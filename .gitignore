@@ -1,0 +1,14 @@
+implementation_plan.md
+backend/uploads/
+backend/database.db
+__pycache__/
+*.pyc
+.env
+.env.local
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+temp_faces.jpg
+temp_grid.jpg
+trace_polygons.py

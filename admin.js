@@ -1,0 +1,746 @@
+document.addEventListener('DOMContentLoaded', () => {
+
+    const API_BASE_URL = 'http://localhost:8000'; // Updated to match local Uvicorn port
+
+    // --- Selectors ---
+    const loginSection = document.getElementById('login-section');
+    const dashboardSection = document.getElementById('dashboard-section');
+    const loginForm = document.getElementById('login-form');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    const navItems = document.querySelectorAll('.nav-item');
+    const tabViews = document.querySelectorAll('.tab-view');
+
+    // Data tables body
+    const prokerTableBody = document.getElementById('proker-table-body');
+    const logbookTableBody = document.getElementById('logbook-table-body');
+    const guestbookListContainer = document.getElementById('guestbook-list-container');
+
+    // Modals
+    const prokerModal = document.getElementById('proker-modal');
+    const logbookModal = document.getElementById('logbook-modal');
+
+    // Forms
+    const prokerForm = document.getElementById('proker-form');
+    const logbookForm = document.getElementById('logbook-form');
+
+    // Proker Form elements
+    const prokerTypeSelect = document.getElementById('proker-type');
+    const prokerOwnerInput = document.getElementById('proker-owner');
+    const ownerGroup = document.getElementById('owner-group');
+    const prokerDescTextarea = document.getElementById('proker-desc');
+    const prokerDescPreview = document.getElementById('proker-desc-preview');
+
+    // Logbook Form elements
+    const logbookContentTextarea = document.getElementById('logbook-content');
+    const logbookContentPreview = document.getElementById('logbook-content-preview');
+
+    // Add buttons
+    const newProkerBtn = document.getElementById('new-proker-btn');
+    const newLogbookBtn = document.getElementById('new-logbook-btn');
+
+    // Image upload inputs
+    const prokerImagesInput = document.getElementById('proker-images');
+    const prokerImagesPreview = document.getElementById('proker-images-preview');
+    const logbookImagesInput = document.getElementById('logbook-images');
+    const logbookImagesPreview = document.getElementById('logbook-images-preview');
+
+    // --- State variables ---
+    let token = localStorage.getItem('kkn_admin_token');
+    let currentProkerImages = [];
+    let currentLogbookImages = [];
+
+    // --- Authentication Helpers ---
+    const setAuthHeader = (headers = {}) => {
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        return headers;
+    };
+
+    const authenticatedFetch = async (url, options = {}) => {
+        options.headers = setAuthHeader(options.headers || {});
+        try {
+            const response = await fetch(url, options);
+            if (response.status === 401) {
+                // Token expired or invalid
+                handleLogout();
+                showToast("Sesi habis. Silakan masuk kembali.", "error");
+                throw new Error("Unauthorized");
+            }
+            return response;
+        } catch (error) {
+            console.error("API error:", error);
+            throw error;
+        }
+    };
+
+    const checkAuthStatus = async () => {
+        if (!token) {
+            showLogin();
+            return;
+        }
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/admin/me`, {
+                headers: setAuthHeader()
+            });
+            if (response.ok) {
+                showDashboard();
+            } else {
+                handleLogout();
+            }
+        } catch (error) {
+            console.error("Auth check failed:", error);
+            showLogin(); // Fallback to login if server is offline
+        }
+    };
+
+    const showLogin = () => {
+        loginSection.classList.remove('hidden');
+        dashboardSection.classList.add('hidden');
+    };
+
+    const showDashboard = () => {
+        loginSection.classList.add('hidden');
+        dashboardSection.classList.remove('hidden');
+        // Initial data load
+        loadTabData('proker');
+    };
+
+    const handleLogout = () => {
+        token = null;
+        localStorage.removeItem('kkn_admin_token');
+        showLogin();
+    };
+
+    // --- Login Form Handler ---
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username: usernameInput, password: passwordInput })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.detail || "Gagal masuk");
+                }
+
+                const data = await response.json();
+                token = data.access_token;
+                localStorage.setItem('kkn_admin_token', token);
+
+                showToast("Berhasil masuk!", "success");
+                showDashboard();
+                loginForm.reset();
+            } catch (error) {
+                console.error(error);
+                showToast(error.message || "Username atau password salah", "error");
+            }
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
+
+    // --- SPA Tab Management ---
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            navItems.forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+
+            const tabName = item.getAttribute('data-tab');
+            tabViews.forEach(view => {
+                if (view.getAttribute('id') === `${tabName}-tab`) {
+                    view.classList.remove('hidden');
+                } else {
+                    view.classList.add('hidden');
+                }
+            });
+
+            loadTabData(tabName);
+        });
+    });
+
+    const loadTabData = (tabName) => {
+        if (tabName === 'proker') {
+            fetchProkers();
+        } else if (tabName === 'logbook') {
+            fetchLogbooks();
+        } else if (tabName === 'guestbook') {
+            fetchGuestbookEntries();
+        }
+    };
+
+    // --- Helper HTML escaping to prevent XSS ---
+    const escapeHTML = (str) => {
+        if (!str) return '';
+        return str.replace(/[&<>'"]/g,
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag] || tag)
+        );
+    };
+
+    // --- Image Upload Helpers ---
+    const uploadImageFile = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch(`${API_BASE_URL}/api/upload`, {
+            method: 'POST',
+            headers: setAuthHeader({}),
+            body: formData
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.detail || "Gagal mengunggah gambar");
+        }
+
+        return await response.json();
+    };
+
+    const handleImageUpload = async (inputElement, currentList, previewElementId) => {
+        const files = inputElement.files;
+        if (!files.length) return;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!file.type.startsWith('image/')) {
+                showToast("File harus berupa gambar", "error");
+                continue;
+            }
+            try {
+                const res = await uploadImageFile(file);
+                currentList.push(res.url);
+                showToast(`Gambar ${file.name} berhasil diunggah`, "success");
+            } catch (err) {
+                console.error(err);
+                showToast(`Gagal mengunggah ${file.name}: ${err.message}`, "error");
+            }
+        }
+        inputElement.value = '';
+        renderImagePreviews(currentList, previewElementId);
+    };
+
+    const renderImagePreviews = (list, previewElementId) => {
+        const previewEl = document.getElementById(previewElementId);
+        if (!previewEl) return;
+        previewEl.innerHTML = '';
+
+        list.forEach((url, index) => {
+            const container = document.createElement('div');
+            container.className = 'thumbnail-container';
+
+            const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+
+            container.innerHTML = `
+                <img src="${fullUrl}" alt="Preview">
+                <button type="button" class="thumbnail-remove">&times;</button>
+            `;
+
+            container.querySelector('.thumbnail-remove').addEventListener('click', () => {
+                list.splice(index, 1);
+                renderImagePreviews(list, previewElementId);
+            });
+
+            previewEl.appendChild(container);
+        });
+    };
+
+    if (prokerImagesInput) {
+        prokerImagesInput.addEventListener('change', () => {
+            handleImageUpload(prokerImagesInput, currentProkerImages, 'proker-images-preview');
+        });
+    }
+    if (logbookImagesInput) {
+        logbookImagesInput.addEventListener('change', () => {
+            handleImageUpload(logbookImagesInput, currentLogbookImages, 'logbook-images-preview');
+        });
+    }
+
+    // --- 1. PROKER CRUDS ---
+    const fetchProkers = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/proker`);
+            const data = await response.json();
+            renderProkersTable(data);
+        } catch (error) {
+            showToast("Gagal mengambil data program kerja", "error");
+        }
+    };
+
+    const renderProkersTable = (prokers) => {
+        if (!prokerTableBody) return;
+        prokerTableBody.innerHTML = '';
+        if (prokers.length === 0) {
+            prokerTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--color-text-muted);">Belum ada program kerja. Klik 'Tambah Proker' untuk membuat baru.</td></tr>`;
+            return;
+        }
+
+        prokers.forEach(proker => {
+            const tr = document.createElement('tr');
+
+            // Status badges
+            let badgeClass = 'badge-warning';
+            if (proker.status === 'Selesai') badgeClass = 'badge-success';
+            if (proker.status === 'Sedang Berjalan') badgeClass = 'badge-info';
+
+            tr.innerHTML = `
+                <td><span class="badge ${proker.type === 'Proker Bersama' ? 'badge-success' : 'badge-info'}">${proker.type}</span></td>
+                <td><strong>${escapeHTML(proker.owner_name) || '-'}</strong></td>
+                <td>${escapeHTML(proker.title)}</td>
+                <td><span class="badge ${badgeClass}">${proker.status}</span></td>
+                <td>
+                    <div class="action-btns">
+                        <button class="btn-icon btn-edit" title="Edit Proker" onclick="openEditProkerModal(${JSON.stringify(proker).replace(/"/g, '&quot;')})">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn-icon btn-delete" title="Hapus Proker" onclick="deleteProker(${proker.id})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            prokerTableBody.appendChild(tr);
+        });
+    };
+
+    // Toggle owner input field visibility based on type selection
+    if (prokerTypeSelect) {
+        prokerTypeSelect.addEventListener('change', () => {
+            if (prokerTypeSelect.value === 'Proker Individu') {
+                ownerGroup.classList.remove('hidden');
+                prokerOwnerInput.setAttribute('required', 'true');
+            } else {
+                ownerGroup.classList.add('hidden');
+                prokerOwnerInput.removeAttribute('required');
+                prokerOwnerInput.value = '';
+            }
+        });
+    }
+
+    // Markdown previews
+    if (prokerDescTextarea && prokerDescPreview) {
+        prokerDescTextarea.addEventListener('input', () => {
+            const rawText = prokerDescTextarea.value;
+            prokerDescPreview.innerHTML = rawText ? marked.parse(rawText) : '<p style="color: var(--color-text-muted); font-style: italic;">Preview akan tampil di sini...</p>';
+        });
+    }
+
+    // Open Proker Modal (Create)
+    if (newProkerBtn) {
+        newProkerBtn.addEventListener('click', () => {
+            document.getElementById('proker-modal-title').textContent = "Tambah Program Kerja";
+            document.getElementById('edit-proker-id').value = "";
+            prokerForm.reset();
+            ownerGroup.classList.add('hidden');
+            prokerOwnerInput.removeAttribute('required');
+            prokerDescPreview.innerHTML = '<p style="color: var(--color-text-muted); font-style: italic;">Preview akan tampil di sini...</p>';
+            currentProkerImages = [];
+            renderImagePreviews(currentProkerImages, 'proker-images-preview');
+            openModal('proker-modal');
+        });
+    }
+
+    // Handle Proker Modal Submit (Create & Update)
+    if (prokerForm) {
+        prokerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-proker-id').value;
+            const type = prokerTypeSelect.value;
+            const owner_name = type === 'Proker Individu' ? prokerOwnerInput.value.trim() : null;
+            const title = document.getElementById('proker-title').value.trim();
+            const statusVal = document.getElementById('proker-status').value;
+            const description_markdown = prokerDescTextarea.value.trim();
+
+            const payload = { type, owner_name, title, status: statusVal, description_markdown, image_urls: currentProkerImages };
+
+            const isEdit = id !== "";
+            const url = isEdit ? `${API_BASE_URL}/api/proker/${id}` : `${API_BASE_URL}/api/proker`;
+            const method = isEdit ? 'PUT' : 'POST';
+
+            try {
+                const response = await authenticatedFetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    showToast(isEdit ? "Proker berhasil diperbarui!" : "Proker berhasil ditambahkan!", "success");
+                    closeModal('proker-modal');
+                    fetchProkers();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || "Gagal menyimpan proker");
+                }
+            } catch (error) {
+                console.error(error);
+                if (error.message !== "Unauthorized") {
+                    showToast(error.message, "error");
+                }
+            }
+        });
+    }
+
+    // Global scopes for inline onclick attributes
+    window.openEditProkerModal = (proker) => {
+        document.getElementById('proker-modal-title').textContent = "Edit Program Kerja";
+        document.getElementById('edit-proker-id').value = proker.id;
+        prokerTypeSelect.value = proker.type;
+
+        if (proker.type === 'Proker Individu') {
+            ownerGroup.classList.remove('hidden');
+            prokerOwnerInput.setAttribute('required', 'true');
+            prokerOwnerInput.value = proker.owner_name || '';
+        } else {
+            ownerGroup.classList.add('hidden');
+            prokerOwnerInput.removeAttribute('required');
+            prokerOwnerInput.value = '';
+        }
+
+        document.getElementById('proker-title').value = proker.title;
+        document.getElementById('proker-status').value = proker.status;
+        prokerDescTextarea.value = proker.description_markdown;
+        prokerDescPreview.innerHTML = marked.parse(proker.description_markdown);
+
+        currentProkerImages = [...(proker.image_urls || [])];
+        renderImagePreviews(currentProkerImages, 'proker-images-preview');
+
+        openModal('proker-modal');
+    };
+
+    window.deleteProker = async (id) => {
+        if (!confirm("Apakah Anda yakin ingin menghapus program kerja ini?")) return;
+        try {
+            const response = await authenticatedFetch(`${API_BASE_URL}/api/proker/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                showToast("Proker berhasil dihapus!", "success");
+                fetchProkers();
+            } else {
+                throw new Error("Gagal menghapus proker");
+            }
+        } catch (error) {
+            console.error(error);
+            if (error.message !== "Unauthorized") {
+                showToast(error.message, "error");
+            }
+        }
+    };
+
+
+    // --- 2. LOGBOOK CRUDS ---
+    const fetchLogbooks = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/logbook`);
+            const data = await response.json();
+            renderLogbookTable(data);
+        } catch (error) {
+            showToast("Gagal mengambil data logbook", "error");
+        }
+    };
+
+    const renderLogbookTable = (logbooks) => {
+        if (!logbookTableBody) return;
+        logbookTableBody.innerHTML = '';
+        if (logbooks.length === 0) {
+            logbookTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--color-text-muted);">Belum ada catatan logbook. Klik 'Tambah Logbook' untuk membuat baru.</td></tr>`;
+            return;
+        }
+
+        logbooks.forEach(entry => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${entry.date}</strong></td>
+                <td><span class="badge ${entry.phase === 'Pra-KKN' ? 'badge-warning' : 'badge-success'}">${entry.phase}</span></td>
+                <td>${escapeHTML(entry.title)}</td>
+                <td>
+                    <div class="action-btns">
+                        <button class="btn-icon btn-edit" title="Edit Logbook" onclick="openEditLogbookModal(${JSON.stringify(entry).replace(/"/g, '&quot;')})">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn-icon btn-delete" title="Hapus Logbook" onclick="deleteLogbook(${entry.id})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            logbookTableBody.appendChild(tr);
+        });
+    };
+
+    if (logbookContentTextarea && logbookContentPreview) {
+        logbookContentTextarea.addEventListener('input', () => {
+            const rawText = logbookContentTextarea.value;
+            logbookContentPreview.innerHTML = rawText ? marked.parse(rawText) : '<p style="color: var(--color-text-muted); font-style: italic;">Preview akan tampil di sini...</p>';
+        });
+    }
+
+    if (newLogbookBtn) {
+        newLogbookBtn.addEventListener('click', () => {
+            document.getElementById('logbook-modal-title').textContent = "Tambah Catatan Logbook";
+            document.getElementById('edit-logbook-id').value = "";
+            logbookForm.reset();
+            // Default to today's date
+            document.getElementById('logbook-date').value = new Date().toISOString().split('T')[0];
+            logbookContentPreview.innerHTML = '<p style="color: var(--color-text-muted); font-style: italic;">Preview akan tampil di sini...</p>';
+            currentLogbookImages = [];
+            renderImagePreviews(currentLogbookImages, 'logbook-images-preview');
+            openModal('logbook-modal');
+        });
+    }
+
+    if (logbookForm) {
+        logbookForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-logbook-id').value;
+            const date = document.getElementById('logbook-date').value;
+            const phase = document.getElementById('logbook-phase').value;
+            const title = document.getElementById('logbook-title').value.trim();
+            const content_markdown = logbookContentTextarea.value.trim();
+
+            const payload = { date, phase, title, content_markdown, image_urls: currentLogbookImages };
+
+            const isEdit = id !== "";
+            const url = isEdit ? `${API_BASE_URL}/api/logbook/${id}` : `${API_BASE_URL}/api/logbook`;
+            const method = isEdit ? 'PUT' : 'POST';
+
+            try {
+                const response = await authenticatedFetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    showToast(isEdit ? "Logbook berhasil diperbarui!" : "Logbook berhasil ditambahkan!", "success");
+                    closeModal('logbook-modal');
+                    fetchLogbooks();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || "Gagal menyimpan logbook");
+                }
+            } catch (error) {
+                console.error(error);
+                if (error.message !== "Unauthorized") {
+                    showToast(error.message, "error");
+                }
+            }
+        });
+    }
+
+    window.openEditLogbookModal = (entry) => {
+        document.getElementById('logbook-modal-title').textContent = "Edit Catatan Logbook";
+        document.getElementById('edit-logbook-id').value = entry.id;
+        document.getElementById('logbook-date').value = entry.date;
+        document.getElementById('logbook-phase').value = entry.phase;
+        document.getElementById('logbook-title').value = entry.title;
+        logbookContentTextarea.value = entry.content_markdown;
+        logbookContentPreview.innerHTML = marked.parse(entry.content_markdown);
+
+        currentLogbookImages = [...(entry.image_urls || [])];
+        renderImagePreviews(currentLogbookImages, 'logbook-images-preview');
+
+        openModal('logbook-modal');
+    };
+
+    window.deleteLogbook = async (id) => {
+        if (!confirm("Apakah Anda yakin ingin menghapus catatan logbook ini?")) return;
+        try {
+            const response = await authenticatedFetch(`${API_BASE_URL}/api/logbook/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                showToast("Logbook berhasil dihapus!", "success");
+                fetchLogbooks();
+            } else {
+                throw new Error("Gagal menghapus logbook");
+            }
+        } catch (error) {
+            console.error(error);
+            if (error.message !== "Unauthorized") {
+                showToast(error.message, "error");
+            }
+        }
+    };
+
+
+    // --- 3. GUESTBOOK MODERATION ---
+    const fetchGuestbookEntries = async () => {
+        try {
+            const response = await authenticatedFetch(`${API_BASE_URL}/api/admin/guestbook`);
+            const data = await response.json();
+            renderGuestbookList(data);
+        } catch (error) {
+            console.error(error);
+            if (error.message !== "Unauthorized") {
+                showToast("Gagal mengambil data buku tamu", "error");
+            }
+        }
+    };
+
+    const renderGuestbookList = (entries) => {
+        if (!guestbookListContainer) return;
+        guestbookListContainer.innerHTML = '';
+
+        if (entries.length === 0) {
+            guestbookListContainer.innerHTML = `<div style="text-align: center; color: var(--color-text-muted); padding: 40px;">Belum ada kiriman pesan di buku tamu.</div>`;
+            return;
+        }
+
+        entries.forEach(entry => {
+            const card = document.createElement('div');
+            card.className = `moderation-card ${entry.is_approved ? 'approved' : ''}`;
+
+            const badgeText = entry.is_approved ? 'Disetujui' : 'Menunggu Moderasi';
+            const badgeClass = entry.is_approved ? 'badge-success' : 'badge-warning';
+
+            card.innerHTML = `
+                <div class="moderation-card-body">
+                    <h5>${escapeHTML(entry.name)} <span class="badge ${badgeClass}">${badgeText}</span></h5>
+                    <div class="moderation-meta"><i class="fa-solid fa-users"></i> ${escapeHTML(entry.role)} • <i class="fa-solid fa-clock"></i> ${entry.date}</div>
+                    <p class="moderation-message">${escapeHTML(entry.message)}</p>
+                </div>
+                <div class="action-btns">
+                    ${!entry.is_approved ? `
+                    <button class="btn-icon btn-approve" title="Setujui Pesan" onclick="approveGuestbookEntry(${entry.id})">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                    ` : ''}
+                    <button class="btn-icon btn-delete" title="Hapus Pesan" onclick="deleteGuestbookEntry(${entry.id})">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            guestbookListContainer.appendChild(card);
+        });
+    };
+
+    window.approveGuestbookEntry = async (id) => {
+        try {
+            const response = await authenticatedFetch(`${API_BASE_URL}/api/admin/guestbook/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_approved: true })
+            });
+
+            if (response.ok) {
+                showToast("Pesan berhasil disetujui!", "success");
+                fetchGuestbookEntries();
+            } else {
+                throw new Error("Gagal menyetujui pesan");
+            }
+        } catch (error) {
+            console.error(error);
+            if (error.message !== "Unauthorized") {
+                showToast(error.message, "error");
+            }
+        }
+    };
+
+    window.deleteGuestbookEntry = async (id) => {
+        if (!confirm("Apakah Anda yakin ingin menghapus/menolak pesan ini?")) return;
+        try {
+            const response = await authenticatedFetch(`${API_BASE_URL}/api/admin/guestbook/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                showToast("Pesan berhasil dihapus!", "success");
+                fetchGuestbookEntries();
+            } else {
+                throw new Error("Gagal menghapus pesan");
+            }
+        } catch (error) {
+            console.error(error);
+            if (error.message !== "Unauthorized") {
+                showToast(error.message, "error");
+            }
+        }
+    };
+
+
+    // --- Global Modal Helpers ---
+    window.openModal = (modalId) => {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.remove('hidden');
+    };
+
+    window.closeModal = (modalId) => {
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.add('hidden');
+    };
+
+
+    // --- Toast Notifications Helpers ---
+    const showToast = (message, type = "success") => {
+        const toastContainer = document.getElementById('toast-container');
+        if (!toastContainer) return;
+
+        const toast = document.createElement('div');
+        toast.style.padding = '12px 24px';
+        toast.style.borderRadius = '8px';
+        toast.style.marginBottom = '10px';
+        toast.style.color = '#FFFFFF';
+        toast.style.fontWeight = '600';
+        toast.style.fontSize = '0.95rem';
+        toast.style.boxShadow = '0 5px 15px rgba(0,0,0,0.15)';
+        toast.style.display = 'flex';
+        toast.style.alignItems = 'center';
+        toast.style.gap = '10px';
+        toast.style.animation = 'toastFadeIn 0.3s ease';
+
+        if (type === 'success') {
+            toast.style.backgroundColor = 'var(--color-success)';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${message}`;
+        } else {
+            toast.style.backgroundColor = 'var(--color-danger)';
+            toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${message}`;
+        }
+
+        toastContainer.appendChild(toast);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.animation = 'toastFadeOut 0.3s ease';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    };
+
+    // Add Keyframe Animations for Toasts to Head stylesheet dynamically
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes toastFadeIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toastFadeOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(20px); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+
+
+    // Check startup login status
+    checkAuthStatus();
+});

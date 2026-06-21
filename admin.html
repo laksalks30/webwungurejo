@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - KKN AA 84.095</title>
+    <!-- Favicon -->
+    <link rel="icon" href="assets/logo/LogoKKNBaru.png" type="image/png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js for Markdown Preview -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --color-primary: #FF3385;        /* Vibrant Pink - same as main site */
+            --color-primary-light: #FF66A3;  /* Lightened Pink for hover */
+            --color-accent: #FFD6E6;         /* Soft Pink */
+            --color-bg-light: #FFF0F5;       /* Blush/Cream Background */
+            --color-secondary: #6B9054;      /* Green from logo leaves */
+            --color-dark: #990040;           /* Deep Pink/Crimson */
+            --color-text: #2D3748;
+            --color-text-muted: #718096;
+            --color-white: #FFFFFF;
+            --color-light-gray: #EDF2F7;
+            --color-shadow: rgba(255, 51, 133, 0.15);
+            --color-success: #2ecc71;
+            --color-warning: #f1c40f;
+            --color-danger: #e74c3c;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--color-text);
+            background-color: #FAF6F6;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- Login Screen --- */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #FAF6F6 0%, #F2DCDB 50%, #FFD6E6 100%);
+        }
+
+        .login-card {
+            background-color: var(--color-white);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px var(--color-shadow);
+            width: 100%;
+            max-width: 440px;
+            padding: 48px 40px;
+            text-align: center;
+            border: 1.5px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .login-logo {
+            width: 90px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 12px var(--color-shadow));
+        }
+
+        .login-title {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--color-dark);
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            border: 2px solid var(--color-light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px var(--color-bg-light);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
+            color: var(--color-white);
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px var(--color-shadow);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--color-shadow);
+        }
+
+        /* --- Dashboard Screen Layout --- */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--color-dark) 0%, var(--color-primary) 100%);
+            color: var(--color-white);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            flex-shrink: 0;
+            box-shadow: 4px 0 20px var(--color-shadow);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-logo {
+            width: 45px;
+        }
+
+        .sidebar-brand-text h4 {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .sidebar-brand-text p {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: var(--color-white);
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .btn-logout {
+            width: 100%;
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #ff7675;
+            border: 1px solid rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-logout:hover {
+            background-color: var(--color-danger);
+            color: var(--color-white);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--color-light-gray);
+            padding-bottom: 20px;
+        }
+
+        .header-title h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--color-dark);
+        }
+
+        .header-title p {
+            color: var(--color-text-muted);
+        }
+
+        .btn-add {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+        }
+
+        .btn-add:hover {
+            background-color: #2b4369;
+            transform: translateY(-2px);
+        }
+
+        /* Data Tables */
+        .table-card {
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 16px;
+            border-bottom: 2px solid var(--color-light-gray);
+            font-weight: 700;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 18px 16px;
+            border-bottom: 1px solid var(--color-light-gray);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .badge-success { background-color: rgba(46, 204, 113, 0.15); color: var(--color-success); }
+        .badge-warning { background-color: rgba(241, 196, 15, 0.15); color: #b78a00; }
+        .badge-danger { background-color: rgba(231, 76, 60, 0.15); color: var(--color-danger); }
+        .badge-info { background-color: rgba(90, 134, 203, 0.15); color: var(--color-secondary); }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .btn-edit { background-color: rgba(90, 134, 203, 0.1); color: var(--color-secondary); }
+        .btn-edit:hover { background-color: var(--color-secondary); color: var(--color-white); }
+        .btn-delete { background-color: rgba(231, 76, 60, 0.1); color: var(--color-danger); }
+        .btn-delete:hover { background-color: var(--color-danger); color: var(--color-white); }
+        .btn-approve { background-color: rgba(46, 204, 113, 0.1); color: var(--color-success); }
+        .btn-approve:hover { background-color: var(--color-success); color: var(--color-white); }
+
+        /* --- Modals --- */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal-card form {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--color-light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--color-dark);
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-text-muted);
+            transition: var(--transition);
+        }
+
+        .btn-close:hover {
+            color: var(--color-danger);
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .modal-footer {
+            padding: 24px;
+            border-top: 1px solid var(--color-light-gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            background-color: var(--color-light-gray);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #cbd5e0;
+        }
+
+        .btn-save {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-save:hover {
+            background-color: var(--color-primary-light);
+        }
+
+        /* Split Editor Layout */
+        .editor-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .editor-split {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .editor-textarea {
+            width: 100%;
+            height: 250px;
+            padding: 12px;
+            border: 2px solid var(--color-light-gray);
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+
+        .preview-box {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 12px;
+            height: 250px;
+            overflow-y: auto;
+            background-color: #fafbfc;
+        }
+
+        .preview-box h1, .preview-box h2, .preview-box h3 {
+            margin-bottom: 8px;
+            color: var(--color-dark);
+        }
+
+        .preview-box p {
+            margin-bottom: 12px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* --- Guestbook Moderation List --- */
+        .guestbook-moderation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .moderation-card {
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            border-left: 5px solid var(--color-warning);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .moderation-card.approved {
+            border-left-color: var(--color-success);
+        }
+
+        .moderation-card-body h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 4px;
+        }
+
+        .moderation-meta {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            margin-bottom: 12px;
+        }
+
+        .moderation-message {
+            background-color: var(--color-light-gray);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 2000;
+        }
+
+        /* Thumbnail Image Previews for Uploads */
+        .thumbnail-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid var(--color-light-gray);
+            display: inline-block;
+        }
+        .thumbnail-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .thumbnail-remove {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            transition: var(--transition);
+        }
+        .thumbnail-remove:hover {
+            background: var(--color-danger);
+            transform: scale(1.1);
+        }
+
+        /* --- Mobile Responsiveness (Responsive adjustments for Admin Dashboard) --- */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 20px 15px;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .sidebar-brand {
+                margin-bottom: 20px;
+                justify-content: center;
+            }
+
+            .nav-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+
+            .nav-item {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                flex-grow: 1;
+                justify-content: center;
+            }
+
+            .sidebar-footer {
+                padding-top: 15px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .header-area {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+                margin-bottom: 25px;
+                padding-bottom: 15px;
+                text-align: center;
+            }
+
+            .header-title h2 {
+                font-size: 1.6rem;
+            }
+
+            .btn-add {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .table-card {
+                padding: 12px;
+                margin: 0 -15px;
+                border-radius: 0;
+                box-shadow: none;
+                border-left: none;
+                border-right: none;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 12px 10px;
+            }
+
+            .action-btns {
+                gap: 4px;
+            }
+
+            .btn-icon {
+                width: 30px;
+                height: 30px;
+            }
+
+            /* Moderation Cards stacking */
+            .moderation-card {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 15px;
+                gap: 15px;
+            }
+
+            .moderation-card .action-btns {
+                justify-content: flex-end;
+            }
+
+            /* Modal layout stack */
+            .modal {
+                padding: 10px;
+            }
+
+            .modal-card {
+                max-height: 95vh;
+            }
+
+            .modal-body {
+                padding: 15px;
+            }
+
+            .modal-footer {
+                padding: 15px;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .modal-footer .btn {
+                flex-grow: 1;
+                justify-content: center;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .editor-split {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .editor-textarea, .preview-box {
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+            
+            .nav-list {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .nav-item {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. LOGIN SECTION -->
+    <div id="login-section" class="login-container">
+        <div class="login-card">
+            <img src="assets/logo/LogoKKNBaru.png" alt="Logo KKN" class="login-logo">
+            <h2 class="login-title">Admin Login</h2>
+            <p class="login-subtitle">Aplikasi KKN Dusun Wungurejo Kelompok AA 84.095</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="username" class="form-control" placeholder="admin" required autocomplete="username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Masuk <i class="fa-solid fa-right-to-bracket"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. DASHBOARD SECTION -->
+    <div id="dashboard-section" class="dashboard-container hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <img src="assets/logo/LogoKKNBaru.png" alt="Logo KKN" class="sidebar-logo">
+                <div class="sidebar-brand-text">
+                    <h4>KKN AA 84.095</h4>
+                    <p>Admin Panel</p>
+                </div>
+            </div>
+            
+            <ul class="nav-list">
+                <li class="nav-item active" data-tab="proker">
+                    <i class="fa-solid fa-list-check"></i> Program Kerja
+                </li>
+                <li class="nav-item" data-tab="logbook">
+                    <i class="fa-solid fa-calendar-day"></i> Logbook Harian
+                </li>
+                <li class="nav-item" data-tab="guestbook">
+                    <i class="fa-solid fa-book-open-reader"></i> Buku Tamu
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-logout">Keluar <i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Program Kerja Tab View -->
+            <div id="proker-tab" class="tab-view">
+                <div class="header-area">
+                    <div class="header-title">
+                        <h2>Manajemen Program Kerja</h2>
+                        <p>Kelola daftar program kerja bersama dan individu KKN.</p>
+                    </div>
+                    <button class="btn btn-add" id="new-proker-btn">
+                        <i class="fa-solid fa-plus"></i> Tambah Proker
+                    </button>
+                </div>
+
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kategori / Type</th>
+                                <th>Penanggung Jawab</th>
+                                <th>Nama Program Kerja</th>
+                                <th>Status</th>
+                                <th style="width: 100px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="proker-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Logbook Tab View -->
+            <div id="logbook-tab" class="tab-view hidden">
+                <div class="header-area">
+                    <div class="header-title">
+                        <h2>Logbook Harian</h2>
+                        <p>Kelola catatan harian dan dokumentasi kegiatan pengabdian.</p>
+                    </div>
+                    <button class="btn btn-add" id="new-logbook-btn">
+                        <i class="fa-solid fa-plus"></i> Tambah Logbook
+                    </button>
+                </div>
+
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Fase</th>
+                                <th>Judul Kegiatan</th>
+                                <th style="width: 100px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logbook-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Guestbook Tab View -->
+            <div id="guestbook-tab" class="tab-view hidden">
+                <div class="header-area">
+                    <div class="header-title">
+                        <h2>Moderasi Buku Tamu</h2>
+                        <p>Setujui pesan atau hapus pesan masuk dari pengunjung website.</p>
+                    </div>
+                </div>
+
+                <div class="guestbook-moderation-list" id="guestbook-list-container">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 3. PROKER EDITOR MODAL -->
+    <div id="proker-modal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="proker-modal-title">Tambah Program Kerja</h3>
+                <button class="btn-close" onclick="closeModal('proker-modal')">&times;</button>
+            </div>
+            <form id="proker-form">
+                <div class="modal-body">
+                    <input type="hidden" id="edit-proker-id">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="proker-type">Jenis Proker</label>
+                            <select id="proker-type" class="form-control" style="padding-left: 15px;" required>
+                                <option value="Proker Bersama">Proker Bersama</option>
+                                <option value="Proker Individu">Proker Individu</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="owner-group">
+                            <label for="proker-owner">Nama Pemilik Proker (Individu)</label>
+                            <input type="text" id="proker-owner" class="form-control" style="padding-left: 15px;" placeholder="Contoh: Dewa">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="proker-title">Nama Program Kerja</label>
+                            <input type="text" id="proker-title" class="form-control" style="padding-left: 15px;" required placeholder="Contoh: Digitalisasi UMKM">
+                        </div>
+                        <div class="form-group">
+                            <label for="proker-status">Status</label>
+                            <select id="proker-status" class="form-control" style="padding-left: 15px;" required>
+                                <option value="Belum Mulai">Belum Mulai</option>
+                                <option value="Sedang Berjalan">Sedang Berjalan</option>
+                                <option value="Selesai">Selesai</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dokumentasi Gambar (Opsional)</label>
+                        <div class="upload-container" style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="file" id="proker-images" class="form-control" style="padding-left: 15px;" accept="image/*" multiple>
+                            <div id="proker-images-preview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="proker-desc">Deskripsi Program Kerja (Markdown)</label>
+                        <div class="editor-split">
+                            <div>
+                                <textarea id="proker-desc" class="editor-textarea" placeholder="Tulis rincian program kerja menggunakan format Markdown..." required></textarea>
+                            </div>
+                            <div>
+                                <div class="preview-box markdown-body" id="proker-desc-preview">
+                                    <p style="color: var(--color-text-muted); font-style: italic;">Preview akan tampil di sini...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('proker-modal')">Batal</button>
+                    <button type="submit" class="btn btn-save">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. LOGBOOK EDITOR MODAL -->
+    <div id="logbook-modal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="logbook-modal-title">Tambah Catatan Logbook</h3>
+                <button class="btn-close" onclick="closeModal('logbook-modal')">&times;</button>
+            </div>
+            <form id="logbook-form">
+                <div class="modal-body">
+                    <input type="hidden" id="edit-logbook-id">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="logbook-date">Tanggal Kegiatan</label>
+                            <input type="date" id="logbook-date" class="form-control" style="padding-left: 15px;" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="logbook-phase">Fase Kegiatan</label>
+                            <select id="logbook-phase" class="form-control" style="padding-left: 15px;" required>
+                                <option value="Pra-KKN">Pra-KKN</option>
+                                <option value="Pelaksanaan KKN">Pelaksanaan KKN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logbook-title">Judul Kegiatan</label>
+                        <input type="text" id="logbook-title" class="form-control" style="padding-left: 15px;" required placeholder="Contoh: Rapat Pleno bersama Warga">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Dokumentasi Gambar (Opsional)</label>
+                        <div class="upload-container" style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="file" id="logbook-images" class="form-control" style="padding-left: 15px;" accept="image/*" multiple>
+                            <div id="logbook-images-preview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logbook-content">Rincian Kegiatan (Markdown)</label>
+                        <div class="editor-split">
+                            <div>
+                                <textarea id="logbook-content" class="editor-textarea" placeholder="Tulis isi catatan harian menggunakan format Markdown..." required></textarea>
+                            </div>
+                            <div>
+                                <div class="preview-box markdown-body" id="logbook-content-preview">
+                                    <p style="color: var(--color-text-muted); font-style: italic;">Preview akan tampil di sini...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('logbook-modal')">Batal</button>
+                    <button type="submit" class="btn btn-save">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <script src="admin.js?v=3"></script>
+</body>
+</html>
