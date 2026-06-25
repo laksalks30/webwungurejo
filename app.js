@@ -1099,54 +1099,59 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!window.blogData) return;
         const blog = window.blogData.find(b => b.id === id);
         if (!blog) return;
-        
-        const modal = document.getElementById('details-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalMarkdownContent = document.getElementById('modal-markdown-content');
-        const modalDate = document.getElementById('modal-date');
-        const modalCategory = document.getElementById('modal-category-badge');
-        const modalGallerySide = document.getElementById('modal-gallery-side');
-        
-        if (modalTitle) modalTitle.textContent = blog.title;
-        if (modalCategory) {
-            modalCategory.textContent = "Artikel";
-            modalCategory.className = "badge badge-success"; 
-        }
-        
-        if (modalDate) {
-            const dateObj = new Date(blog.date);
-            modalDate.textContent = isNaN(dateObj.getTime()) ? blog.date : dateObj.toLocaleDateString('id-ID', {
-                day: 'numeric', month: 'long', year: 'numeric'
-            });
-            modalDate.style.display = 'inline-block';
-        }
-        
-        // Hide carousel side panel — blog articles use full-width text layout
-        if (modalGallerySide) modalGallerySide.style.display = 'none';
-        
-        let htmlContent = blog.content_markdown || '';
-        if (typeof marked !== 'undefined') {
-            htmlContent = marked.parse(htmlContent);
-        }
-        
-        let imagesHTML = '';
+
+        const overlay      = document.getElementById('blog-reader-modal');
+        const heroImg      = document.getElementById('blog-reader-hero-img');
+        const heroPlaceholder = document.getElementById('blog-reader-hero-placeholder');
+        const badge        = document.getElementById('blog-reader-badge');
+        const dateEl       = document.getElementById('blog-reader-date');
+        const titleEl      = document.getElementById('blog-reader-title');
+        const contentEl    = document.getElementById('blog-reader-content');
+
+        if (!overlay) return;
+
+        // --- Hero image ---
         if (blog.thumbnail_url) {
-            const fullUrl = blog.thumbnail_url.startsWith('http') 
-                ? blog.thumbnail_url 
+            const fullUrl = blog.thumbnail_url.startsWith('http')
+                ? blog.thumbnail_url
                 : `${API_BASE_URL}${blog.thumbnail_url}`;
-            imagesHTML = `<img src="${fullUrl}" alt="${escapeHTML(blog.title)}" 
-                style="width: 100%; max-height: 380px; object-fit: cover; border-radius: 12px; margin-bottom: 24px;">`;
+            heroImg.src = fullUrl;
+            heroImg.alt = escapeHTML(blog.title);
+            heroImg.classList.remove('hidden');
+            if (heroPlaceholder) heroPlaceholder.classList.add('hidden');
+        } else {
+            heroImg.classList.add('hidden');
+            if (heroPlaceholder) heroPlaceholder.classList.remove('hidden');
         }
-        
-        if (modalMarkdownContent) {
-            modalMarkdownContent.innerHTML = imagesHTML + `<div class="markdown-body">${htmlContent}</div>`;
+
+        // --- Badge & Date ---
+        if (badge) badge.textContent = 'Artikel';
+        if (dateEl) {
+            const d = new Date(blog.date);
+            dateEl.textContent = isNaN(d.getTime())
+                ? blog.date
+                : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         }
-        
-        // Use same mechanism as openDetailsModal (removes 'hidden', not adds 'active')
-        if (modal) {
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
+
+        // --- Title ---
+        if (titleEl) titleEl.textContent = blog.title;
+
+        // --- Content (Markdown) ---
+        let html = blog.content_markdown || '';
+        if (typeof marked !== 'undefined') html = marked.parse(html);
+        if (contentEl) contentEl.innerHTML = html;
+
+        // --- Open ---
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeBlogReaderModal = (event) => {
+        // If called from backdrop click, only close when clicking the overlay itself
+        if (event && event.target !== document.getElementById('blog-reader-modal')) return;
+        const overlay = document.getElementById('blog-reader-modal');
+        if (overlay) overlay.classList.add('hidden');
+        document.body.style.overflow = '';
     };
 
     // --- 11. WebGIS Initialization ---
