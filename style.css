@@ -2816,84 +2816,6 @@ textarea {
     border-top: 1px solid rgba(255, 107, 157, 0.1) !important;
 }
 
-[data-theme="dark"] .footer-bottom {
-    background-color: #0A0A12 !important;
-    border-top: 1px solid rgba(205, 214, 244, 0.05) !important;
-}
-
-[data-theme="dark"] .footer p,
-[data-theme="dark"] .footer span,
-[data-theme="dark"] .footer a,
-[data-theme="dark"] .footer-text {
-    color: #6C7086 !important;
-}
-
-[data-theme="dark"] .footer h3,
-[data-theme="dark"] .footer-title {
-    color: #A6ADC8 !important;
-}
-
-/* === 21. BADGES === */
-[data-theme="dark"] .badge,
-[data-theme="dark"] .proker-status {
-    /* Keep badge colors — they use bright colors, visible on dark */
-}
-
-[data-theme="dark"] .status-planned {
-    color: #FAB387 !important;
-    background-color: rgba(250, 179, 135, 0.12) !important;
-}
-
-[data-theme="dark"] .status-completed {
-    color: #A6E3A1 !important;
-    background-color: rgba(166, 227, 161, 0.12) !important;
-}
-
-[data-theme="dark"] .status-ongoing {
-    color: #89DCEB !important;
-    background-color: rgba(137, 220, 235, 0.12) !important;
-}
-
-/* === 22. BTN SECONDARY (secondary buttons) === */
-[data-theme="dark"] .btn-secondary {
-    background-color: #1E1E2E !important;
-    border: 1.5px solid rgba(255, 107, 157, 0.3) !important;
-    color: #FF6B9D !important;
-}
-
-[data-theme="dark"] .btn-secondary:hover {
-    background-color: rgba(255, 107, 157, 0.12) !important;
-}
-
-/* === 23. SCROLLBAR === */
-[data-theme="dark"] ::-webkit-scrollbar {
-    width: 8px;
-    background-color: #11111B;
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 107, 157, 0.3);
-    border-radius: 4px;
-}
-
-[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 107, 157, 0.5);
-}
-
-/* === 24. MISC UTILS === */
-[data-theme="dark"] .divider,
-[data-theme="dark"] hr {
-    border-color: rgba(205, 214, 244, 0.06) !important;
-}
-
-[data-theme="dark"] .text-muted {
-    color: #6C7086 !important;
-}
-
-[data-theme="dark"] .preloader {
-    background-color: #11111B !important;
-}
-
 /* ================================================================
    THEME TOGGLE BUTTON — Premium Pill Style
    ================================================================ */
@@ -3022,3 +2944,104 @@ textarea {
 }
 
 /* === END OF STYLESHEET === */
+
+/* ===================================================
+   DARK MODE ADDITIONS — Pillar Cards, Badges, Sections
+   =================================================== */
+
+/* Pillar Cards (Fokus Utama Pengabdian) */
+[data-theme="dark"] .pillar-card {
+    background: linear-gradient(135deg, #1E1E2E 0%, #181825 100%) !important;
+    border: 1px solid rgba(255, 107, 157, 0.12) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important;
+}
+[data-theme="dark"] .pillar-card:hover {
+    border-color: rgba(255, 107, 157, 0.3) !important;
+    box-shadow: 0 16px 40px rgba(255, 107, 157, 0.1) !important;
+}
+[data-theme="dark"] .pillar-card h4 { color: #CDD6F4 !important; }
+[data-theme="dark"] .pillar-card p { color: #A6ADC8 !important; }
+[data-theme="dark"] .pillar-icon {
+    background-color: rgba(255, 107, 157, 0.12) !important;
+    color: #FF6B9D !important;
+}
+[data-theme="dark"] .beranda-info-title { color: #CDD6F4 !important; }
+
+/* Badge Status Colors */
+[data-theme="dark"] .status-planned {
+    color: #FAB387 !important;
+    background-color: rgba(250, 179, 135, 0.12) !important;
+}
+[data-theme="dark"] .status-completed {
+    color: #A6E3A1 !important;
+    background-color: rgba(166, 227, 161, 0.12) !important;
+}
+[data-theme="dark"] .status-ongoing {
+    color: #89DCEB !important;
+    background-color: rgba(137, 220, 235, 0.12) !important;
+}
+
+/* Section Backgrounds */
+[data-theme="dark"] .profile-section { background-color: #181825 !important; }
+[data-theme="dark"] .logbook-section { background-color: #181825 !important; }
+[data-theme="dark"] .team-section { background-color: #1E1E2E !important; }
+[data-theme="dark"] .vm-card {
+    background: linear-gradient(135deg, #1E1E2E 0%, #181825 100%) !important;
+    border-left-color: #FF6B9D !important;
+}
+[data-theme="dark"] .vm-icon { color: #FF6B9D !important; }
+
+/* Footer Fix */
+[data-theme="dark"] .footer-bottom {
+    background-color: #0A0A12 !important;
+    border-top: 1px solid rgba(205, 214, 244, 0.05) !important;
+}
+[data-theme="dark"] .footer p,
+[data-theme="dark"] .footer span,
+[data-theme="dark"] .footer a,
+[data-theme="dark"] .footer-text { color: #6C7086 !important; }
+[data-theme="dark"] .footer h3,
+[data-theme="dark"] .footer-title { color: #A6ADC8 !important; }
+
+/* Buttons */
+[data-theme="dark"] .btn-secondary {
+    background-color: #1E1E2E !important;
+    border: 1.5px solid rgba(255, 107, 157, 0.3) !important;
+    color: #FF6B9D !important;
+}
+[data-theme="dark"] .btn-secondary:hover {
+    background-color: rgba(255, 107, 157, 0.12) !important;
+}
+
+/* Misc */
+[data-theme="dark"] .text-muted { color: #6C7086 !important; }
+[data-theme="dark"] .divider,
+[data-theme="dark"] hr { border-color: rgba(205, 214, 244, 0.06) !important; }
+[data-theme="dark"] .preloader { background-color: #11111B !important; }
+
+/* Scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar { width: 8px; background-color: #11111B; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 107, 157, 0.3);
+    border-radius: 4px;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 107, 157, 0.5);
+}
+
+/* Leaflet Map */
+[data-theme="dark"] #webgis-map {
+    border: 1px solid rgba(255, 107, 157, 0.15) !important;
+    filter: brightness(0.88) saturate(0.85) !important;
+}
+[data-theme="dark"] .leaflet-popup-content-wrapper {
+    background-color: #1E1E2E !important;
+    border: 1px solid rgba(255, 107, 157, 0.2) !important;
+    color: #CDD6F4 !important;
+}
+[data-theme="dark"] .leaflet-popup-tip { background-color: #1E1E2E !important; }
+[data-theme="dark"] .leaflet-control-zoom a {
+    background-color: #1E1E2E !important;
+    color: #CDD6F4 !important;
+    border-color: rgba(255, 107, 157, 0.2) !important;
+}
