@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 0. Preloader ---
     const preloader = document.getElementById('preloader');
     if (preloader) {
-        // Hilangkan window.onload karena bisa tertahan loading gambar map Leaflet
         setTimeout(() => {
             preloader.classList.add('fade-out');
             setTimeout(() => {
@@ -972,201 +971,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 htmlElement.setAttribute('data-theme', 'dark');
                 localStorage.setItem('kkn-theme', 'dark');
-        if (modalTitle) modalTitle.textContent = item.title;
-
-        // Format and render description
-        const rawContent = itemType === 'Proker' ? item.description_markdown : item.content_markdown;
-        if (modalMarkdownContent) {
-            modalMarkdownContent.innerHTML = typeof marked !== 'undefined' ? marked.parse(rawContent) : rawContent;
-        }
-
-        // Set badge and date
-        if (modalCategoryBadge) {
-            modalCategoryBadge.textContent = itemType === 'Proker' ? item.type : item.phase;
-            modalCategoryBadge.className = 'badge'; // reset
-            if (itemType === 'Proker') {
-                modalCategoryBadge.classList.add(item.type === 'Proker Bersama' ? 'badge-success' : 'badge-info');
-            } else {
-                modalCategoryBadge.classList.add(item.phase === 'Pra-KKN' ? 'badge-warning' : 'badge-success');
-            }
-        }
-
-        if (modalDate) {
-            if (itemType === 'Logbook') {
-                const dateObj = new Date(item.date);
-                const formattedDate = isNaN(dateObj.getTime()) ? item.date : dateObj.toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                });
-                modalDate.textContent = formattedDate;
-                modalDate.style.display = 'inline-block';
-            } else {
-                modalDate.textContent = `Status: ${item.status}`;
-                modalDate.style.display = 'inline-block';
-            }
-        }
-
-        // Handle Image Gallery
-        activeImages = item.image_urls || [];
-        if (activeImages.length === 0) {
-            if (modalGallerySide) modalGallerySide.style.display = 'none';
-        } else {
-            if (modalGallerySide) modalGallerySide.style.display = 'block';
-
-            // Build carousel slides
-            if (carouselTrack) {
-                carouselTrack.innerHTML = '';
-                activeImages.forEach((imgUrl, idx) => {
-                    const slide = document.createElement('div');
-                    slide.className = 'carousel-slide';
-
-                    const fullUrl = imgUrl.startsWith('http') ? imgUrl : `${API_BASE_URL}${imgUrl}`;
-
-                    slide.innerHTML = `<img src="${fullUrl}" alt="Slide ${idx + 1}" class="carousel-image">`;
-
-                    // Click to Zoom
-                    slide.querySelector('img').addEventListener('click', () => {
-                        openLightbox(fullUrl);
-                    });
-
-                    carouselTrack.appendChild(slide);
-                });
-            }
-
-            // Build dot indicators
-            if (carouselDotsContainer) {
-                carouselDotsContainer.innerHTML = '';
-                activeImages.forEach((_, idx) => {
-                    const dot = document.createElement('span');
-                    dot.className = `carousel-dot ${idx === 0 ? 'active' : ''}`;
-                    dot.addEventListener('click', () => {
-                        goToSlide(idx);
-                    });
-                    carouselDotsContainer.appendChild(dot);
-                });
-            }
-
-            // Update slide positioning
-            updateCarousel();
-        }
-
-        // Show modal with transition
-        detailsModal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent body scroll
-    };
-
-    window.closeDetailsModal = () => {
-        if (detailsModal) detailsModal.classList.add('hidden');
-        document.body.style.overflow = ''; // Restore body scroll
-    };
-
-    // Carousel Navigation
-    const updateCarousel = () => {
-        if (!carouselTrack) return;
-        const offset = -currentSlideIndex * 100;
-        carouselTrack.style.transform = `translateX(${offset}%)`;
-
-        // Update dots
-        if (carouselDotsContainer) {
-            const dots = carouselDotsContainer.querySelectorAll('.carousel-dot');
-            dots.forEach((dot, idx) => {
-                if (idx === currentSlideIndex) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-
-        // Show/hide arrows based on index / wrap-around
-        if (prevBtn) prevBtn.style.display = activeImages.length <= 1 ? 'none' : 'flex';
-        if (nextBtn) nextBtn.style.display = activeImages.length <= 1 ? 'none' : 'flex';
-    };
-
-    const goToSlide = (index) => {
-        if (index < 0) {
-            currentSlideIndex = activeImages.length - 1;
-        } else if (index >= activeImages.length) {
-            currentSlideIndex = 0;
-        } else {
-            currentSlideIndex = index;
-        }
-        updateCarousel();
-    };
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            goToSlide(currentSlideIndex - 1);
-        });
-    }
-
-    if (nextBtn) {
-        nextBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            goToSlide(currentSlideIndex + 1);
-        });
-    }
-
-    // Touch support (swipe) for Carousel
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    if (carouselTrack) {
-        carouselTrack.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        carouselTrack.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, { passive: true });
-    }
-
-    const handleSwipe = () => {
-        const threshold = 50; // swipe minimum distance in pixels
-        if (touchStartX - touchEndX > threshold) {
-            // Swiped left, next slide
-            goToSlide(currentSlideIndex + 1);
-        } else if (touchEndX - touchStartX > threshold) {
-            // Swiped right, prev slide
-            goToSlide(currentSlideIndex - 1);
-        }
-    };
-
-    // --- Lightbox Zoom Logic ---
-    const openLightbox = (imgUrl) => {
-        if (!lightboxOverlay || !lightboxImage) return;
-        lightboxImage.src = imgUrl;
-        lightboxOverlay.classList.remove('hidden');
-    };
-
-    window.closeLightbox = () => {
-        if (lightboxOverlay) lightboxOverlay.classList.add('hidden');
-    };
-
-    // --- Dark Mode Logic ---
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const htmlElement = document.documentElement;
-    const bodyElement = document.body;
-    
-    // Check local storage for saved theme
-    const savedTheme = localStorage.getItem('kkn-theme');
-    if (savedTheme === 'dark') {
-        htmlElement.setAttribute('data-theme', 'dark');
-        if (themeToggleBtn) themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-    }
-
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            if (htmlElement.getAttribute('data-theme') === 'dark') {
-                htmlElement.removeAttribute('data-theme');
-                localStorage.setItem('kkn-theme', 'light');
-                themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            } else {
-                htmlElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('kkn-theme', 'dark');
                 themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
             }
         });
@@ -1218,7 +1022,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 11. WebGIS Initialization ---
     const initWebGIS = () => {
         const mapContainer = document.getElementById('webgis-map');
-        // Pastikan div ada dan library Leaflet (L) sudah termuat
         if (!mapContainer || typeof L === 'undefined') return;
 
         // Koordinat area Nglipar, Gunungkidul (Dusun Wungurejo area)
@@ -1232,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', () => {
             attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Buat Custom Icon untuk Marker agar terlihat premium
+        // Buat Custom Icon untuk Marker
         const createCustomIcon = (color, iconClass) => {
             return L.divIcon({
                 className: 'custom-leaflet-icon',
@@ -1243,7 +1046,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        // Data Marker Potensi Desa (Tinggal disesuaikan koordinat aslinya nanti)
+        // Data Marker Dummy
         const locations = [
             {
                 name: "Posko KKN 84.095",
@@ -1282,7 +1085,6 @@ document.addEventListener('DOMContentLoaded', () => {
         locations.forEach(loc => {
             const marker = L.marker(loc.coords, { icon: createCustomIcon(loc.color, loc.icon) }).addTo(map);
             
-            // Konten Pop-up yang estetik
             const popupContent = `
                 <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 220px; padding: 5px;">
                     <span style="display: inline-block; padding: 4px 8px; border-radius: 20px; background-color: ${loc.color}15; font-size: 0.7rem; font-weight: 800; color: ${loc.color}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">${loc.type}</span>
@@ -1301,6 +1103,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchGuestbook();
     fetchGallery();
     
-    // Initialize map with a slight delay to ensure container is fully rendered
+    // Initialize WebGIS Map safely
     setTimeout(initWebGIS, 500);
 });
