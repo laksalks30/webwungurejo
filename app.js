@@ -1099,7 +1099,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Masjid Al Amin",
-                coords: [-7.8740193, 110.6040767], // Koordinat presisi dari Google Maps
+                coords: [-7.873480286219351, 110.60479159365966], // Dikoreksi oleh user
                 color: "#9B59B6", 
                 icon: "fa-solid fa-mosque",
                 desc: "Pusat kegiatan ibadah kemasyarakatan dan pendidikan keagamaan warga.",
