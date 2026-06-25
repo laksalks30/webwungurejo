@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     handleRouting();
 
     // --- 3. API Base URL and Data Loading ---
-    const API_BASE_URL = 'http://localhost:8000'; // Updated to match local Uvicorn port
+    const API_BASE_URL = 'http://localhost:8067'; // Updated to match local Uvicorn port
 
     const prokerGridContainer = document.getElementById('proker-grid-container');
     const filterButtons = document.querySelectorAll('.filter-btn');

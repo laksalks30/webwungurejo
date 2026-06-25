@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const API_BASE_URL = 'http://localhost:8000'; // Updated to match local Uvicorn port
+    const API_BASE_URL = 'http://localhost:8067'; // Updated to match local Uvicorn port
 
     // --- Selectors ---
     const loginSection = document.getElementById('login-section');
