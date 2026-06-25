@@ -1024,8 +1024,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const mapContainer = document.getElementById('webgis-map');
         if (!mapContainer || typeof L === 'undefined') return;
 
-        // Koordinat area Pengkol, Nglipar, Gunungkidul (Berdasarkan riset aktual)
-        const wungurejoCoords = [-7.878, 110.598]; 
+        // Koordinat area Dusun Wungurejo (Berdasarkan foto peta aktual)
+        const wungurejoCoords = [-7.877, 110.608]; 
         
         const map = L.map('webgis-map').setView(wungurejoCoords, 15);
 
@@ -1047,16 +1047,17 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // --- 1. GARIS BATAS WILAYAH DUSUN (POLYGON) ---
-        // Koordinat batas wilayah estimasi (Disesuaikan dengan area Pengkol, Nglipar)
+        // Koordinat batas wilayah presisi (Mengikuti garis merah di peta referensi)
         const wungurejoBoundary = [
-            [-7.875, 110.595],
-            [-7.874, 110.598],
-            [-7.875, 110.601],
-            [-7.877, 110.603],
-            [-7.880, 110.602],
-            [-7.883, 110.599],
-            [-7.882, 110.596],
-            [-7.879, 110.594]
+            [-7.8715, 110.6070], // Barat Laut (Dekat Griya Sehat)
+            [-7.8715, 110.6100], // Timur Laut
+            [-7.8750, 110.6102], // Timur Tengah Atas
+            [-7.8770, 110.6105], // Timur Tengah (Dekat SDN Sendowo 03)
+            [-7.8810, 110.6080], // Tenggara
+            [-7.8825, 110.6065], // Ujung Selatan
+            [-7.8810, 110.6050], // Barat Daya
+            [-7.8780, 110.6055], // Barat Tengah Bawah
+            [-7.8760, 110.6060]  // Barat Tengah Atas (Dekat TPQ)
         ];
 
         // Gambar area polygon di peta
@@ -1076,63 +1077,63 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `);
 
-        // --- 2. DATA TITIK LOKASI (MARKERS) ---
+        // --- 2. DATA TITIK LOKASI (MARKERS) DARI PETA ASLI ---
         const locations = [
             {
                 name: "Posko KKN 84.095",
-                coords: [-7.877, 110.597],
+                coords: [-7.877, 110.6085], // Tengah Dusun
                 color: "#6C0820", 
                 icon: "fa-solid fa-house-user",
                 desc: "Pusat koordinasi dan tempat tinggal mahasiswa KKN selama mengabdi.",
                 type: "Posko Utama"
             },
             {
-                name: "Balai Kalurahan / Dusun",
-                coords: [-7.879, 110.599],
-                color: "#4A90E2", 
-                icon: "fa-solid fa-landmark",
-                desc: "Tempat pelaksanaan proker utama seperti Sosialisasi UMKM dan Stunting.",
-                type: "Fasilitas Umum"
-            },
-            {
-                name: "Peternakan Madu Klanceng",
-                coords: [-7.876, 110.600],
+                name: "Putra Mebel (UMKM)",
+                coords: [-7.8765, 110.6090], // Sesuai peta
                 color: "#F5A623", 
-                icon: "fa-solid fa-bug",
-                desc: "Salah satu potensi utama ekonomi dan UMKM warga Desa Wungurejo.",
+                icon: "fa-solid fa-hammer",
+                desc: "Potensi industri kreatif dan kerajinan kayu lokal Dusun Wungurejo.",
                 type: "UMKM Lokal"
             },
             {
-                name: "Area Gejog Lesung",
-                coords: [-7.880, 110.596],
-                color: "#27AE60", 
-                icon: "fa-solid fa-music",
-                desc: "Pusat pelestarian kesenian tradisional khas Gunungkidul.",
-                type: "Pariwisata Budaya"
+                name: "Griya Sehat TBS",
+                coords: [-7.8718, 110.6075], // Ujung Utara
+                color: "#FF69B4", 
+                icon: "fa-solid fa-kit-medical",
+                desc: "Fasilitas pelayanan kesehatan masyarakat setempat.",
+                type: "Fasilitas Kesehatan"
             },
             {
-                name: "Masjid / Mushola Dusun",
-                coords: [-7.878, 110.5975],
-                color: "#9B59B6", // Ungu
+                name: "TPQ Tarbiyatul Muchcinin",
+                coords: [-7.8755, 110.6065], // Sisi Barat
+                color: "#27AE60", 
+                icon: "fa-solid fa-book-quran",
+                desc: "Pusat pendidikan agama dan taman bacaan Al-Quran dusun.",
+                type: "Pendidikan & Agama"
+            },
+            {
+                name: "Masjid Darussalam",
+                coords: [-7.8795, 110.6075], // Sisi Selatan
+                color: "#9B59B6", 
                 icon: "fa-solid fa-mosque",
-                desc: "Pusat kegiatan ibadah, TPA anak-anak, dan kegiatan keagamaan warga.",
+                desc: "Pusat kegiatan ibadah dan kemasyarakatan warga Wungurejo.",
                 type: "Fasilitas Ibadah"
             },
             {
-                name: "SD / PAUD Terdekat",
-                coords: [-7.8775, 110.599],
-                color: "#1ABC9C", // Tosca
+                name: "SDN Sendowo 03",
+                coords: [-7.8773, 110.6105], // Sisi Timur
+                color: "#1ABC9C", 
                 icon: "fa-solid fa-school",
-                desc: "Pusat pendidikan usia dini dan dasar bagi anak-anak dusun.",
+                desc: "Sekolah Dasar yang berbatasan langsung dengan area Dusun Wungurejo.",
                 type: "Fasilitas Pendidikan"
             },
             {
-                name: "Posyandu Balita & Lansia",
-                coords: [-7.880, 110.598],
-                color: "#FF69B4", // Pink Terang
-                icon: "fa-solid fa-kit-medical",
-                desc: "Lokasi pelayanan kesehatan rutin dan sosialisasi pencegahan stunting.",
-                type: "Kesehatan"
+                name: "Pengrajin Popor",
+                coords: [-7.8745, 110.6068], // Sisi Barat
+                color: "#E67E22", 
+                icon: "fa-solid fa-toolbox",
+                desc: "Salah satu titik potensi usaha mandiri warga (UMKM).",
+                type: "UMKM Lokal"
             }
         ];
 
