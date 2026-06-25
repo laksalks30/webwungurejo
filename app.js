@@ -1099,7 +1099,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Masjid Al Amin",
-                coords: [-7.8718, 110.6058], // Tepat di utara Balai Padukuhan
+                coords: [-7.8740193, 110.6040767], // Koordinat presisi dari Google Maps
                 color: "#9B59B6", 
                 icon: "fa-solid fa-mosque",
                 desc: "Pusat kegiatan ibadah kemasyarakatan dan pendidikan keagamaan warga.",
