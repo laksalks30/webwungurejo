@@ -92,8 +92,10 @@ class GalleryDB(Base):
 class BlogDB(Base):
     __tablename__ = "blogs"
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
-    content_markdown = Column(Text, nullable=False)
+    title = Column(String, nullable=False)           # Indonesian title
+    title_en = Column(String, nullable=True)          # English title (optional)
+    content_markdown = Column(Text, nullable=False)   # Indonesian content
+    content_markdown_en = Column(Text, nullable=True) # English content (optional)
     thumbnail_url = Column(String, nullable=True)
     date = Column(String, nullable=False) # YYYY-MM-DD
 
@@ -181,7 +183,9 @@ class GalleryResponse(GalleryBase):
 
 class BlogBase(BaseModel):
     title: str
+    title_en: Optional[str] = None
     content_markdown: str
+    content_markdown_en: Optional[str] = None
     thumbnail_url: Optional[str] = None
     date: str
 

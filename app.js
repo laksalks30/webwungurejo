@@ -1141,13 +1141,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const blog = window.blogData.find(b => b.id === id);
         if (!blog) return;
 
-        const overlay      = document.getElementById('blog-reader-modal');
-        const heroImg      = document.getElementById('blog-reader-hero-img');
+        const isEN = (window.currentLang === 'en');
+        const overlay         = document.getElementById('blog-reader-modal');
+        const heroImg         = document.getElementById('blog-reader-hero-img');
         const heroPlaceholder = document.getElementById('blog-reader-hero-placeholder');
-        const badge        = document.getElementById('blog-reader-badge');
-        const dateEl       = document.getElementById('blog-reader-date');
-        const titleEl      = document.getElementById('blog-reader-title');
-        const contentEl    = document.getElementById('blog-reader-content');
+        const badge           = document.getElementById('blog-reader-badge');
+        const dateEl          = document.getElementById('blog-reader-date');
+        const titleEl         = document.getElementById('blog-reader-title');
+        const contentEl       = document.getElementById('blog-reader-content');
 
         if (!overlay) return;
 
@@ -1165,27 +1166,38 @@ document.addEventListener('DOMContentLoaded', () => {
             if (heroPlaceholder) heroPlaceholder.classList.remove('hidden');
         }
 
-        // --- Badge & Date ---
-        if (badge) badge.textContent = 'Artikel';
+        // --- Badge & Date (respects active language) ---
+        const lang = (window.currentLang && window.translations) ? window.translations[window.currentLang] : null;
+        const t = (key, fallback) => (lang && lang[key]) ? lang[key] : fallback;
+
+        if (badge) badge.textContent = t('blog_badge_label', 'Artikel');
+
         if (dateEl) {
+            const locale = isEN ? 'en-US' : 'id-ID';
             const d = new Date(blog.date);
             dateEl.textContent = isNaN(d.getTime())
                 ? blog.date
-                : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                : d.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
         }
 
-        // --- Title ---
-        if (titleEl) titleEl.textContent = blog.title;
+        // --- Title: use EN if available and EN is active, else ID ---
+        const displayTitle = (isEN && blog.title_en) ? blog.title_en : blog.title;
+        if (titleEl) titleEl.textContent = displayTitle;
 
-        // --- Content (Markdown) ---
-        let html = blog.content_markdown || '';
-        if (typeof marked !== 'undefined') html = marked.parse(html);
+        // --- Content: use EN if available and EN is active, else ID ---
+        const rawContent = (isEN && blog.content_markdown_en)
+            ? blog.content_markdown_en
+            : blog.content_markdown || '';
+
+        let html = rawContent;
+        if (typeof marked !== 'undefined') html = marked.parse(rawContent);
         if (contentEl) contentEl.innerHTML = html;
 
         // --- Open ---
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     };
+
 
     window.closeBlogReaderModal = (event) => {
         // If called from backdrop click, only close when clicking the overlay itself

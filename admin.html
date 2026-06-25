@@ -1905,8 +1905,13 @@
                     <input type="hidden" id="edit-blog-id">
                     
                     <div class="form-group">
-                        <label for="blog-title">Judul Artikel</label>
+                        <label for="blog-title">Judul Artikel 🇮🇩 (Indonesia) <span style="color:var(--color-danger)">*</span></label>
                         <input type="text" id="blog-title" class="form-control" style="padding-left: 15px;" required placeholder="Contoh: Sejarah Kesenian Reog Wungurejo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blog-title-en">Judul Artikel 🇬🇧 (English) <span style="color: var(--color-text-muted); font-weight: 400;">(Opsional)</span></label>
+                        <input type="text" id="blog-title-en" class="form-control" style="padding-left: 15px;" placeholder="Example: History of Reog Kesenian Wungurejo">
                     </div>
 
                     <div class="form-group">
@@ -1922,15 +1927,31 @@
                         </div>
                     </div>
 
+                    <!-- ID Content -->
                     <div class="form-group">
-                        <label for="blog-content">Isi Artikel (Mendukung Markdown)</label>
+                        <label for="blog-content">✍️ Isi Artikel 🇮🇩 (Indonesia) — Mendukung Markdown <span style="color:var(--color-danger)">*</span></label>
                         <div class="editor-split">
                             <div>
-                                <textarea id="blog-content" class="editor-textarea" placeholder="Tulis artikel menggunakan format Markdown..." required></textarea>
+                                <textarea id="blog-content" class="editor-textarea" placeholder="Tulis artikel dalam Bahasa Indonesia..." required></textarea>
                             </div>
                             <div>
                                 <div class="preview-box markdown-body" id="blog-content-preview">
                                     <p style="color: var(--color-text-muted); font-style: italic;">Preview artikel akan tampil di sini...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EN Content (Optional) -->
+                    <div class="form-group">
+                        <label for="blog-content-en">✍️ Isi Artikel 🇬🇧 (English) — Mendukung Markdown <span style="color: var(--color-text-muted); font-weight: 400;">(Opsional — tampil saat pengunjung pilih bahasa EN)</span></label>
+                        <div class="editor-split">
+                            <div>
+                                <textarea id="blog-content-en" class="editor-textarea" placeholder="Write the article in English (optional). If left empty, the Indonesian version will be shown as fallback."></textarea>
+                            </div>
+                            <div>
+                                <div class="preview-box markdown-body" id="blog-content-en-preview">
+                                    <p style="color: var(--color-text-muted); font-style: italic;">English preview here...</p>
                                 </div>
                             </div>
                         </div>
