@@ -11,6 +11,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- 0.5 Language Toggle System ---
+    const langToggleBtn = document.getElementById('lang-toggle');
+    const defaultLang = 'id';
+    let currentLang = localStorage.getItem('kkn-lang') || defaultLang;
+
+    const applyLanguage = (lang) => {
+        if (!window.KKN_LANG || !window.KKN_LANG[lang]) return;
+        
+        const dictionary = window.KKN_LANG[lang];
+
+        // Update Text Elements
+        document.querySelectorAll('[data-lang-key]').forEach(el => {
+            const key = el.getAttribute('data-lang-key');
+            if (dictionary[key]) {
+                el.innerHTML = dictionary[key];
+            }
+        });
+
+        // Update Placeholders
+        document.querySelectorAll('[data-lang-ph]').forEach(el => {
+            const key = el.getAttribute('data-lang-ph');
+            if (dictionary[key]) {
+                el.setAttribute('placeholder', dictionary[key]);
+            }
+        });
+
+        // Update Button UI
+        if (langToggleBtn) {
+            if (lang === 'en') {
+                langToggleBtn.innerHTML = '<span style="opacity: 0.5; font-weight: 400;">ID | </span> EN';
+            } else {
+                langToggleBtn.innerHTML = 'ID <span style="opacity: 0.5; margin: 0 4px; font-weight: 400;">| EN</span>';
+            }
+        }
+    };
+
+    // Apply saved language on load
+    applyLanguage(currentLang);
+
+    if (langToggleBtn) {
+        langToggleBtn.addEventListener('click', () => {
+            currentLang = currentLang === 'id' ? 'en' : 'id';
+            localStorage.setItem('kkn-lang', currentLang);
+            applyLanguage(currentLang);
+        });
+    }
+
     // --- 1. Mobile Menu Toggler ---
     const mobileToggle = document.querySelector('.mobile-nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
@@ -903,9 +950,78 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lightboxOverlay) lightboxOverlay.classList.add('hidden');
     };
 
+    // --- Dark Mode Logic ---
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+    const bodyElement = document.body;
+    
+    // Check local storage for saved theme
+    const savedTheme = localStorage.getItem('kkn-theme');
+    if (savedTheme === 'dark') {
+        htmlElement.setAttribute('data-theme', 'dark');
+        if (themeToggleBtn) themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+    }
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.getAttribute('data-theme') === 'dark') {
+                htmlElement.removeAttribute('data-theme');
+                localStorage.setItem('kkn-theme', 'light');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('kkn-theme', 'dark');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            }
+        });
+    }
+
+    // --- 6. Gallery Functional Logic ---
+    const fetchGallery = async () => {
+        const galleryContainer = document.getElementById('masonry-gallery-container');
+        if (!galleryContainer) return;
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/gallery`);
+            if (!response.ok) throw new Error('Gagal mengambil data galeri');
+            const galleryItems = await response.json();
+            
+            galleryContainer.innerHTML = ''; // Clear spinner
+            
+            if (galleryItems.length === 0) {
+                galleryContainer.innerHTML = `<div style="text-align: center; width: 100%; padding: 40px; color: var(--color-text-muted); grid-column: 1 / -1;">Belum ada foto galeri.</div>`;
+                return;
+            }
+
+            galleryItems.forEach(item => {
+                const fullUrl = item.image_url.startsWith('http') ? item.image_url : `${API_BASE_URL}${item.image_url}`;
+                const dateObj = new Date(item.date);
+                const formattedDate = isNaN(dateObj.getTime()) ? item.date : dateObj.toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                });
+
+                const html = `
+                    <div class="gallery-item" onclick="openLightbox('${fullUrl}')">
+                        <img src="${fullUrl}" alt="${escapeHTML(item.title)}" class="gallery-img" loading="lazy">
+                        <div class="gallery-info">
+                            <h4 class="gallery-title">${escapeHTML(item.title)}</h4>
+                            <span class="gallery-date">${formattedDate}</span>
+                            ${item.description ? `<p style="font-size: 0.8rem; margin-top: 5px; color: #eee;">${escapeHTML(item.description)}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+                galleryContainer.insertAdjacentHTML('beforeend', html);
+            });
+            
+        } catch (error) {
+            console.error(error);
+            galleryContainer.innerHTML = `<div class="error-msg" style="color: var(--color-primary); font-weight: 600; padding: 20px; text-align: center; grid-column: 1 / -1;">Gagal memuat galeri.</div>`;
+        }
+    };
+
     // Load dynamic data on startup
     fetchProkers();
     fetchLogbook();
     fetchGuestbook();
+    fetchGallery();
 });
-

@@ -17,7 +17,7 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=4">
 </head>
 
 <body>
@@ -41,12 +41,23 @@
                 <i class="fa-solid fa-bars"></i>
             </button>
             <nav class="nav-menu">
-                <a href="#beranda" class="nav-link active">Beranda</a>
-                <a href="#profil" class="nav-link">Profil Desa</a>
-                <a href="#proker" class="nav-link">Program Kerja</a>
-                <a href="#logbook" class="nav-link">Logbook</a>
-                <a href="#tim" class="nav-link">Tim Kami</a>
-                <a href="#guestbook" class="nav-link nav-btn">Buku Tamu</a>
+                <a href="#beranda" class="nav-link active" data-lang-key="nav_home">Beranda</a>
+                <a href="#profil" class="nav-link" data-lang-key="nav_profile">Profil Desa</a>
+                <a href="#proker" class="nav-link" data-lang-key="nav_proker">Program Kerja</a>
+                <a href="#logbook" class="nav-link" data-lang-key="nav_logbook">Logbook</a>
+                <a href="#galeri" class="nav-link" data-lang-key="nav_gallery">Galeri</a>
+                <a href="#tim" class="nav-link" data-lang-key="nav_team">Tim Kami</a>
+                <a href="#guestbook" class="nav-link nav-btn" data-lang-key="nav_guestbook">Buku Tamu</a>
+                
+                <!-- Language Toggle Button -->
+                <button id="lang-toggle" class="theme-toggle" aria-label="Toggle Language" style="font-weight: 800; font-size: 0.85rem; width: auto; padding: 0 12px; letter-spacing: 0.5px;">
+                    ID <span style="opacity: 0.5; margin: 0 4px; font-weight: 400;">|</span> EN
+                </button>
+
+                <!-- Dark Mode Toggle Button -->
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </nav>
         </div>
     </header>
@@ -56,16 +67,16 @@
         <div class="hero-overlay"></div>
         <div class="hero-container">
             <div class="hero-content">
-                <span class="hero-tag">Wungurejo, Gunungkidul (1 Juli - 31 Juli 2026)</span>
-                <h1 class="hero-title">Datang Mengabdi,<br><span class="highlight-text">Pulang Membawa Arti</span>
+                <span class="hero-tag" data-lang-key="hero_tag">Wungurejo, Gunungkidul (1 Juli - 31 Juli 2026)</span>
+                <h1 class="hero-title"><span data-lang-key="hero_title">Datang Mengabdi,</span><br><span class="highlight-text" data-lang-key="hero_highlight">Pulang Membawa Arti</span>
                 </h1>
-                <p class="hero-description">Website resmi Kuliah Kerja Nyata (KKN) Kelompok AA 84.095 Universitas
+                <p class="hero-description" data-lang-key="hero_desc">Website resmi Kuliah Kerja Nyata (KKN) Kelompok AA 84.095 Universitas
                     Pembangunan Nasional "Veteran" Yogyakarta. Bersama masyarakat mewujudkan kemandirian, pendidikan,
                     dan kesejahteraan desa.</p>
                 <div class="hero-actions">
-                    <a href="#proker" class="btn btn-primary">Lihat Program Kerja <i
+                    <a href="#proker" class="btn btn-primary"><span data-lang-key="hero_btn_proker">Lihat Program Kerja</span> <i
                             class="fa-solid fa-arrow-right"></i></a>
-                    <a href="#profil" class="btn btn-secondary">Jelajahi Desa</a>
+                    <a href="#profil" class="btn btn-secondary" data-lang-key="hero_btn_desa">Jelajahi Desa</a>
                 </div>
             </div>
 
@@ -74,21 +85,21 @@
                     <div class="stat-icon"><i class="fa-solid fa-list-check"></i></div>
                     <div class="stat-info">
                         <span class="stat-number">12</span>
-                        <span class="stat-label">Program Kerja</span>
+                        <span class="stat-label" data-lang-key="stat_proker_label">Program Kerja</span>
                     </div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon"><i class="fa-solid fa-people-group"></i></div>
                     <div class="stat-info">
                         <span class="stat-number">10</span>
-                        <span class="stat-label">Mahasiswa KKN</span>
+                        <span class="stat-label" data-lang-key="stat_mhs_label">Mahasiswa KKN</span>
                     </div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div>
                     <div class="stat-info">
                         <span class="stat-number">30 Hari</span>
-                        <span class="stat-label">Mengabdi (1 Juli - 31 Juli)</span>
+                        <span class="stat-label" data-lang-key="stat_hari_label">Mengabdi (1 Juli - 31 Juli)</span>
                     </div>
                 </div>
             </div>
@@ -96,34 +107,34 @@
 
         <!-- Core Pillars Section (Fokus Kegiatan) -->
         <div class="beranda-info-container">
-            <h2 class="beranda-info-title">Fokus Utama Pengabdian Kami</h2>
+            <h2 class="beranda-info-title" data-lang-key="pillars_title">Fokus Utama Pengabdian Kami</h2>
             <div class="pillars-grid">
                 <!-- Pilar 1 -->
                 <div class="pillar-card">
                     <div class="pillar-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                    <h4>Pendidikan & Literasi</h4>
-                    <p>Membangun masa depan generasi muda Wungurejo melalui bimbingan belajar kreatif, literasi digital
+                    <h4 data-lang-key="p1_title">Pendidikan & Literasi</h4>
+                    <p data-lang-key="p1_desc">Membangun masa depan generasi muda Wungurejo melalui bimbingan belajar kreatif, literasi digital
                         sejak dini, dan penyediaan pojok baca.</p>
                 </div>
                 <!-- Pilar 2 -->
                 <div class="pillar-card">
                     <div class="pillar-icon"><i class="fa-solid fa-chart-line"></i></div>
-                    <h4>UMKM & Ekonomi Lokal</h4>
-                    <p>Mendorong kemandirian ekonomi desa dengan melakukan digitalisasi pemasaran, rebranding kemasan,
+                    <h4 data-lang-key="p2_title">UMKM & Ekonomi Lokal</h4>
+                    <p data-lang-key="p2_desc">Mendorong kemandirian ekonomi desa dengan melakukan digitalisasi pemasaran, rebranding kemasan,
                         dan sosialisasi manajemen keuangan.</p>
                 </div>
                 <!-- Pilar 3 -->
                 <div class="pillar-card">
                     <div class="pillar-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                    <h4>Kesehatan & Sanitasi</h4>
-                    <p>Meningkatkan kesadaran pola hidup bersih dan sehat (PHBS) warga desa serta melakukan sosialisasi
+                    <h4 data-lang-key="p3_title">Kesehatan & Sanitasi</h4>
+                    <p data-lang-key="p3_desc">Meningkatkan kesadaran pola hidup bersih dan sehat (PHBS) warga desa serta melakukan sosialisasi
                         intensif pencegahan stunting.</p>
                 </div>
                 <!-- Pilar 4 -->
                 <div class="pillar-card">
                     <div class="pillar-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                    <h4>Adaptasi & Digitalisasi IT</h4>
-                    <p>Mengimplementasikan solusi digital untuk administrasi desa, pemetaan potensi wilayah, dan
+                    <h4 data-lang-key="p4_title">Adaptasi & Digitalisasi IT</h4>
+                    <p data-lang-key="p4_desc">Mengimplementasikan solusi digital untuk administrasi desa, pemetaan potensi wilayah, dan
                         optimalisasi publikasi online desa.</p>
                 </div>
             </div>
@@ -134,30 +145,30 @@
     <section id="profil" class="profile-section section-padding page-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Profil Pengabdian</span>
-                <h2 class="section-title">Kenal Lebih Dekat dengan Wungurejo</h2>
-                <p class="section-subtitle">Kalurahan Pengkol, Kapanewon Nglipar, Kabupaten Gunungkidul, D.I. Yogyakarta</p>
+                <span class="section-tag" data-lang-key="profil_tag">Profil Pengabdian</span>
+                <h2 class="section-title" data-lang-key="profil_title">Kenal Lebih Dekat dengan Wungurejo</h2>
+                <p class="section-subtitle" data-lang-key="profil_subtitle">Kalurahan Pengkol, Kapanewon Nglipar, Kabupaten Gunungkidul, D.I. Yogyakarta</p>
             </div>
 
             <div class="profile-grid">
                 <div class="profile-text-content">
-                    <h3>Potensi & Karakteristik Dusun</h3>
-                    <p>Dusun Wungurejo memiliki kekayaan filosofis dari kata "Wungu" (bunga yang tumbuh subur di tepi sungai) dan "Rejo" (makmur). Sebagai bagian dari rintisan Desa Wisata Wandari Mukti, dusun ini menyimpan potensi luar biasa di bidang kesenian tradisional (seperti Reog dan Gejog Lesung), peternakan madu klanceng, serta bentang alam perbukitan yang asri. KKN 84.095 hadir untuk berkolaborasi mengoptimalkan potensi tersebut menuju kemandirian ekonomi dan pelestarian budaya.</p>
+                    <h3 data-lang-key="profil_potensi_h">Potensi & Karakteristik Dusun</h3>
+                    <p data-lang-key="profil_potensi_p">Dusun Wungurejo memiliki kekayaan filosofis dari kata "Wungu" (bunga yang tumbuh subur di tepi sungai) dan "Rejo" (makmur). Sebagai bagian dari rintisan Desa Wisata Wandari Mukti, dusun ini menyimpan potensi luar biasa di bidang kesenian tradisional (seperti Reog dan Gejog Lesung), peternakan madu klanceng, serta bentang alam perbukitan yang asri. KKN 84.095 hadir untuk berkolaborasi mengoptimalkan potensi tersebut menuju kemandirian ekonomi dan pelestarian budaya.</p>
 
                     <div class="vision-mission">
                         <div class="vm-card">
                             <div class="vm-icon"><i class="fa-solid fa-bullseye"></i></div>
                             <div class="vm-info">
-                                <h4>Visi Kami</h4>
-                                <p>Menjadi jembatan inovasi ilmiah akademis dengan kearifan lokal guna meningkatkan daya
+                                <h4 data-lang-key="visi_title">Visi Kami</h4>
+                                <p data-lang-key="visi_desc">Menjadi jembatan inovasi ilmiah akademis dengan kearifan lokal guna meningkatkan daya
                                     saing masyarakat Dusun Wungurejo.</p>
                             </div>
                         </div>
                         <div class="vm-card">
                             <div class="vm-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
                             <div class="vm-info">
-                                <h4>Misi Pengabdian</h4>
-                                <p>Pemberdayaan UMKM lokal, edukasi berkelanjutan anak usia sekolah, serta implementasi
+                                <h4 data-lang-key="misi_title">Misi Pengabdian</h4>
+                                <p data-lang-key="misi_desc">Pemberdayaan UMKM lokal, edukasi berkelanjutan anak usia sekolah, serta implementasi
                                     adaptasi digital ramah masyarakat.</p>
                             </div>
                         </div>
@@ -166,7 +177,7 @@
 
                 <div class="profile-visual">
                     <div class="visual-card">
-                        <img src="assets/images/andongsili.webp" alt="Pemandangan Dusun Wungurejo" class="visual-img">
+                        <img src="assets/images/Gunung kidul.jpg" alt="Pemandangan Gunung Kidul" class="visual-img">
                         <div class="visual-badge">
                             <i class="fa-solid fa-map-location-dot"></i> Nglipar, Gunungkidul
                         </div>
@@ -174,6 +185,49 @@
                             <i class="fa-brands fa-instagram"></i> credit to : sunraku_zx
                         </a>
                     </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Data Demografi Section -->
+            <div class="demographics-container" style="margin-top: 60px;">
+                <h3 style="text-align: center; margin-bottom: 30px; font-size: 1.5rem; color: var(--color-dark); font-weight: 800;"><i class="fa-solid fa-chart-pie" style="color: var(--color-primary); margin-right: 10px;"></i> <span data-lang-key="demo_title">Data Demografi Dusun Wungurejo</span></h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; text-align: center;">
+                    <!-- Stat 1: Total Jiwa -->
+                    <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                        <i class="fa-solid fa-users" style="font-size: 2.5rem; color: var(--color-primary); margin-bottom: 16px; display: block;"></i>
+                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;">437</h4>
+                        <p style="color: var(--color-text-muted); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;" data-lang-key="demo_penduduk">Total Penduduk</p>
+                    </div>
+                    <!-- Stat 2: KK -->
+                    <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                        <i class="fa-solid fa-house-chimney-user" style="font-size: 2.5rem; color: var(--color-secondary); margin-bottom: 16px; display: block;"></i>
+                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;">135</h4>
+                        <p style="color: var(--color-text-muted); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;" data-lang-key="demo_kk">Kepala Keluarga</p>
+                    </div>
+                    <!-- Stat 3: RT -->
+                    <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                        <i class="fa-solid fa-map" style="font-size: 2.5rem; color: #FFA500; margin-bottom: 16px; display: block;"></i>
+                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;">10</h4>
+                        <p style="color: var(--color-text-muted); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;" data-lang-key="demo_rt">Rukun Tetangga (RT)</p>
+                    </div>
+                    <!-- Stat 4: Gender -->
+                    <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                        <i class="fa-solid fa-venus-mars" style="font-size: 2.5rem; color: #9B59B6; margin-bottom: 16px; display: block;"></i>
+                        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 8px;">
+                            <div><span style="font-size: 1.4rem; font-weight: 800; color: var(--color-dark);">230</span><br><span style="font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600;" data-lang-key="demo_lakilaki">Laki-laki</span></div>
+                            <div style="width: 2px; background-color: rgba(0,0,0,0.1);"></div>
+                            <div><span style="font-size: 1.4rem; font-weight: 800; color: var(--color-dark);">207</span><br><span style="font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600;" data-lang-key="demo_perempuan">Perempuan</span></div>
+                        </div>
+                        <p style="color: var(--color-text-muted); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;" data-lang-key="demo_gender">Rasio Gender</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-map-container" style="margin-top: 60px; background-color: var(--color-white); padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px var(--color-shadow); border: 1.5px solid rgba(108, 8, 32, 0.08);">
+                <h3 style="text-align: center; margin-bottom: 24px; font-size: 1.5rem; color: var(--color-dark); font-weight: 800;"><i class="fa-solid fa-map-location-dot" style="color: var(--color-primary); margin-right: 10px;"></i> <span data-lang-key="map_title">Peta Lokasi Dusun Wungurejo</span></h3>
+                <div style="border-radius: 16px; overflow: hidden;">
+                    <iframe src="https://maps.google.com/maps?q=Wungurejo,%20Pengkol,%20Nglipar,%20Gunung%20Kidul&t=&z=14&ie=UTF8&iwloc=&output=embed" width="100%" height="450" style="border:0; display: block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
@@ -183,16 +237,16 @@
     <section id="proker" class="proker-section section-padding page-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Rencana Aksi</span>
-                <h2 class="section-title">Program Kerja Pengabdian</h2>
-                <p class="section-subtitle">Inisiatif program kerja KKN Kelompok AA 84.095 yang terbagi berdasarkan kategori pelaksanaan.</p>
+                <span class="section-tag" data-lang-key="proker_tag">Rencana Aksi</span>
+                <h2 class="section-title" data-lang-key="proker_title">Program Kerja Pengabdian</h2>
+                <p class="section-subtitle" data-lang-key="proker_subtitle">Inisiatif program kerja KKN Kelompok AA 84.095 yang terbagi berdasarkan kategori pelaksanaan.</p>
             </div>
 
             <!-- Proker Filters -->
             <div class="proker-filters">
-                <button class="filter-btn active" data-filter="all">Semua</button>
-                <button class="filter-btn" data-filter="Proker Bersama">Proker Bersama</button>
-                <button class="filter-btn" data-filter="Proker Individu">Proker Individu</button>
+                <button class="filter-btn active" data-filter="all" data-lang-key="filter_all">Semua</button>
+                <button class="filter-btn" data-filter="Proker Bersama" data-lang-key="filter_bersama">Proker Bersama</button>
+                <button class="filter-btn" data-filter="Proker Individu" data-lang-key="filter_individu">Proker Individu</button>
             </div>
 
             <!-- Proker Grid -->
@@ -208,16 +262,16 @@
     <section id="logbook" class="logbook-section section-padding page-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Log Harian</span>
-                <h2 class="section-title">Timeline & Kegiatan Terbaru</h2>
-                <p class="section-subtitle">Catatan dokumentasi harian kegiatan pengabdian KKN AA 84.095.</p>
+                <span class="section-tag" data-lang-key="logbook_tag">Log Harian</span>
+                <h2 class="section-title" data-lang-key="logbook_title">Timeline & Kegiatan Terbaru</h2>
+                <p class="section-subtitle" data-lang-key="logbook_subtitle">Catatan dokumentasi harian kegiatan pengabdian KKN AA 84.095.</p>
             </div>
 
             <!-- Logbook Filters -->
             <div class="logbook-filters">
-                <button class="logbook-filter-btn active" data-filter="all">Semua Fase</button>
-                <button class="logbook-filter-btn" data-filter="Pra-KKN">Pra-KKN</button>
-                <button class="logbook-filter-btn" data-filter="Pelaksanaan KKN">Pelaksanaan KKN</button>
+                <button class="logbook-filter-btn active" data-filter="all" data-lang-key="filter_all_phase">Semua Fase</button>
+                <button class="logbook-filter-btn" data-filter="Pra-KKN" data-lang-key="filter_prakkn">Pra-KKN</button>
+                <button class="logbook-filter-btn" data-filter="Pelaksanaan KKN" data-lang-key="filter_pelaksanaan">Pelaksanaan KKN</button>
             </div>
 
             <div class="timeline" id="logbook-timeline-container">
@@ -228,13 +282,31 @@
         </div>
     </section>
 
+    <!-- Gallery (Masonry) Section -->
+    <section id="galeri" class="gallery-section section-padding page-section">
+        <div class="container container-wide">
+            <div class="section-header">
+                <span class="section-tag" data-lang-key="gallery_tag">Pesona Wungurejo</span>
+                <h2 class="section-title" data-lang-key="gallery_title">Galeri Pengabdian</h2>
+                <p class="section-subtitle" data-lang-key="gallery_subtitle">Potret keindahan alam dan momen berharga selama pelaksanaan KKN Kelompok AA 84.095.</p>
+            </div>
+
+            <div class="masonry-gallery" id="masonry-gallery-container">
+                <div class="loading-spinner-wrapper" style="display: flex; justify-content: center; align-items: center; padding: 40px; width: 100%; grid-column: 1 / -1;">
+                    <div class="loader-spinner"></div>
+                </div>
+                <!-- Gallery items will be injected here by app.js -->
+            </div>
+        </div>
+    </section>
+
     <!-- Meet the Team Section -->
     <section id="tim" class="team-section section-padding page-section">
         <div class="container container-wide">
             <div class="section-header">
-                <span class="section-tag">Anggota Kelompok</span>
-                <h2 class="section-title">Di Balik Layar KKN AA 84.095</h2>
-                <p class="section-subtitle">Arahkan kursor dan klik pada foto anggota kelompok untuk melihat profil lengkap mereka.</p>
+                <span class="section-tag" data-lang-key="tim_tag">Anggota Kelompok</span>
+                <h2 class="section-title" data-lang-key="tim_title">Di Balik Layar KKN AA 84.095</h2>
+                <p class="section-subtitle" data-lang-key="tim_subtitle">Arahkan kursor dan klik pada foto anggota kelompok untuk melihat profil lengkap mereka.</p>
             </div>
 
             <div class="team-interactive-container">
@@ -288,7 +360,7 @@
                     <div class="team-detail-card" id="team-detail-card">
                         <div class="team-detail-placeholder" id="team-detail-placeholder">
                             <i class="fa-solid fa-arrow-pointer"></i>
-                            <p>Klik salah satu anggota kelompok pada foto untuk melihat profil lengkap.</p>
+                            <p data-lang-key="tim_placeholder">Klik salah satu anggota kelompok pada foto untuk melihat profil lengkap.</p>
                         </div>
                         <div class="team-detail-content hidden" id="team-detail-content">
                             <div class="detail-avatar-box">
@@ -316,53 +388,53 @@
     <section id="guestbook" class="guestbook-section section-padding page-section">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Pesan & Saran</span>
-                <h2 class="section-title">Buku Tamu Interaktif</h2>
-                <p class="section-subtitle">Silakan tinggalkan pesan, masukan, atau kesan bagi KKN Kelompok AA 84.095
+                <span class="section-tag" data-lang-key="gb_tag">Pesan & Saran</span>
+                <h2 class="section-title" data-lang-key="gb_title">Buku Tamu Interaktif</h2>
+                <p class="section-subtitle" data-lang-key="gb_subtitle">Silakan tinggalkan pesan, masukan, atau kesan bagi KKN Kelompok AA 84.095
                     selama di Dusun Wungurejo.</p>
             </div>
 
             <div class="guestbook-grid">
                 <!-- Form Side -->
                 <div class="guestbook-form-card">
-                    <h3>Kirim Pesan Baru</h3>
+                    <h3 data-lang-key="gb_form_title">Kirim Pesan Baru</h3>
                     <form id="comment-form">
                         <div class="form-group">
-                            <label for="input-name">Nama Lengkap</label>
+                            <label for="input-name" data-lang-key="gb_label_name">Nama Lengkap</label>
                             <div class="input-icon-wrapper">
                                 <i class="fa-solid fa-user"></i>
-                                <input type="text" id="input-name" placeholder="Contoh: Pak Budi" required>
+                                <input type="text" id="input-name" placeholder="Contoh: Pak Budi" data-lang-ph="gb_ph_name" required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="input-role">Status / Peran</label>
+                            <label for="input-role" data-lang-key="gb_label_role">Status / Peran</label>
                             <div class="input-icon-wrapper">
                                 <i class="fa-solid fa-users"></i>
                                 <select id="input-role" required>
-                                    <option value="Warga Desa">Warga Dusun Wungurejo</option>
-                                    <option value="Perangkat Desa">Perangkat Desa</option>
-                                    <option value="Mahasiswa">Mahasiswa KKN</option>
-                                    <option value="Dosen/DPL">Dosen Pembimbing Lapangan</option>
-                                    <option value="Umum">Pengunjung Umum</option>
+                                    <option value="Warga Desa" data-lang-key="gb_opt_warga">Warga Dusun Wungurejo</option>
+                                    <option value="Perangkat Desa" data-lang-key="gb_opt_perangkat">Perangkat Desa</option>
+                                    <option value="Mahasiswa" data-lang-key="gb_opt_mhs">Mahasiswa KKN</option>
+                                    <option value="Dosen/DPL" data-lang-key="gb_opt_dosen">Dosen Pembimbing Lapangan</option>
+                                    <option value="Umum" data-lang-key="gb_opt_umum">Pengunjung Umum</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="input-message">Pesan Anda</label>
+                            <label for="input-message" data-lang-key="gb_label_msg">Pesan Anda</label>
                             <textarea id="input-message" rows="4"
-                                placeholder="Tuliskan pesan atau saran Anda di sini..." required></textarea>
+                                placeholder="Tuliskan pesan atau saran Anda di sini..." data-lang-ph="gb_ph_msg" required></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-block">Kirim Pesan <i
+                        <button type="submit" class="btn btn-primary btn-block"><span data-lang-key="gb_btn_send">Kirim Pesan</span> <i
                                 class="fa-solid fa-paper-plane"></i></button>
                     </form>
                 </div>
 
                 <!-- Messages Display Side -->
                 <div class="guestbook-messages-card">
-                    <h3>Pesan Terbaru (<span id="messages-count">0</span>)</h3>
+                    <h3><span data-lang-key="gb_latest">Pesan Terbaru</span> (<span id="messages-count">0</span>)</h3>
                     <div id="messages-list" class="messages-list">
                         <!-- Dynamic Comments will appear here -->
                     </div>
@@ -376,8 +448,8 @@
         <div class="container">
             <div class="cta-container">
                 <div class="cta-content">
-                    <h2>Ikuti Perjalanan KKN Kami!</h2>
-                    <p>Dapatkan update terbaru seputar program kerja dan kegiatan sehari-hari kami di Dusun Wungurejo melalui Instagram dan TikTok resmi kelompok.</p>
+                    <h2 data-lang-key="cta_title">Ikuti Perjalanan KKN Kami!</h2>
+                    <p data-lang-key="cta_desc">Dapatkan update terbaru seputar program kerja dan kegiatan sehari-hari kami di Dusun Wungurejo melalui Instagram dan TikTok resmi kelompok.</p>
                 </div>
                 <div class="cta-actions">
                     <a href="https://www.instagram.com/about.wungurejo?igsh=MW5iZzh1dG13cnBzbQ==" target="_blank" class="btn btn-social-instagram">
@@ -400,11 +472,11 @@
                     class="footer-logo footer-upn-logo">
                 <div>
                     <h4>KKN AA 84.095</h4>
-                    <p>UPN "Veteran" Yogyakarta - Desa Dusun Wungurejo, Pengkol, Nglipar, Gunung Kidul</p>
+                    <p>UPN "Veteran" Yogyakarta - <span data-lang-key="footer_loc">Desa Dusun Wungurejo, Pengkol, Nglipar, Gunung Kidul</span></p>
                 </div>
             </div>
-            <p class="copyright">&copy; 2026 KKN Kelompok AA 84.095. All Rights Reserved. Made with <i
-                    class="fa-solid fa-heart"></i> for Wungurejo.</p>
+            <p class="copyright"><span data-lang-key="footer_copy">&copy; 2026 KKN Kelompok AA 84.095. All Rights Reserved. Made with</span> <i
+                    class="fa-solid fa-heart"></i> <span data-lang-key="footer_for">for Wungurejo.</span></p>
         </div>
     </footer>
 
@@ -458,8 +530,10 @@
 
     <!-- Marked.js for Markdown Parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Language Dictionary -->
+    <script src="lang.js?v=1"></script>
     <!-- App Script -->
-    <script src="app.js"></script>
+    <script src="app.js?v=3"></script>
 </body>
 
 </html>

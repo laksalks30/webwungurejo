@@ -15,14 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const prokerTableBody = document.getElementById('proker-table-body');
     const logbookTableBody = document.getElementById('logbook-table-body');
     const guestbookListContainer = document.getElementById('guestbook-list-container');
+    const galleryTableBody = document.getElementById('gallery-table-body');
 
     // Modals
     const prokerModal = document.getElementById('proker-modal');
     const logbookModal = document.getElementById('logbook-modal');
+    const galleryModal = document.getElementById('gallery-modal');
 
     // Forms
     const prokerForm = document.getElementById('proker-form');
     const logbookForm = document.getElementById('logbook-form');
+    const galleryForm = document.getElementById('gallery-form');
 
     // Proker Form elements
     const prokerTypeSelect = document.getElementById('proker-type');
@@ -38,17 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add buttons
     const newProkerBtn = document.getElementById('new-proker-btn');
     const newLogbookBtn = document.getElementById('new-logbook-btn');
+    const newGalleryBtn = document.getElementById('new-gallery-btn');
 
     // Image upload inputs
     const prokerImagesInput = document.getElementById('proker-images');
     const prokerImagesPreview = document.getElementById('proker-images-preview');
     const logbookImagesInput = document.getElementById('logbook-images');
     const logbookImagesPreview = document.getElementById('logbook-images-preview');
+    const galleryImageInput = document.getElementById('gallery-image');
+    const galleryImagePreview = document.getElementById('gallery-image-preview');
 
     // --- State variables ---
     let token = localStorage.getItem('kkn_admin_token');
     let currentProkerImages = [];
     let currentLogbookImages = [];
+    let currentGalleryImage = null;
 
     // --- Authentication Helpers ---
     const setAuthHeader = (headers = {}) => {
@@ -176,6 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchProkers();
         } else if (tabName === 'logbook') {
             fetchLogbooks();
+        } else if (tabName === 'gallery') {
+            fetchGalleries();
         } else if (tabName === 'guestbook') {
             fetchGuestbookEntries();
         }
@@ -268,10 +277,50 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     if (logbookImagesInput) {
-        logbookImagesInput.addEventListener('change', () => {
-            handleImageUpload(logbookImagesInput, currentLogbookImages, 'logbook-images-preview');
+        logbookImagesInput.addEventListener('change', () => handleImageUpload(logbookImagesInput, currentLogbookImages, 'logbook-images-preview'));
+    }
+
+    if (galleryImageInput) {
+        galleryImageInput.addEventListener('change', async () => {
+            const file = galleryImageInput.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast("File harus berupa gambar", "error");
+                return;
+            }
+            try {
+                const res = await uploadImageFile(file);
+                currentGalleryImage = res.url;
+                renderSingleImagePreview(currentGalleryImage, 'gallery-image-preview');
+                showToast("Gambar berhasil diunggah", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal mengunggah gambar", "error");
+            }
+            galleryImageInput.value = '';
         });
     }
+
+    const renderSingleImagePreview = (url, previewElementId) => {
+        const previewEl = document.getElementById(previewElementId);
+        if (!previewEl) return;
+        previewEl.innerHTML = '';
+        if (url) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'thumbnail-container';
+            const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+            wrapper.innerHTML = `
+                <img src="${fullUrl}" alt="Preview">
+                <button type="button" class="btn-remove" onclick="removeSingleImage()">×</button>
+            `;
+            previewEl.appendChild(wrapper);
+        }
+    };
+
+    window.removeSingleImage = () => {
+        currentGalleryImage = null;
+        renderSingleImagePreview(null, 'gallery-image-preview');
+    };
 
     // --- 1. PROKER CRUDS ---
     const fetchProkers = async () => {
@@ -581,6 +630,141 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // --- 3. GALLERY MANAGEMENT ---
+    const fetchGalleries = async () => {
+        try {
+            const response = await authenticatedFetch(`${API_BASE_URL}/api/gallery`);
+            const data = await response.json();
+            renderGalleryList(data);
+        } catch (error) {
+            console.error(error);
+            if (error.message !== "Unauthorized") {
+                galleryTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-danger);">Gagal memuat galeri.</td></tr>`;
+            }
+        }
+    };
+
+    const renderGalleryList = (galleries) => {
+        galleryTableBody.innerHTML = '';
+        if (galleries.length === 0) {
+            galleryTableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Belum ada foto galeri.</td></tr>`;
+            return;
+        }
+
+        galleries.forEach(gal => {
+            const tr = document.createElement('tr');
+            const fullUrl = gal.image_url.startsWith('http') ? gal.image_url : `${API_BASE_URL}${gal.image_url}`;
+            tr.innerHTML = `
+                <td>
+                    <img src="${fullUrl}" alt="Gallery Thumbnail" style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(108, 8, 32, 0.1);">
+                </td>
+                <td>
+                    <strong>${escapeHTML(gal.title)}</strong><br>
+                    <span style="font-size: 0.8rem; color: var(--color-text-muted);">${escapeHTML(gal.description || '')}</span>
+                </td>
+                <td>${gal.date}</td>
+                <td>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-edit" onclick='openEditGalleryModal(${JSON.stringify(gal)})' title="Edit">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn btn-delete" onclick="deleteGallery(${gal.id})" title="Hapus">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            galleryTableBody.appendChild(tr);
+        });
+    };
+
+    if (newGalleryBtn) {
+        newGalleryBtn.addEventListener('click', () => {
+            document.getElementById('gallery-modal-title').textContent = "Tambah Foto Galeri";
+            document.getElementById('edit-gallery-id').value = "";
+            galleryForm.reset();
+            document.getElementById('gallery-date').value = new Date().toISOString().split('T')[0];
+            currentGalleryImage = null;
+            renderSingleImagePreview(null, 'gallery-image-preview');
+            openModal('gallery-modal');
+        });
+    }
+
+    if (galleryForm) {
+        galleryForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-gallery-id').value;
+            const title = document.getElementById('gallery-title').value.trim();
+            const date = document.getElementById('gallery-date').value;
+            const description = document.getElementById('gallery-desc').value.trim();
+
+            if (!currentGalleryImage) {
+                showToast("Silakan unggah foto terlebih dahulu!", "warning");
+                return;
+            }
+
+            const payload = { title, date, description, image_url: currentGalleryImage };
+            const isEdit = id !== "";
+            const url = isEdit ? `${API_BASE_URL}/api/gallery/${id}` : `${API_BASE_URL}/api/gallery`;
+            const method = isEdit ? 'PUT' : 'POST';
+
+            try {
+                const response = await authenticatedFetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    showToast(isEdit ? "Foto berhasil diperbarui!" : "Foto berhasil ditambahkan!", "success");
+                    closeModal('gallery-modal');
+                    fetchGalleries();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || "Gagal menyimpan foto");
+                }
+            } catch (error) {
+                console.error(error);
+                if (error.message !== "Unauthorized") {
+                    showToast(error.message, "error");
+                }
+            }
+        });
+    }
+
+    window.openEditGalleryModal = (gal) => {
+        document.getElementById('gallery-modal-title').textContent = "Edit Foto Galeri";
+        document.getElementById('edit-gallery-id').value = gal.id;
+        document.getElementById('gallery-title').value = gal.title;
+        document.getElementById('gallery-date').value = gal.date;
+        document.getElementById('gallery-desc').value = gal.description || '';
+        
+        currentGalleryImage = gal.image_url;
+        renderSingleImagePreview(currentGalleryImage, 'gallery-image-preview');
+        
+        openModal('gallery-modal');
+    };
+
+    window.deleteGallery = async (id) => {
+        if (!confirm("Apakah Anda yakin ingin menghapus foto ini?")) return;
+        try {
+            const response = await authenticatedFetch(`${API_BASE_URL}/api/gallery/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                showToast("Foto berhasil dihapus!", "success");
+                fetchGalleries();
+            } else {
+                throw new Error("Gagal menghapus foto");
+            }
+        } catch (error) {
+            console.error(error);
+            if (error.message !== "Unauthorized") {
+                showToast(error.message, "error");
+            }
+        }
+    };
+
 
     // --- 3. GUESTBOOK MODERATION ---
     const fetchGuestbookEntries = async () => {
@@ -740,7 +924,55 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(style);
 
+    // --- Admin Dark Mode Toggle ---
+    const adminThemeToggle = document.getElementById('admin-theme-toggle');
+    const htmlEl = document.documentElement;
+
+    // Update the button icon & text based on current theme
+    const updateToggleUI = () => {
+        if (!adminThemeToggle) return;
+        const isDark = htmlEl.getAttribute('data-theme') === 'dark';
+        adminThemeToggle.innerHTML = isDark
+            ? '<i class="fa-solid fa-sun"></i><span>Mode Terang</span>'
+            : '<i class="fa-solid fa-moon"></i><span>Mode Gelap</span>';
+    };
+
+    // Sync UI with saved theme state (called on load & after login)
+    const syncTheme = () => {
+        const saved = localStorage.getItem('kkn-theme');
+        if (saved === 'dark') {
+            htmlEl.setAttribute('data-theme', 'dark');
+        } else {
+            htmlEl.removeAttribute('data-theme');
+        }
+        updateToggleUI();
+    };
+
+    // Run once on load
+    syncTheme();
+
+    // Toggle handler
+    if (adminThemeToggle) {
+        adminThemeToggle.addEventListener('click', () => {
+            const isDark = htmlEl.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                htmlEl.removeAttribute('data-theme');
+                localStorage.setItem('kkn-theme', 'light');
+            } else {
+                htmlEl.setAttribute('data-theme', 'dark');
+                localStorage.setItem('kkn-theme', 'dark');
+            }
+            updateToggleUI();
+        });
+    }
+
+    // Expose syncTheme so showDashboard can call it after login
+    window._syncAdminTheme = syncTheme;
 
     // Check startup login status
     checkAuthStatus();
 });
+
+
+
+

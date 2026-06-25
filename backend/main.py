@@ -81,6 +81,14 @@ class GuestbookDB(Base):
     date = Column(String, nullable=False)  # YYYY-MM-DD HH:MM
     is_approved = Column(Boolean, default=False, nullable=False)
 
+class GalleryDB(Base):
+    __tablename__ = "gallery"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(Text, nullable=True)
+    image_url = Column(String, nullable=False)
+    date = Column(String, nullable=False) # YYYY-MM-DD
+
 # Create tables
 Base.metadata.create_all(bind=engine)
 
@@ -144,6 +152,21 @@ class GuestbookResponse(BaseModel):
     message: str
     date: str
     is_approved: bool
+    class Config:
+        from_attributes = True
+        orm_mode = True
+
+class GalleryBase(BaseModel):
+    title: str
+    description: Optional[str] = None
+    image_url: str
+    date: str
+
+class GalleryCreate(GalleryBase):
+    pass
+
+class GalleryResponse(GalleryBase):
+    id: int
     class Config:
         from_attributes = True
         orm_mode = True
@@ -356,3 +379,36 @@ def delete_guestbook_entry(id: int, current_user: AdminUserDB = Depends(get_curr
     db.delete(db_msg)
     db.commit()
     return {"message": "Pesan berhasil dihapus"}
+
+# --- Gallery Routes ---
+@app.get("/api/gallery", response_model=List[GalleryResponse])
+def get_galleries(db: Session = Depends(get_db)):
+    return db.query(GalleryDB).order_by(GalleryDB.id.desc()).all()
+
+@app.post("/api/gallery", response_model=GalleryResponse)
+def create_gallery(gallery: GalleryCreate, current_user: AdminUserDB = Depends(get_current_admin), db: Session = Depends(get_db)):
+    db_gallery = GalleryDB(**gallery.dict())
+    db.add(db_gallery)
+    db.commit()
+    db.refresh(db_gallery)
+    return db_gallery
+
+@app.put("/api/gallery/{id}", response_model=GalleryResponse)
+def update_gallery(id: int, gallery_data: GalleryCreate, current_user: AdminUserDB = Depends(get_current_admin), db: Session = Depends(get_db)):
+    db_gallery = db.query(GalleryDB).filter(GalleryDB.id == id).first()
+    if not db_gallery:
+        raise HTTPException(status_code=404, detail="Galeri tidak ditemukan")
+    for key, value in gallery_data.dict().items():
+        setattr(db_gallery, key, value)
+    db.commit()
+    db.refresh(db_gallery)
+    return db_gallery
+
+@app.delete("/api/gallery/{id}")
+def delete_gallery(id: int, current_user: AdminUserDB = Depends(get_current_admin), db: Session = Depends(get_db)):
+    db_gallery = db.query(GalleryDB).filter(GalleryDB.id == id).first()
+    if not db_gallery:
+        raise HTTPException(status_code=404, detail="Galeri tidak ditemukan")
+    db.delete(db_gallery)
+    db.commit()
+    return {"message": "Galeri berhasil dihapus"}

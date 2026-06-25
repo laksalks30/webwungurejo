@@ -14,14 +14,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Marked.js for Markdown Preview -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Apply dark theme IMMEDIATELY before render to prevent flash -->
+    <script>
+        (function() {
+            var saved = localStorage.getItem('kkn-theme');
+            if (saved === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <style>
         :root {
-            --color-primary: #FF3385;        /* Vibrant Pink - same as main site */
-            --color-primary-light: #FF66A3;  /* Lightened Pink for hover */
-            --color-accent: #FFD6E6;         /* Soft Pink */
-            --color-bg-light: #FFF0F5;       /* Blush/Cream Background */
-            --color-secondary: #6B9054;      /* Green from logo leaves */
-            --color-dark: #990040;           /* Deep Pink/Crimson */
+            --color-primary: #FF3385;
+            --color-primary-light: #FF66A3;
+            --color-accent: #FFD6E6;
+            --color-bg-light: #FFF0F5;
+            --color-secondary: #6B9054;
+            --color-dark: #990040;
             --color-text: #2D3748;
             --color-text-muted: #718096;
             --color-white: #FFFFFF;
@@ -32,6 +41,405 @@
             --color-danger: #e74c3c;
             --border-radius: 12px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Dark mode surface colors as variables for convenience */
+            --dm-bg: #11111B;
+            --dm-surface: #1E1E2E;
+            --dm-surface2: #181825;
+            --dm-border: rgba(205, 214, 244, 0.07);
+            --dm-text: #CDD6F4;
+            --dm-text-muted: #A6ADC8;
+            --dm-text-subtle: #6C7086;
+            --dm-pink: #FF6B9D;
+        }
+
+        /* ============================================================
+           DARK MODE — Applied when html has data-theme="dark"
+           Using html[data-theme="dark"] for maximum CSS specificity
+           ============================================================ */
+
+        /* 1. Override all CSS variables */
+        html[data-theme="dark"] {
+            --color-primary: #FF6B9D;
+            --color-primary-light: #FF9DBF;
+            --color-accent: rgba(255,107,157,0.12);
+            --color-bg-light: #1E1E2E;
+            --color-dark: #CDD6F4;
+            --color-text: #CDD6F4;
+            --color-text-muted: #A6ADC8;
+            --color-white: #1E1E2E;
+            --color-light-gray: #313244;
+            --color-shadow: rgba(0,0,0,0.5);
+        }
+
+        /* 2. Body & global background */
+        html[data-theme="dark"] body {
+            background-color: #11111B;
+            color: #CDD6F4;
+        }
+
+        /* 3. Login screen */
+        html[data-theme="dark"] .login-container {
+            background: linear-gradient(135deg, #11111B 0%, #1E1E2E 60%, #181825 100%);
+        }
+
+        html[data-theme="dark"] .login-card {
+            background-color: #1E1E2E;
+            border-color: rgba(255,107,157,0.15);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+        }
+
+        html[data-theme="dark"] .login-title {
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .login-subtitle {
+            color: #A6ADC8;
+        }
+
+        html[data-theme="dark"] .form-group label {
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .form-control {
+            background-color: #11111B;
+            border-color: rgba(205,214,244,0.12);
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .form-control::placeholder {
+            color: #6C7086;
+        }
+
+        html[data-theme="dark"] .form-control:focus {
+            border-color: rgba(255,107,157,0.5);
+            box-shadow: 0 0 0 3px rgba(255,107,157,0.1);
+        }
+
+        html[data-theme="dark"] .input-wrapper i {
+            color: #6C7086;
+        }
+
+        /* 4. Dashboard layout */
+        html[data-theme="dark"] .dashboard-container {
+            background-color: #11111B;
+        }
+
+        /* 5. Sidebar */
+        html[data-theme="dark"] .sidebar {
+            background: linear-gradient(180deg, #0A0A14 0%, #12091A 100%);
+            box-shadow: 4px 0 24px rgba(0,0,0,0.7);
+            border-right: 1px solid rgba(255,107,157,0.08);
+        }
+
+        html[data-theme="dark"] .sidebar-brand-text h4 {
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .sidebar-brand-text p {
+            color: #A6ADC8;
+        }
+
+        html[data-theme="dark"] .nav-item {
+            color: rgba(205,214,244,0.7);
+        }
+
+        html[data-theme="dark"] .nav-item:hover,
+        html[data-theme="dark"] .nav-item.active {
+            background-color: rgba(255,107,157,0.15);
+            color: #FF6B9D;
+        }
+
+        html[data-theme="dark"] .sidebar-footer {
+            border-top-color: rgba(255,255,255,0.06);
+        }
+
+        /* 6. Main content */
+        html[data-theme="dark"] .main-content {
+            background-color: #11111B;
+        }
+
+        html[data-theme="dark"] .header-area {
+            border-bottom-color: rgba(205,214,244,0.06);
+        }
+
+        html[data-theme="dark"] .header-title h2 {
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .header-title p {
+            color: #A6ADC8;
+        }
+
+        /* 7. Table cards */
+        html[data-theme="dark"] .table-card {
+            background-color: #1E1E2E;
+            border: 1px solid rgba(205,214,244,0.06);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        html[data-theme="dark"] th {
+            color: #A6ADC8;
+            border-bottom-color: rgba(205,214,244,0.06);
+        }
+
+        html[data-theme="dark"] td {
+            color: #CDD6F4;
+            border-bottom-color: rgba(205,214,244,0.04);
+        }
+
+        html[data-theme="dark"] tr:hover td {
+            background-color: rgba(255,107,157,0.04);
+        }
+
+        /* 8. Badges */
+        html[data-theme="dark"] .badge-success {
+            background-color: rgba(166,227,161,0.12);
+            color: #A6E3A1;
+        }
+
+        html[data-theme="dark"] .badge-warning {
+            background-color: rgba(250,179,135,0.12);
+            color: #FAB387;
+        }
+
+        html[data-theme="dark"] .badge-danger {
+            background-color: rgba(243,139,168,0.12);
+            color: #F38BA8;
+        }
+
+        html[data-theme="dark"] .badge-info {
+            background-color: rgba(137,220,235,0.12);
+            color: #89DCEB;
+        }
+
+        /* 9. Action buttons */
+        html[data-theme="dark"] .btn-icon.btn-edit {
+            background-color: rgba(137,220,235,0.1);
+            color: #89DCEB;
+        }
+
+        html[data-theme="dark"] .btn-icon.btn-edit:hover {
+            background-color: #89DCEB;
+            color: #11111B;
+        }
+
+        html[data-theme="dark"] .btn-icon.btn-delete {
+            background-color: rgba(243,139,168,0.1);
+            color: #F38BA8;
+        }
+
+        html[data-theme="dark"] .btn-icon.btn-delete:hover {
+            background-color: #F38BA8;
+            color: #11111B;
+        }
+
+        html[data-theme="dark"] .btn-icon.btn-approve {
+            background-color: rgba(166,227,161,0.1);
+            color: #A6E3A1;
+        }
+
+        html[data-theme="dark"] .btn-icon.btn-approve:hover {
+            background-color: #A6E3A1;
+            color: #11111B;
+        }
+
+        /* 10. Guestbook Moderation cards */
+        html[data-theme="dark"] .moderation-card {
+            background-color: #1E1E2E;
+            border-left-color: #FAB387;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+
+        html[data-theme="dark"] .moderation-card.approved {
+            border-left-color: #A6E3A1;
+        }
+
+        html[data-theme="dark"] .moderation-card-body h5 {
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .moderation-meta {
+            color: #A6ADC8;
+        }
+
+        html[data-theme="dark"] .moderation-message {
+            background-color: #11111B;
+            color: #A6ADC8;
+        }
+
+        /* 11. Modals */
+        html[data-theme="dark"] .modal {
+            background-color: rgba(0,0,0,0.85);
+        }
+
+        html[data-theme="dark"] .modal-card {
+            background-color: #1E1E2E;
+            border: 1px solid rgba(255,107,157,0.1);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.7);
+        }
+
+        html[data-theme="dark"] .modal-header {
+            background-color: #181825;
+            border-bottom-color: rgba(205,214,244,0.06);
+        }
+
+        html[data-theme="dark"] .modal-header h3 {
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .modal-body {
+            background-color: #1E1E2E;
+        }
+
+        html[data-theme="dark"] .modal-footer {
+            background-color: #181825;
+            border-top-color: rgba(205,214,244,0.06);
+        }
+
+        html[data-theme="dark"] .btn-close {
+            color: #A6ADC8;
+        }
+
+        html[data-theme="dark"] .btn-close:hover {
+            color: #F38BA8;
+        }
+
+        /* 12. All inputs/selects inside modal */
+        html[data-theme="dark"] input,
+        html[data-theme="dark"] select,
+        html[data-theme="dark"] textarea {
+            background-color: #11111B;
+            border-color: rgba(205,214,244,0.1);
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] input::placeholder,
+        html[data-theme="dark"] textarea::placeholder {
+            color: #6C7086;
+        }
+
+        html[data-theme="dark"] input:focus,
+        html[data-theme="dark"] select:focus,
+        html[data-theme="dark"] textarea:focus {
+            border-color: rgba(255,107,157,0.45);
+            box-shadow: 0 0 0 3px rgba(255,107,157,0.1);
+        }
+
+        /* 13. Labels */
+        html[data-theme="dark"] label {
+            color: #CDD6F4;
+        }
+
+        /* 14. Editor & preview */
+        html[data-theme="dark"] .editor-textarea {
+            background-color: #11111B;
+            border-color: rgba(205,214,244,0.1);
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .preview-box {
+            background-color: #11111B;
+            border-color: rgba(205,214,244,0.1);
+            color: #A6ADC8;
+        }
+
+        html[data-theme="dark"] .preview-box h1,
+        html[data-theme="dark"] .preview-box h2,
+        html[data-theme="dark"] .preview-box h3 {
+            color: #CDD6F4;
+        }
+
+        /* 15. Secondary & add buttons */
+        html[data-theme="dark"] .btn-secondary {
+            background-color: rgba(205,214,244,0.06);
+            color: #A6ADC8;
+            border: 1px solid rgba(205,214,244,0.1);
+        }
+
+        html[data-theme="dark"] .btn-secondary:hover {
+            background-color: rgba(205,214,244,0.12);
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] .btn-add {
+            background-color: rgba(205,214,244,0.06);
+            color: #CDD6F4;
+            border: 1px solid rgba(205,214,244,0.12);
+        }
+
+        html[data-theme="dark"] .btn-add:hover {
+            background-color: rgba(255,107,157,0.15);
+            color: #FF6B9D;
+            border-color: rgba(255,107,157,0.3);
+        }
+
+        /* 16. Headings generic */
+        html[data-theme="dark"] h1,
+        html[data-theme="dark"] h2,
+        html[data-theme="dark"] h3,
+        html[data-theme="dark"] h4,
+        html[data-theme="dark"] h5 {
+            color: #CDD6F4;
+        }
+
+        html[data-theme="dark"] p {
+            color: #A6ADC8;
+        }
+
+        html[data-theme="dark"] small,
+        html[data-theme="dark"] .text-muted {
+            color: #6C7086;
+        }
+
+        /* 17. Scrollbar */
+        html[data-theme="dark"] ::-webkit-scrollbar { width: 8px; background-color: #11111B; }
+        html[data-theme="dark"] ::-webkit-scrollbar-thumb { background-color: rgba(255,107,157,0.3); border-radius: 4px; }
+        html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background-color: rgba(255,107,157,0.5); }
+
+        /* 18. Dark Mode Toggle Button (inside sidebar) */
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 8px;
+            background-color: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode-toggle:hover {
+            background-color: rgba(255,255,255,0.14);
+            color: #fff;
+            transform: translateX(3px);
+        }
+
+        .dark-mode-toggle i {
+            width: 16px;
+            text-align: center;
+            transition: transform 0.4s ease;
+        }
+
+        .dark-mode-toggle:hover i {
+            transform: rotate(20deg) scale(1.15);
+        }
+
+        html[data-theme="dark"] .dark-mode-toggle {
+            background-color: rgba(255,107,157,0.1);
+            border-color: rgba(255,107,157,0.2);
+            color: #FF6B9D;
+        }
+
+        html[data-theme="dark"] .dark-mode-toggle:hover {
+            background-color: rgba(255,107,157,0.18);
         }
 
         * {
@@ -736,6 +1144,380 @@
                 justify-content: flex-start;
             }
         }
+        /* =============================================
+           DARK MODE TOGGLE BUTTON
+           ============================================= */
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .dark-mode-toggle i {
+            font-size: 1rem;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark-mode-toggle:hover i {
+            transform: rotate(20deg) scale(1.1);
+        }
+
+        /* =============================================
+           ADMIN DARK MODE — PROFESSIONAL DESIGN
+           Based on Catppuccin Mocha palette
+           ============================================= */
+        [data-theme="dark"] body {
+            background-color: #11111B !important;
+            color: #CDD6F4 !important;
+        }
+
+        /* --- Login Page --- */
+        [data-theme="dark"] .login-container {
+            background: linear-gradient(135deg, #11111B 0%, #1E1E2E 50%, #181825 100%) !important;
+        }
+
+        [data-theme="dark"] .login-card {
+            background-color: #1E1E2E !important;
+            border: 1px solid rgba(255, 107, 157, 0.15) !important;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
+        }
+
+        [data-theme="dark"] .login-title {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .login-subtitle {
+            color: #A6ADC8 !important;
+        }
+
+        [data-theme="dark"] .form-group label {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .form-control {
+            background-color: #11111B !important;
+            border-color: rgba(205, 214, 244, 0.1) !important;
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .form-control::placeholder {
+            color: #6C7086 !important;
+        }
+
+        [data-theme="dark"] .form-control:focus {
+            border-color: rgba(255, 107, 157, 0.5) !important;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1) !important;
+        }
+
+        [data-theme="dark"] .input-wrapper i {
+            color: #6C7086 !important;
+        }
+
+        /* --- Sidebar (stays dark, just adjust tones) --- */
+        [data-theme="dark"] .sidebar {
+            background: linear-gradient(180deg, #0D0D17 0%, #1A0D1A 100%) !important;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.6) !important;
+            border-right: 1px solid rgba(255, 107, 157, 0.08) !important;
+        }
+
+        [data-theme="dark"] .sidebar-brand-text h4 {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .sidebar-brand-text p {
+            color: #A6ADC8 !important;
+            opacity: 1 !important;
+        }
+
+        [data-theme="dark"] .nav-item {
+            color: #A6ADC8 !important;
+        }
+
+        [data-theme="dark"] .nav-item:hover,
+        [data-theme="dark"] .nav-item.active {
+            background-color: rgba(255, 107, 157, 0.15) !important;
+            color: #FF6B9D !important;
+        }
+
+        /* --- Main Content Area --- */
+        [data-theme="dark"] .main-content {
+            background-color: #11111B !important;
+        }
+
+        [data-theme="dark"] .header-area {
+            border-bottom-color: rgba(205, 214, 244, 0.06) !important;
+        }
+
+        [data-theme="dark"] .header-title h2 {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .header-title p {
+            color: #A6ADC8 !important;
+        }
+
+        /* --- Table Cards --- */
+        [data-theme="dark"] .table-card {
+            background-color: #1E1E2E !important;
+            border: 1px solid rgba(205, 214, 244, 0.06) !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        [data-theme="dark"] th {
+            color: #A6ADC8 !important;
+            border-bottom-color: rgba(205, 214, 244, 0.06) !important;
+        }
+
+        [data-theme="dark"] td {
+            color: #CDD6F4 !important;
+            border-bottom-color: rgba(205, 214, 244, 0.04) !important;
+        }
+
+        [data-theme="dark"] tr:hover td {
+            background-color: rgba(255, 107, 157, 0.04) !important;
+        }
+
+        /* --- Moderation Cards --- */
+        [data-theme="dark"] .moderation-card {
+            background-color: #1E1E2E !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4) !important;
+            border-left-color: #FAB387 !important;
+        }
+
+        [data-theme="dark"] .moderation-card.approved {
+            border-left-color: #A6E3A1 !important;
+        }
+
+        [data-theme="dark"] .moderation-card-body h5 {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .moderation-meta {
+            color: #A6ADC8 !important;
+        }
+
+        [data-theme="dark"] .moderation-message {
+            background-color: #11111B !important;
+            color: #A6ADC8 !important;
+        }
+
+        /* --- Modals --- */
+        [data-theme="dark"] .modal {
+            background-color: rgba(0, 0, 0, 0.85) !important;
+        }
+
+        [data-theme="dark"] .modal-card {
+            background-color: #1E1E2E !important;
+            border: 1px solid rgba(255, 107, 157, 0.12) !important;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7) !important;
+        }
+
+        [data-theme="dark"] .modal-header {
+            background-color: #181825 !important;
+            border-bottom-color: rgba(205, 214, 244, 0.06) !important;
+        }
+
+        [data-theme="dark"] .modal-header h3 {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .modal-footer {
+            background-color: #181825 !important;
+            border-top-color: rgba(205, 214, 244, 0.06) !important;
+        }
+
+        [data-theme="dark"] .modal-body {
+            background-color: #1E1E2E !important;
+        }
+
+        [data-theme="dark"] .btn-close {
+            color: #A6ADC8 !important;
+        }
+
+        [data-theme="dark"] .btn-close:hover {
+            color: #F38BA8 !important;
+        }
+
+        /* --- Form Controls Inside Modal --- */
+        [data-theme="dark"] .modal .form-control,
+        [data-theme="dark"] .modal select,
+        [data-theme="dark"] .modal input[type="text"],
+        [data-theme="dark"] .modal input[type="date"],
+        [data-theme="dark"] .modal input[type="url"] {
+            background-color: #11111B !important;
+            border-color: rgba(205, 214, 244, 0.1) !important;
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .modal .form-control::placeholder {
+            color: #6C7086 !important;
+        }
+
+        [data-theme="dark"] .modal .form-control:focus {
+            border-color: rgba(255, 107, 157, 0.5) !important;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1) !important;
+        }
+
+        [data-theme="dark"] .modal label,
+        [data-theme="dark"] .modal .form-group label {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .modal small,
+        [data-theme="dark"] .modal .text-muted {
+            color: #6C7086 !important;
+        }
+
+        /* --- Editor & Preview Box --- */
+        [data-theme="dark"] .editor-textarea {
+            background-color: #11111B !important;
+            border-color: rgba(205, 214, 244, 0.1) !important;
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .editor-textarea:focus {
+            border-color: rgba(255, 107, 157, 0.5) !important;
+        }
+
+        [data-theme="dark"] .preview-box {
+            background-color: #11111B !important;
+            border-color: rgba(205, 214, 244, 0.1) !important;
+            color: #A6ADC8 !important;
+        }
+
+        [data-theme="dark"] .preview-box h1,
+        [data-theme="dark"] .preview-box h2,
+        [data-theme="dark"] .preview-box h3 {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .preview-box p {
+            color: #A6ADC8 !important;
+        }
+
+        /* --- Buttons in dark mode --- */
+        [data-theme="dark"] .btn-secondary {
+            background-color: rgba(205, 214, 244, 0.08) !important;
+            color: #A6ADC8 !important;
+            border: 1px solid rgba(205, 214, 244, 0.1) !important;
+        }
+
+        [data-theme="dark"] .btn-secondary:hover {
+            background-color: rgba(205, 214, 244, 0.14) !important;
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] .btn-add {
+            background-color: #1E1E2E !important;
+            color: #CDD6F4 !important;
+            border: 1px solid rgba(205, 214, 244, 0.12) !important;
+        }
+
+        [data-theme="dark"] .btn-add:hover {
+            background-color: rgba(255, 107, 157, 0.15) !important;
+            color: #FF6B9D !important;
+            border-color: rgba(255, 107, 157, 0.3) !important;
+        }
+
+        /* --- Action Icon Buttons --- */
+        [data-theme="dark"] .btn-edit {
+            background-color: rgba(137, 220, 235, 0.1) !important;
+            color: #89DCEB !important;
+        }
+
+        [data-theme="dark"] .btn-edit:hover {
+            background-color: #89DCEB !important;
+            color: #11111B !important;
+        }
+
+        [data-theme="dark"] .btn-delete {
+            background-color: rgba(243, 139, 168, 0.1) !important;
+            color: #F38BA8 !important;
+        }
+
+        [data-theme="dark"] .btn-delete:hover {
+            background-color: #F38BA8 !important;
+            color: #11111B !important;
+        }
+
+        [data-theme="dark"] .btn-approve {
+            background-color: rgba(166, 227, 161, 0.1) !important;
+            color: #A6E3A1 !important;
+        }
+
+        [data-theme="dark"] .btn-approve:hover {
+            background-color: #A6E3A1 !important;
+            color: #11111B !important;
+        }
+
+        /* --- Badges in Dark Mode --- */
+        [data-theme="dark"] .badge-success {
+            background-color: rgba(166, 227, 161, 0.12) !important;
+            color: #A6E3A1 !important;
+        }
+
+        [data-theme="dark"] .badge-warning {
+            background-color: rgba(250, 179, 135, 0.12) !important;
+            color: #FAB387 !important;
+        }
+
+        [data-theme="dark"] .badge-danger {
+            background-color: rgba(243, 139, 168, 0.12) !important;
+            color: #F38BA8 !important;
+        }
+
+        [data-theme="dark"] .badge-info {
+            background-color: rgba(137, 220, 235, 0.12) !important;
+            color: #89DCEB !important;
+        }
+
+        /* --- Thumbnail Borders --- */
+        [data-theme="dark"] .thumbnail-container {
+            border-color: rgba(205, 214, 244, 0.1) !important;
+        }
+
+        /* --- Scrollbar --- */
+        [data-theme="dark"] ::-webkit-scrollbar {
+            width: 8px;
+            background-color: #11111B;
+        }
+        [data-theme="dark"] ::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 107, 157, 0.3);
+            border-radius: 4px;
+        }
+        [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 107, 157, 0.5);
+        }
+
+        /* --- General text fallbacks --- */
+        [data-theme="dark"] h1,
+        [data-theme="dark"] h2,
+        [data-theme="dark"] h3,
+        [data-theme="dark"] h4 {
+            color: #CDD6F4 !important;
+        }
+
+        [data-theme="dark"] p {
+            color: #A6ADC8 !important;
+        }
+
     </style>
 </head>
 <body>
@@ -785,12 +1567,20 @@
                 <li class="nav-item" data-tab="logbook">
                     <i class="fa-solid fa-calendar-day"></i> Logbook Harian
                 </li>
+                <li class="nav-item" data-tab="gallery">
+                    <i class="fa-solid fa-images"></i> Galeri Pengabdian
+                </li>
                 <li class="nav-item" data-tab="guestbook">
                     <i class="fa-solid fa-book-open-reader"></i> Buku Tamu
                 </li>
             </ul>
 
             <div class="sidebar-footer">
+                <!-- Dark Mode Toggle -->
+                <button id="admin-theme-toggle" class="dark-mode-toggle">
+                    <i class="fa-solid fa-moon"></i>
+                    <span id="theme-toggle-label">Mode Gelap</span>
+                </button>
                 <button id="logout-btn" class="btn btn-logout">Keluar <i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
         </aside>
@@ -850,6 +1640,35 @@
                             </tr>
                         </thead>
                         <tbody id="logbook-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Gallery Tab View -->
+            <div id="gallery-tab" class="tab-view hidden">
+                <div class="header-area">
+                    <div class="header-title">
+                        <h2>Galeri Pengabdian</h2>
+                        <p>Kelola foto-foto dokumentasi untuk ditampilkan di halaman Galeri Pengabdian.</p>
+                    </div>
+                    <button class="btn btn-add" id="new-gallery-btn">
+                        <i class="fa-solid fa-plus"></i> Tambah Foto
+                    </button>
+                </div>
+
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Preview</th>
+                                <th>Judul Foto</th>
+                                <th>Tanggal</th>
+                                <th style="width: 100px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gallery-table-body">
                             <!-- Populated dynamically -->
                         </tbody>
                     </table>
@@ -1000,9 +1819,52 @@
         </div>
     </div>
 
+    <!-- 5. GALLERY EDITOR MODAL -->
+    <div id="gallery-modal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="gallery-modal-title">Tambah Foto Galeri</h3>
+                <button class="btn-close" onclick="closeModal('gallery-modal')">&times;</button>
+            </div>
+            <form id="gallery-form">
+                <div class="modal-body">
+                    <input type="hidden" id="edit-gallery-id">
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="gallery-title">Judul Foto</label>
+                            <input type="text" id="gallery-title" class="form-control" style="padding-left: 15px;" required placeholder="Contoh: Keseruan Lomba 17an">
+                        </div>
+                        <div class="form-group">
+                            <label for="gallery-date">Tanggal</label>
+                            <input type="date" id="gallery-date" class="form-control" style="padding-left: 15px;" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gallery-desc">Deskripsi Singkat (Opsional)</label>
+                        <textarea id="gallery-desc" class="form-control" style="padding-left: 15px; min-height: 80px;" placeholder="Ceritakan sedikit tentang foto ini..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Foto</label>
+                        <div class="upload-container" style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="file" id="gallery-image" class="form-control" style="padding-left: 15px;" accept="image/*">
+                            <div id="gallery-image-preview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('gallery-modal')">Batal</button>
+                    <button type="submit" class="btn btn-save">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notifications Container -->
     <div id="toast-container"></div>
 
-    <script src="admin.js?v=3"></script>
+    <script src="admin.js?v=6"></script>
 </body>
 </html>
