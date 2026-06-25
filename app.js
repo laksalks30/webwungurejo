@@ -1046,7 +1046,37 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        // Data Marker Dummy
+        // --- 1. GARIS BATAS WILAYAH DUSUN (POLYGON) ---
+        // Koordinat batas wilayah estimasi (bisa diganti dengan data GeoJSON asli dari BPN/Desa nanti)
+        const wungurejoBoundary = [
+            [-7.859, 110.635],
+            [-7.858, 110.638],
+            [-7.859, 110.641],
+            [-7.861, 110.643],
+            [-7.864, 110.642],
+            [-7.867, 110.639],
+            [-7.866, 110.636],
+            [-7.863, 110.634]
+        ];
+
+        // Gambar area polygon di peta
+        const desaPolygon = L.polygon(wungurejoBoundary, {
+            color: '#6C0820',      // Warna garis tepi (Tema KKN)
+            weight: 3,             // Ketebalan garis
+            opacity: 0.8,
+            fillColor: '#6C0820',  // Warna isian area
+            fillOpacity: 0.1       // Sangat transparan agar jalan di bawahnya tetap terlihat
+        }).addTo(map);
+        
+        // Pop-up saat area desa diklik (bukan di markernya)
+        desaPolygon.bindPopup(`
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; text-align: center;">
+                <h4 style="margin: 0; color: #6C0820; font-weight: 800;">Wilayah Dusun Wungurejo</h4>
+                <p style="margin: 5px 0 0 0; font-size: 0.8rem; color: #666;">Estimasi Pemetaan Area KKN 84.095</p>
+            </div>
+        `);
+
+        // --- 2. DATA TITIK LOKASI (MARKERS) ---
         const locations = [
             {
                 name: "Posko KKN 84.095",
@@ -1079,9 +1109,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: "fa-solid fa-music",
                 desc: "Pusat pelestarian kesenian tradisional khas Gunungkidul.",
                 type: "Pariwisata Budaya"
+            },
+            {
+                name: "Masjid Dusun Wungurejo",
+                coords: [-7.863, 110.6375],
+                color: "#9B59B6", // Ungu
+                icon: "fa-solid fa-mosque",
+                desc: "Pusat kegiatan ibadah, TPA anak-anak, dan kegiatan keagamaan warga.",
+                type: "Fasilitas Ibadah"
+            },
+            {
+                name: "SD / PAUD Wungurejo",
+                coords: [-7.8625, 110.639],
+                color: "#1ABC9C", // Tosca
+                icon: "fa-solid fa-school",
+                desc: "Pusat pendidikan usia dini dan dasar bagi anak-anak dusun.",
+                type: "Fasilitas Pendidikan"
+            },
+            {
+                name: "Posyandu Balita & Lansia",
+                coords: [-7.865, 110.638],
+                color: "#FF69B4", // Pink Terang
+                icon: "fa-solid fa-kit-medical",
+                desc: "Lokasi pelayanan kesehatan rutin dan sosialisasi pencegahan stunting.",
+                type: "Kesehatan"
             }
         ];
 
+        // --- 3. RENDER MARKERS KE PETA ---
         locations.forEach(loc => {
             const marker = L.marker(loc.coords, { icon: createCustomIcon(loc.color, loc.icon) }).addTo(map);
             
