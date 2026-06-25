@@ -1131,11 +1131,19 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Peternak Ikan Sugino Wiryo",
-                coords: [-7.879900709814317, 110.60831684355774], // Presisi dari user
+                coords: [-7.879900709814317, 110.60831684355774],
                 color: "#3498DB", 
                 icon: "fa-solid fa-fish",
                 desc: "Usaha budidaya perikanan lokal, potensi UMKM peternakan ikan di Dusun Wungurejo.",
                 type: "UMKM Lokal"
+            },
+            {
+                name: "TPQ Tarbiyatul Muchcinin",
+                coords: [-7.8765467110434555, 110.60488574061534], // Presisi dari user
+                color: "#27AE60", 
+                icon: "fa-solid fa-book-quran",
+                desc: "Pusat pendidikan agama dan taman bacaan Al-Quran bagi anak-anak dusun.",
+                type: "Pendidikan & Agama"
             }
         ];
 
