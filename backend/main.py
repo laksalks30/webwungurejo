@@ -89,6 +89,14 @@ class GalleryDB(Base):
     image_url = Column(String, nullable=False)
     date = Column(String, nullable=False) # YYYY-MM-DD
 
+class BlogDB(Base):
+    __tablename__ = "blogs"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    content_markdown = Column(Text, nullable=False)
+    thumbnail_url = Column(String, nullable=True)
+    date = Column(String, nullable=False) # YYYY-MM-DD
+
 # Create tables
 Base.metadata.create_all(bind=engine)
 
@@ -166,6 +174,21 @@ class GalleryCreate(GalleryBase):
     pass
 
 class GalleryResponse(GalleryBase):
+    id: int
+    class Config:
+        from_attributes = True
+        orm_mode = True
+
+class BlogBase(BaseModel):
+    title: str
+    content_markdown: str
+    thumbnail_url: Optional[str] = None
+    date: str
+
+class BlogCreate(BlogBase):
+    pass
+
+class BlogResponse(BlogBase):
     id: int
     class Config:
         from_attributes = True
@@ -412,3 +435,37 @@ def delete_gallery(id: int, current_user: AdminUserDB = Depends(get_current_admi
     db.delete(db_gallery)
     db.commit()
     return {"message": "Galeri berhasil dihapus"}
+
+# --- Blog Routes ---
+@app.get("/api/blogs", response_model=List[BlogResponse])
+def get_blogs(db: Session = Depends(get_db)):
+    return db.query(BlogDB).order_by(BlogDB.id.desc()).all()
+
+@app.post("/api/blogs", response_model=BlogResponse)
+def create_blog(blog: BlogCreate, current_user: AdminUserDB = Depends(get_current_admin), db: Session = Depends(get_db)):
+    db_blog = BlogDB(**blog.dict())
+    db.add(db_blog)
+    db.commit()
+    db.refresh(db_blog)
+    return db_blog
+
+@app.put("/api/blogs/{id}", response_model=BlogResponse)
+def update_blog(id: int, blog_data: BlogCreate, current_user: AdminUserDB = Depends(get_current_admin), db: Session = Depends(get_db)):
+    db_blog = db.query(BlogDB).filter(BlogDB.id == id).first()
+    if not db_blog:
+        raise HTTPException(status_code=404, detail="Blog tidak ditemukan")
+    for key, value in blog_data.dict().items():
+        setattr(db_blog, key, value)
+    db.commit()
+    db.refresh(db_blog)
+    return db_blog
+
+@app.delete("/api/blogs/{id}")
+def delete_blog(id: int, current_user: AdminUserDB = Depends(get_current_admin), db: Session = Depends(get_db)):
+    db_blog = db.query(BlogDB).filter(BlogDB.id == id).first()
+    if not db_blog:
+        raise HTTPException(status_code=404, detail="Blog tidak ditemukan")
+    db.delete(db_blog)
+    db.commit()
+    return {"message": "Blog berhasil dihapus"}
+

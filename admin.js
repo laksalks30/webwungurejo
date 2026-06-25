@@ -56,6 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentProkerImages = [];
     let currentLogbookImages = [];
     let currentGalleryImage = null;
+    let currentBlogThumbnail = null;
+
+    // --- Blog Selectors ---
+    const blogTableBody = document.getElementById('blog-table-body');
+    const blogModal = document.getElementById('blog-modal');
+    const blogForm = document.getElementById('blog-form');
+    const newBlogBtn = document.getElementById('new-blog-btn');
+    const blogContentTextarea = document.getElementById('blog-content');
+    const blogContentPreview = document.getElementById('blog-content-preview');
+    const blogThumbnailInput = document.getElementById('blog-thumbnail');
+    const blogThumbnailPreview = document.getElementById('blog-thumbnail-preview');
 
     // --- Authentication Helpers ---
     const setAuthHeader = (headers = {}) => {
@@ -187,6 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchGalleries();
         } else if (tabName === 'guestbook') {
             fetchGuestbookEntries();
+        } else if (tabName === 'blog') {
+            fetchBlogsAdmin();
         }
     };
 
@@ -860,6 +873,171 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+
+    // --- 5. BLOG CRUDS ---
+    const fetchBlogsAdmin = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/blogs`);
+            const data = await response.json();
+            renderBlogTable(data);
+        } catch (error) {
+            showToast("Gagal mengambil data blog", "error");
+        }
+    };
+
+    const renderBlogTable = (blogs) => {
+        if (!blogTableBody) return;
+        blogTableBody.innerHTML = '';
+        if (blogs.length === 0) {
+            blogTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color: var(--color-text-muted);">Belum ada artikel. Klik 'Tulis Artikel' untuk membuat baru.</td></tr>`;
+            return;
+        }
+
+        blogs.forEach(entry => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><strong>${entry.date}</strong></td>
+                <td>${escapeHTML(entry.title)}</td>
+                <td>
+                    <div class="action-btns">
+                        <button class="btn-icon btn-edit" title="Edit Artikel" onclick="openEditBlogModal(${JSON.stringify(entry).replace(/"/g, '&quot;')})">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button class="btn-icon btn-delete" title="Hapus Artikel" onclick="deleteBlog(${entry.id})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            blogTableBody.appendChild(tr);
+        });
+    };
+
+    if (blogContentTextarea && blogContentPreview) {
+        blogContentTextarea.addEventListener('input', () => {
+            const rawText = blogContentTextarea.value;
+            blogContentPreview.innerHTML = rawText ? marked.parse(rawText) : '<p style="color: var(--color-text-muted); font-style: italic;">Preview artikel akan tampil di sini...</p>';
+        });
+    }
+
+    if (newBlogBtn) {
+        newBlogBtn.addEventListener('click', () => {
+            document.getElementById('blog-modal-title').textContent = "Tulis Artikel Baru";
+            document.getElementById('edit-blog-id').value = "";
+            blogForm.reset();
+            document.getElementById('blog-date').value = new Date().toISOString().split('T')[0];
+            blogContentPreview.innerHTML = '<p style="color: var(--color-text-muted); font-style: italic;">Preview artikel akan tampil di sini...</p>';
+            currentBlogThumbnail = null;
+            if (blogThumbnailPreview) blogThumbnailPreview.innerHTML = '';
+            openModal('blog-modal');
+        });
+    }
+
+    if (blogThumbnailInput) {
+        blogThumbnailInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await authenticatedFetch(`${API_BASE_URL}/api/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                currentBlogThumbnail = data.url;
+                blogThumbnailPreview.innerHTML = `<img src="${API_BASE_URL}${data.url}" style="width: 150px; border-radius: 8px;">`;
+            } catch (error) {
+                showToast("Gagal mengunggah foto sampul", "error");
+            }
+        });
+    }
+
+    if (blogForm) {
+        blogForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-blog-id').value;
+            const title = document.getElementById('blog-title').value.trim();
+            const date = document.getElementById('blog-date').value;
+            const content_markdown = blogContentTextarea.value.trim();
+
+            const payload = { title, date, content_markdown, thumbnail_url: currentBlogThumbnail };
+
+            const isEdit = id !== "";
+            const url = isEdit ? `${API_BASE_URL}/api/blogs/${id}` : `${API_BASE_URL}/api/blogs`;
+            const method = isEdit ? 'PUT' : 'POST';
+
+            try {
+                const response = await authenticatedFetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    showToast(isEdit ? "Artikel berhasil diperbarui!" : "Artikel berhasil diterbitkan!", "success");
+                    closeModal('blog-modal');
+                    fetchBlogsAdmin();
+                } else {
+                    throw new Error("Gagal menyimpan artikel");
+                }
+            } catch (error) {
+                showToast(error.message, "error");
+            }
+        });
+    }
+
+    window.openEditBlogModal = (entry) => {
+        document.getElementById('blog-modal-title').textContent = "Edit Artikel";
+        document.getElementById('edit-blog-id').value = entry.id;
+        document.getElementById('blog-title').value = entry.title;
+        document.getElementById('blog-date').value = entry.date;
+        
+        blogContentTextarea.value = entry.content_markdown;
+        blogContentPreview.innerHTML = marked.parse(entry.content_markdown);
+        
+        currentBlogThumbnail = entry.thumbnail_url;
+        if (blogThumbnailPreview) {
+            blogThumbnailPreview.innerHTML = currentBlogThumbnail ? `<img src="${currentBlogThumbnail.startsWith('http') ? currentBlogThumbnail : API_BASE_URL + currentBlogThumbnail}" style="width: 150px; border-radius: 8px;">` : '';
+        }
+        
+        openModal('blog-modal');
+    };
+
+    window.deleteBlog = async (id) => {
+        if (!confirm("Hapus artikel ini secara permanen?")) return;
+        try {
+            const response = await authenticatedFetch(`${API_BASE_URL}/api/blogs/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                showToast("Artikel berhasil dihapus!", "success");
+                fetchBlogsAdmin();
+            } else {
+                throw new Error("Gagal menghapus artikel");
+            }
+        } catch (error) {
+            showToast(error.message, "error");
+        }
+    };
+
+    window.insertMarkdownBlog = (prefix, suffix) => {
+        if (!blogContentTextarea) return;
+        const start = blogContentTextarea.selectionStart;
+        const end = blogContentTextarea.selectionEnd;
+        const text = blogContentTextarea.value;
+        const before = text.substring(0, start);
+        const selected = text.substring(start, end);
+        const after = text.substring(end);
+
+        blogContentTextarea.value = before + prefix + selected + suffix + after;
+        blogContentTextarea.focus();
+        blogContentTextarea.selectionStart = start + prefix.length;
+        blogContentTextarea.selectionEnd = end + prefix.length;
+        
+        blogContentTextarea.dispatchEvent(new Event('input'));
+    };
 
     // --- Global Modal Helpers ---
     window.openModal = (modalId) => {

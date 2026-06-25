@@ -1031,6 +1031,104 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // --- 12. Blog Functional Logic ---
+    const fetchBlogs = async () => {
+        const blogContainer = document.getElementById('blog-grid-container');
+        if (!blogContainer) return;
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/blogs`);
+            if (!response.ok) throw new Error('Gagal mengambil data blog');
+            const blogs = await response.json();
+            
+            blogContainer.innerHTML = '';
+            
+            if (blogs.length === 0) {
+                blogContainer.innerHTML = `<div style="text-align: center; width: 100%; padding: 40px; color: var(--color-text-muted); grid-column: 1 / -1;">Belum ada artikel.</div>`;
+                return;
+            }
+
+            blogs.forEach(item => {
+                const dateObj = new Date(item.date);
+                const formattedDate = isNaN(dateObj.getTime()) ? item.date : dateObj.toLocaleDateString('id-ID', {
+                    day: 'numeric', month: 'short', year: 'numeric'
+                });
+                
+                let parsedHTML = item.content_markdown;
+                if (typeof marked !== 'undefined') {
+                    parsedHTML = marked.parse(item.content_markdown);
+                }
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = parsedHTML;
+                const plainText = tempDiv.textContent || tempDiv.innerText || "";
+                const excerpt = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
+
+                const thumbnail = item.thumbnail_url ? 
+                    (item.thumbnail_url.startsWith('http') ? item.thumbnail_url : `${API_BASE_URL}${item.thumbnail_url}`) 
+                    : 'assets/logo/LogoKKNBaru.png';
+
+                const html = `
+                    <div class="blog-card" onclick="openBlogModal(${item.id})">
+                        <div class="blog-img-wrap">
+                            <img src="${thumbnail}" alt="${escapeHTML(item.title)}" loading="lazy">
+                            <div class="blog-date">${formattedDate}</div>
+                        </div>
+                        <div class="blog-content">
+                            <h3>${escapeHTML(item.title)}</h3>
+                            <p class="blog-excerpt">${excerpt}</p>
+                            <div class="btn-read-more">Baca Selengkapnya <i class="fa-solid fa-arrow-right"></i></div>
+                        </div>
+                    </div>
+                `;
+                blogContainer.insertAdjacentHTML('beforeend', html);
+            });
+            
+            window.blogData = blogs;
+            
+        } catch (error) {
+            console.error(error);
+            blogContainer.innerHTML = `<div class="error-msg" style="color: var(--color-primary); font-weight: 600; padding: 20px; text-align: center; grid-column: 1 / -1;">Gagal memuat artikel.</div>`;
+        }
+    };
+    
+    window.openBlogModal = (id) => {
+        if (!window.blogData) return;
+        const blog = window.blogData.find(b => b.id === id);
+        if (!blog) return;
+        
+        const modal = document.getElementById('details-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalDate = document.getElementById('modal-date');
+        const modalCategory = document.getElementById('modal-category-badge');
+        
+        modalTitle.textContent = blog.title;
+        modalCategory.textContent = "Artikel/Berita";
+        modalCategory.className = "badge status-completed"; 
+        
+        const dateObj = new Date(blog.date);
+        modalDate.textContent = isNaN(dateObj.getTime()) ? blog.date : dateObj.toLocaleDateString('id-ID', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        });
+        
+        let htmlContent = blog.content_markdown;
+        if (typeof marked !== 'undefined') {
+            htmlContent = marked.parse(blog.content_markdown);
+        }
+        
+        let imagesHTML = '';
+        if (blog.thumbnail_url) {
+            const fullUrl = blog.thumbnail_url.startsWith('http') ? blog.thumbnail_url : `${API_BASE_URL}${blog.thumbnail_url}`;
+            imagesHTML = `<img src="${fullUrl}" alt="${escapeHTML(blog.title)}" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">`;
+        }
+        
+        modalBody.innerHTML = imagesHTML + `<div class="markdown-body" style="color: var(--color-dark);">${htmlContent}</div>`;
+        
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
     // --- 11. WebGIS Initialization ---
     const initWebGIS = () => {
         const mapContainer = document.getElementById('webgis-map');
@@ -1195,6 +1293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchLogbook();
     fetchGuestbook();
     fetchGallery();
+    fetchBlogs();
 
     // --- 11. DEMOGRAPHICS ANIMATION (CHART & COUNTER) ---
     const initDemographics = () => {

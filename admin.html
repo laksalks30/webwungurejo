@@ -1567,6 +1567,9 @@
                 <li class="nav-item" data-tab="logbook">
                     <i class="fa-solid fa-calendar-day"></i> Logbook Harian
                 </li>
+                <li class="nav-item" data-tab="blog">
+                    <i class="fa-solid fa-newspaper"></i> Blog / Artikel
+                </li>
                 <li class="nav-item" data-tab="gallery">
                     <i class="fa-solid fa-images"></i> Galeri Pengabdian
                 </li>
@@ -1640,6 +1643,34 @@
                             </tr>
                         </thead>
                         <tbody id="logbook-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Blog Tab View -->
+            <div id="blog-tab" class="tab-view hidden">
+                <div class="header-area">
+                    <div class="header-title">
+                        <h2>Blog / Artikel Desa</h2>
+                        <p>Kelola berita, cerita ringan, dan artikel untuk mendongkrak SEO dan eksposur dusun.</p>
+                    </div>
+                    <button class="btn btn-add" id="new-blog-btn">
+                        <i class="fa-solid fa-plus"></i> Tulis Artikel
+                    </button>
+                </div>
+
+                <div class="table-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Judul Artikel</th>
+                                <th style="width: 100px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blog-table-body">
                             <!-- Populated dynamically -->
                         </tbody>
                     </table>
@@ -1857,6 +1888,57 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('gallery-modal')">Batal</button>
                     <button type="submit" class="btn btn-save">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 6. BLOG EDITOR MODAL -->
+    <div id="blog-modal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="blog-modal-title">Tulis Artikel Baru</h3>
+                <button class="btn-close" onclick="closeModal('blog-modal')">&times;</button>
+            </div>
+            <form id="blog-form">
+                <div class="modal-body">
+                    <input type="hidden" id="edit-blog-id">
+                    
+                    <div class="form-group">
+                        <label for="blog-title">Judul Artikel</label>
+                        <input type="text" id="blog-title" class="form-control" style="padding-left: 15px;" required placeholder="Contoh: Sejarah Kesenian Reog Wungurejo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blog-date">Tanggal Publikasi</label>
+                        <input type="date" id="blog-date" class="form-control" style="padding-left: 15px;" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Foto Sampul (Thumbnail) (Opsional)</label>
+                        <div class="upload-container">
+                            <input type="file" id="blog-thumbnail" class="form-control" style="padding-left: 15px;" accept="image/*">
+                            <div id="blog-thumbnail-preview" style="margin-top: 10px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blog-content">Isi Artikel (Mendukung Markdown)</label>
+                        <div class="editor-split">
+                            <div>
+                                <textarea id="blog-content" class="editor-textarea" placeholder="Tulis artikel menggunakan format Markdown..." required></textarea>
+                            </div>
+                            <div>
+                                <div class="preview-box markdown-body" id="blog-content-preview">
+                                    <p style="color: var(--color-text-muted); font-style: italic;">Preview artikel akan tampil di sini...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('blog-modal')">Batal</button>
+                    <button type="submit" class="btn btn-save">Simpan Artikel</button>
                 </div>
             </form>
         </div>

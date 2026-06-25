@@ -88,6 +88,11 @@ window.KKN_LANG = {
         umkm_3_desc:        "Menyediakan bibit ikan berkualitas dan ikan siap konsumsi (Lele, Nila) hasil budidaya Bapak Sugino Wiryo.",
         umkm_3_price:       "Harga Bervariasi",
 
+        // ── BLOG SECTION ──────────────────────────────────────
+        blog_tag:           "Kabar & Artikel",
+        blog_title:         "Cerita dari Wungurejo",
+        blog_subtitle:      "Kumpulan tulisan inspiratif, sejarah dusun, dan artikel ringan dari kegiatan pengabdian kami.",
+
         // ── LOGBOOK SECTION ───────────────────────────────────
         logbook_tag:        "Log Harian",
         logbook_title:      "Timeline & Kegiatan Terbaru",
@@ -244,6 +249,11 @@ window.KKN_LANG = {
         umkm_3_name:        "Freshwater Fish Seed & Consumption",
         umkm_3_desc:        "Providing quality fish seeds and ready-to-consume fish (Catfish, Tilapia) farmed by Mr. Sugino Wiryo.",
         umkm_3_price:       "Prices Vary",
+
+        // ── BLOG SECTION ──────────────────────────────────────
+        blog_tag:           "News & Articles",
+        blog_title:         "Stories from Wungurejo",
+        blog_subtitle:      "A collection of inspiring writings, village history, and light articles from our community service.",
 
         // ── LOGBOOK SECTION ───────────────────────────────────
         logbook_tag:        "Daily Log",
