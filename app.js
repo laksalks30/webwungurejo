@@ -1047,17 +1047,19 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // --- 1. GARIS BATAS WILAYAH DUSUN (POLYGON) ---
-        // Koordinat batas wilayah presisi (Mengikuti garis merah di peta referensi)
+        // Koordinat batas wilayah presisi (Mengikuti kontur garis merah lengkap dari peta)
         const wungurejoBoundary = [
-            [-7.8715, 110.6070], // Barat Laut (Dekat Griya Sehat)
-            [-7.8715, 110.6100], // Timur Laut
-            [-7.8750, 110.6102], // Timur Tengah Atas
-            [-7.8770, 110.6105], // Timur Tengah (Dekat SDN Sendowo 03)
-            [-7.8810, 110.6080], // Tenggara
-            [-7.8825, 110.6065], // Ujung Selatan
-            [-7.8810, 110.6050], // Barat Daya
-            [-7.8780, 110.6055], // Barat Tengah Bawah
-            [-7.8760, 110.6060]  // Barat Tengah Atas (Dekat TPQ)
+            [-7.8705, 110.6065], // Titik paling utara (Barat laut Griya Sehat)
+            [-7.8705, 110.6085], // Timur laut
+            [-7.8740, 110.6090], // Timur atas
+            [-7.8770, 110.6105], // Timur tengah (tonjolan ke luar)
+            [-7.8800, 110.6090], // Timur bawah
+            [-7.8830, 110.6075], // Tenggara
+            [-7.8840, 110.6060], // Ujung paling selatan
+            [-7.8825, 110.6045], // Barat daya
+            [-7.8790, 110.6040], // Barat bawah
+            [-7.8750, 110.6045], // Barat tengah
+            [-7.8720, 110.6055]  // Barat atas
         ];
 
         // Gambar area polygon di peta
