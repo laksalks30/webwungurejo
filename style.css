@@ -1967,14 +1967,14 @@ textarea:focus {
 }
 
 .cta-container {
-    background: linear-gradient(135deg, #1a0a14 0%, #2d0f25 40%, #1a1035 100%);
-    border-radius: 28px;
-    padding: 56px 60px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
+    border-radius: 24px;
+    padding: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 40px;
-    box-shadow: 0 24px 60px rgba(108, 8, 32, 0.3), 0 0 0 1px rgba(255, 107, 157, 0.12);
+    box-shadow: 0 20px 40px var(--color-shadow);
     color: var(--color-white);
     flex-wrap: wrap;
     margin-bottom: 60px;
@@ -1982,72 +1982,42 @@ textarea:focus {
     overflow: hidden;
 }
 
-/* Subtle decorative glow blob */
-.cta-container::before {
-    content: '';
-    position: absolute;
-    top: -60px;
-    right: -60px;
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle, rgba(255, 51, 133, 0.18) 0%, transparent 70%);
-    pointer-events: none;
-}
-
-.cta-container::after {
-    content: '';
-    position: absolute;
-    bottom: -40px;
-    left: 20%;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(100, 80, 200, 0.12) 0%, transparent 70%);
-    pointer-events: none;
-}
-
 .cta-content {
     flex: 1;
-    min-width: 280px;
-    position: relative;
-    z-index: 1;
+    min-width: 300px;
 }
 
 .cta-content h2 {
-    font-size: 2.1rem;
+    font-size: 2.2rem;
     font-weight: 800;
-    margin-bottom: 14px;
-    color: #FFFFFF;
-    letter-spacing: -0.5px;
-    line-height: 1.2;
+    margin-bottom: 16px;
+    color: var(--color-white);
 }
 
 .cta-content p {
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.65);
-    max-width: 520px;
-    line-height: 1.7;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.88);
+    max-width: 600px;
+    line-height: 1.65;
 }
 
 .cta-actions {
     display: flex;
-    gap: 14px;
+    gap: 16px;
     flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
 }
 
-/* Instagram Button — clean white-tinted pill */
+
+/* Instagram Button — original pink gradient */
 .btn-social-instagram {
-    background: rgba(255, 255, 255, 0.10);
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
     color: var(--color-white) !important;
-    padding: 14px 28px;
-    font-size: 0.95rem;
+    padding: 16px 32px;
+    font-size: 1.05rem;
     font-weight: 700;
-    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    border: none;
     border-radius: 50px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
@@ -2055,25 +2025,22 @@ textarea:focus {
 }
 
 .btn-social-instagram:hover {
-    background: linear-gradient(135deg, #e1306c, #fd1d1d);
-    border-color: transparent;
     transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 12px 28px rgba(225, 48, 108, 0.4);
-    color: #FFFFFF !important;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    color: var(--color-white);
+    filter: brightness(1.08);
 }
 
-/* TikTok Button — clean dark pill */
+/* TikTok Button — original dark style */
 .btn-social-tiktok {
-    background: rgba(255, 255, 255, 0.08);
+    background: #111111;
     color: var(--color-white) !important;
-    padding: 14px 28px;
-    font-size: 0.95rem;
+    padding: 16px 32px;
+    font-size: 1.05rem;
     font-weight: 700;
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border: none;
     border-radius: 50px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
@@ -2101,20 +2068,50 @@ textarea:focus {
 }
 
 .btn-social-tiktok:hover {
-    border-color: transparent;
     transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 12px 28px rgba(0, 242, 234, 0.25);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
     color: var(--color-white);
 }
 
-/* Dark mode CTA override */
+/* Dark mode CTA — full redesign to premium dark glassmorphic */
 [data-theme="dark"] .cta-section {
     background-color: #11111B !important;
 }
 
 [data-theme="dark"] .cta-container {
     background: linear-gradient(135deg, #0D0D17 0%, #1a0f2e 50%, #0f1a2e 100%) !important;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 107, 157, 0.1) !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 107, 157, 0.1) !important;
+}
+
+/* Dark mode: glassmorphic button overrides */
+[data-theme="dark"] .btn-social-instagram {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    padding: 14px 28px !important;
+    font-size: 0.95rem !important;
+    backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .btn-social-instagram:hover {
+    background: linear-gradient(135deg, #e1306c, #fd1d1d) !important;
+    border-color: transparent !important;
+    box-shadow: 0 12px 28px rgba(225, 48, 108, 0.4) !important;
+    filter: none !important;
+}
+
+[data-theme="dark"] .btn-social-tiktok {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    padding: 14px 28px !important;
+    font-size: 0.95rem !important;
+    backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .btn-social-tiktok:hover {
+    border-color: transparent !important;
+    box-shadow: 0 12px 28px rgba(0, 242, 234, 0.25) !important;
 }
 
 /* Logbook Filters styling */
