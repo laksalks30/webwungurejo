@@ -93,7 +93,10 @@ window.KKN_LANG = {
         blog_tag:           "Kabar & Artikel",
         blog_title:         "Cerita dari Wungurejo",
         blog_subtitle:      "Kumpulan tulisan inspiratif, sejarah dusun, dan artikel ringan dari kegiatan pengabdian kami.",
-
+        blog_read_more:     "Baca Selengkapnya",
+        blog_empty:         "Belum ada artikel. Nantikan tulisan kami!",
+        blog_badge_label:   "Artikel",
+        blog_modal_close:   "Tutup",
         // ── LOGBOOK SECTION ───────────────────────────────────
         logbook_tag:        "Log Harian",
         logbook_title:      "Timeline & Kegiatan Terbaru",
@@ -256,6 +259,10 @@ window.KKN_LANG = {
         blog_tag:           "News & Articles",
         blog_title:         "Stories from Wungurejo",
         blog_subtitle:      "A collection of inspiring writings, village history, and light articles from our community service.",
+        blog_read_more:     "Read More",
+        blog_empty:         "No articles yet. Stay tuned!",
+        blog_badge_label:   "Article",
+        blog_modal_close:   "Close",
 
         // ── LOGBOOK SECTION ───────────────────────────────────
         logbook_tag:        "Daily Log",

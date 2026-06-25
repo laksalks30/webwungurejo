@@ -53,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Apply saved language on load
     applyLanguage(currentLang);
 
+    // Initialise window-level lang references so renderBlogCards can read them on first load
+    window.currentLang  = currentLang;
+    window.translations = window.KKN_LANG;
+
     if (langToggleBtn) {
         langToggleBtn.addEventListener('click', () => {
             currentLang = currentLang === 'id' ? 'en' : 'id';
@@ -64,6 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Wait for fade out to complete before swapping text
             setTimeout(() => {
                 applyLanguage(currentLang);
+
+                // Expose to window so renderBlogCards and other renderers can read it
+                window.currentLang   = currentLang;
+                window.translations  = window.KKN_LANG;
+
+                // Notify other renderers (blog cards, etc.)
+                document.dispatchEvent(new CustomEvent('langChanged', { detail: { lang: currentLang } }));
+
                 // Remove transition class to fade back in
                 document.body.classList.remove('lang-switching');
             }, 250); // Matches CSS transition duration
@@ -1044,56 +1056,85 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Gagal mengambil data blog');
             const blogs = await response.json();
             
-            blogContainer.innerHTML = '';
-            
-            if (blogs.length === 0) {
-                blogContainer.innerHTML = `<div style="text-align: center; width: 100%; padding: 40px; color: var(--color-text-muted); grid-column: 1 / -1;">Belum ada artikel.</div>`;
-                return;
-            }
-
-            blogs.forEach(item => {
-                const dateObj = new Date(item.date);
-                const formattedDate = isNaN(dateObj.getTime()) ? item.date : dateObj.toLocaleDateString('id-ID', {
-                    day: 'numeric', month: 'short', year: 'numeric'
-                });
-                
-                let parsedHTML = item.content_markdown;
-                if (typeof marked !== 'undefined') {
-                    parsedHTML = marked.parse(item.content_markdown);
-                }
-                
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = parsedHTML;
-                const plainText = tempDiv.textContent || tempDiv.innerText || "";
-                const excerpt = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
-
-                const thumbnail = item.thumbnail_url ? 
-                    (item.thumbnail_url.startsWith('http') ? item.thumbnail_url : `${API_BASE_URL}${item.thumbnail_url}`) 
-                    : 'assets/logo/LogoKKNBaru.png';
-
-                const html = `
-                    <div class="blog-card" onclick="openBlogModal(${item.id})">
-                        <div class="blog-img-wrap">
-                            <img src="${thumbnail}" alt="${escapeHTML(item.title)}" loading="lazy">
-                            <div class="blog-date">${formattedDate}</div>
-                        </div>
-                        <div class="blog-content">
-                            <h3>${escapeHTML(item.title)}</h3>
-                            <p class="blog-excerpt">${excerpt}</p>
-                            <div class="btn-read-more">Baca Selengkapnya <i class="fa-solid fa-arrow-right"></i></div>
-                        </div>
-                    </div>
-                `;
-                blogContainer.insertAdjacentHTML('beforeend', html);
-            });
-            
             window.blogData = blogs;
+            renderBlogCards(blogs);
             
         } catch (error) {
             console.error(error);
-            blogContainer.innerHTML = `<div class="error-msg" style="color: var(--color-primary); font-weight: 600; padding: 20px; text-align: center; grid-column: 1 / -1;">Gagal memuat artikel.</div>`;
+            const blogContainer = document.getElementById('blog-grid-container');
+            if (blogContainer) blogContainer.innerHTML = `<div style="color: var(--color-primary); font-weight: 600; padding: 20px; text-align: center; grid-column: 1 / -1;">Gagal memuat artikel.</div>`;
         }
     };
+
+    // Render blog cards — called on fetch and on language switch
+    const renderBlogCards = (blogs) => {
+        const blogContainer = document.getElementById('blog-grid-container');
+        if (!blogContainer) return;
+
+        // Read active language dictionary
+        const lang = (window.currentLang && window.translations)
+            ? window.translations[window.currentLang]
+            : null;
+        const t = (key, fallback) => (lang && lang[key]) ? lang[key] : fallback;
+
+        blogContainer.innerHTML = '';
+
+        if (!blogs || blogs.length === 0) {
+            blogContainer.innerHTML = `<div style="text-align: center; width: 100%; padding: 40px; color: var(--color-text-muted); grid-column: 1 / -1;">${t('blog_empty', 'Belum ada artikel.')}</div>`;
+            return;
+        }
+
+        blogs.forEach(item => {
+            // Format date — respects locale of active language
+            const locale = (window.currentLang === 'en') ? 'en-US' : 'id-ID';
+            const dateObj = new Date(item.date);
+            const formattedDate = isNaN(dateObj.getTime()) ? item.date : dateObj.toLocaleDateString(locale, {
+                day: 'numeric', month: 'short', year: 'numeric'
+            });
+
+            // Generate excerpt from markdown
+            let parsedHTML = item.content_markdown;
+            if (typeof marked !== 'undefined') parsedHTML = marked.parse(item.content_markdown);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = parsedHTML;
+            const plainText = tempDiv.textContent || tempDiv.innerText || '';
+            const excerpt = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
+
+            const thumbnail = item.thumbnail_url
+                ? (item.thumbnail_url.startsWith('http') ? item.thumbnail_url : `${API_BASE_URL}${item.thumbnail_url}`)
+                : 'assets/logo/LogoKKNBaru.png';
+
+            const readMoreText = t('blog_read_more', 'Baca Selengkapnya');
+
+            const html = `
+                <div class="blog-card" onclick="openBlogModal(${item.id})">
+                    <div class="blog-img-wrap">
+                        <img src="${thumbnail}" alt="${escapeHTML(item.title)}" loading="lazy">
+                        <div class="blog-date">${formattedDate}</div>
+                    </div>
+                    <div class="blog-content">
+                        <h3>${escapeHTML(item.title)}</h3>
+                        <p class="blog-excerpt">${excerpt}</p>
+                        <div class="btn-read-more">${readMoreText} <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+                </div>
+            `;
+            blogContainer.insertAdjacentHTML('beforeend', html);
+        });
+    };
+
+    // Re-render blog cards when language changes (hook into language system)
+    document.addEventListener('langChanged', () => {
+        if (window.blogData) renderBlogCards(window.blogData);
+
+        // Also update the badge label if the blog reader modal is currently open
+        const badge = document.getElementById('blog-reader-badge');
+        if (badge) {
+            const lang = (window.currentLang && window.translations) ? window.translations[window.currentLang] : null;
+            badge.textContent = (lang && lang['blog_badge_label']) ? lang['blog_badge_label'] : 'Artikel';
+        }
+    });
+
     
     window.openBlogModal = (id) => {
         if (!window.blogData) return;
