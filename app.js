@@ -1122,12 +1122,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: "UMKM Lokal"
             },
             {
-                name: "Rumah Jahit PW NUR",
-                coords: [-7.8705, 110.6070], // Ujung utara wilayah
-                color: "#E67E22", 
-                icon: "fa-solid fa-scissors",
-                desc: "Jasa konveksi dan penjahit pakaian lokal Dusun Wungurejo.",
-                type: "UMKM Lokal"
+                name: "Makam Punthuk",
+                coords: [-7.875043496517649, 110.60667095892298], // Presisi dari user
+                color: "#7F8C8D", 
+                icon: "fa-solid fa-cross",
+                desc: "Situs pemakaman bersejarah yang menjadi bagian dari warisan budaya Dusun Wungurejo.",
+                type: "Situs Budaya"
             },
             {
                 name: "AB Squad Polishing",
