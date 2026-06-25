@@ -1083,7 +1083,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const locations = [
             {
                 name: "Posko KKN 84.095",
-                coords: [-7.873990, 110.605355], // Titik presisi sesuai arahan
+                coords: [-7.873990, 110.605355], // Sesuai pin abu-abu pengguna
                 color: "#6C0820", 
                 icon: "fa-solid fa-house-user",
                 desc: "Pusat koordinasi dan tempat tinggal mahasiswa KKN selama mengabdi.",
@@ -1091,7 +1091,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Balai Padukuhan Wungurejo",
-                coords: [-7.8735, 110.6040],
+                coords: [-7.8722, 110.6052], // Sisi barat laut agak tengah
                 color: "#4A90E2", 
                 icon: "fa-solid fa-landmark",
                 desc: "Pusat administrasi dusun dan lokasi berbagai sosialisasi proker.",
@@ -1099,7 +1099,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Masjid Al Amin",
-                coords: [-7.8732, 110.6047],
+                coords: [-7.8718, 110.6058], // Tepat di utara Balai Padukuhan
                 color: "#9B59B6", 
                 icon: "fa-solid fa-mosque",
                 desc: "Pusat kegiatan ibadah kemasyarakatan dan pendidikan keagamaan warga.",
@@ -1107,7 +1107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Omah Kayu Toko Mebel",
-                coords: [-7.8730, 110.6062],
+                coords: [-7.8717, 110.6075], // Sisi utara agak timur
                 color: "#F5A623", 
                 icon: "fa-solid fa-hammer",
                 desc: "Potensi UMKM kerajinan dan furnitur kayu unggulan dusun.",
@@ -1115,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Toko Qutis",
-                coords: [-7.8742, 110.6068],
+                coords: [-7.8726, 110.6077], // Di jalan sisi timur
                 color: "#1ABC9C", 
                 icon: "fa-solid fa-store",
                 desc: "Salah satu warung kelontong penggerak ekonomi mikro warga.",
@@ -1123,7 +1123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Rumah Jahit PW NUR",
-                coords: [-7.8715, 110.6055],
+                coords: [-7.8705, 110.6070], // Ujung utara wilayah
                 color: "#E67E22", 
                 icon: "fa-solid fa-scissors",
                 desc: "Jasa konveksi dan penjahit pakaian lokal Dusun Wungurejo.",
@@ -1131,7 +1131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "AB Squad Polishing",
-                coords: [-7.8735, 110.6070],
+                coords: [-7.8722, 110.6080], // Dekat Toko Qutis
                 color: "#FF69B4", 
                 icon: "fa-solid fa-car",
                 desc: "Jasa pengecatan dan pemolesan bodi otomotif (Potensi wirausaha mandiri).",
