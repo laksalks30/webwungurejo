@@ -1081,7 +1081,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const locations = [
             {
                 name: "Posko KKN 84.095",
-                coords: [-7.877, 110.6085], // Tengah Dusun
+                coords: [-7.873834, 110.605251], // Titik presisi sesuai arahan
                 color: "#6C0820", 
                 icon: "fa-solid fa-house-user",
                 desc: "Pusat koordinasi dan tempat tinggal mahasiswa KKN selama mengabdi.",
@@ -1112,7 +1112,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: "Pendidikan & Agama"
             },
             {
-                name: "Masjid Darussalam",
+                name: "Masjid Manbaul Hikmah",
                 coords: [-7.8795, 110.6075], // Sisi Selatan
                 color: "#9B59B6", 
                 icon: "fa-solid fa-mosque",
