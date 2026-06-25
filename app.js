@@ -1130,11 +1130,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: "Situs Budaya"
             },
             {
-                name: "AB Squad Polishing",
-                coords: [-7.8722, 110.6080], // Dekat Toko Qutis
-                color: "#FF69B4", 
-                icon: "fa-solid fa-car",
-                desc: "Jasa pengecatan dan pemolesan bodi otomotif (Potensi wirausaha mandiri).",
+                name: "Peternak Ikan Sugino Wiryo",
+                coords: [-7.879900709814317, 110.60831684355774], // Presisi dari user
+                color: "#3498DB", 
+                icon: "fa-solid fa-fish",
+                desc: "Usaha budidaya perikanan lokal, potensi UMKM peternakan ikan di Dusun Wungurejo.",
                 type: "UMKM Lokal"
             }
         ];
