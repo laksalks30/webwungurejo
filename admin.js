@@ -959,12 +959,10 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const id = document.getElementById('edit-blog-id').value;
             const title = document.getElementById('blog-title').value.trim();
-            const title_en = (document.getElementById('blog-title-en')?.value || '').trim() || null;
             const date = document.getElementById('blog-date').value;
             const content_markdown = blogContentTextarea.value.trim();
-            const content_markdown_en = (document.getElementById('blog-content-en')?.value || '').trim() || null;
 
-            const payload = { title, title_en, date, content_markdown, content_markdown_en, thumbnail_url: currentBlogThumbnail };
+            const payload = { title, date, content_markdown, thumbnail_url: currentBlogThumbnail };
 
             const isEdit = id !== "";
             const url = isEdit ? `${API_BASE_URL}/api/blogs/${id}` : `${API_BASE_URL}/api/blogs`;
@@ -994,29 +992,21 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('blog-modal-title').textContent = "Edit Artikel";
         document.getElementById('edit-blog-id').value = entry.id;
         document.getElementById('blog-title').value = entry.title;
-        
-        const titleEnEl = document.getElementById('blog-title-en');
-        if (titleEnEl) titleEnEl.value = entry.title_en || '';
-
         document.getElementById('blog-date').value = entry.date;
         
         blogContentTextarea.value = entry.content_markdown;
         blogContentPreview.innerHTML = marked.parse(entry.content_markdown);
-
-        const contentEnEl = document.getElementById('blog-content-en');
-        const previewEnEl = document.getElementById('blog-content-en-preview');
-        if (contentEnEl) contentEnEl.value = entry.content_markdown_en || '';
-        if (previewEnEl) previewEnEl.innerHTML = entry.content_markdown_en
-            ? marked.parse(entry.content_markdown_en)
-            : '<p style="color: var(--color-text-muted); font-style: italic;">English preview here...</p>';
         
         currentBlogThumbnail = entry.thumbnail_url;
         if (blogThumbnailPreview) {
-            blogThumbnailPreview.innerHTML = currentBlogThumbnail ? `<img src="${currentBlogThumbnail.startsWith('http') ? currentBlogThumbnail : API_BASE_URL + currentBlogThumbnail}" style="width: 150px; border-radius: 8px;">` : '';
+            blogThumbnailPreview.innerHTML = currentBlogThumbnail
+                ? `<img src="${currentBlogThumbnail.startsWith('http') ? currentBlogThumbnail : API_BASE_URL + currentBlogThumbnail}" style="width: 150px; border-radius: 8px;">`
+                : '';
         }
         
         openModal('blog-modal');
     };
+
 
     window.deleteBlog = async (id) => {
         if (!confirm("Hapus artikel ini secara permanen?")) return;

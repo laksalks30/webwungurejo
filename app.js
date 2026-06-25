@@ -1123,25 +1123,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Re-render blog cards when language changes (hook into language system)
+    // Re-render blog cards when language changes (UI labels only)
     document.addEventListener('langChanged', () => {
         if (window.blogData) renderBlogCards(window.blogData);
-
-        // Also update the badge label if the blog reader modal is currently open
-        const badge = document.getElementById('blog-reader-badge');
-        if (badge) {
-            const lang = (window.currentLang && window.translations) ? window.translations[window.currentLang] : null;
-            badge.textContent = (lang && lang['blog_badge_label']) ? lang['blog_badge_label'] : 'Artikel';
-        }
     });
 
-    
     window.openBlogModal = (id) => {
         if (!window.blogData) return;
         const blog = window.blogData.find(b => b.id === id);
         if (!blog) return;
 
-        const isEN = (window.currentLang === 'en');
         const overlay         = document.getElementById('blog-reader-modal');
         const heroImg         = document.getElementById('blog-reader-hero-img');
         const heroPlaceholder = document.getElementById('blog-reader-hero-placeholder');
@@ -1166,31 +1157,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (heroPlaceholder) heroPlaceholder.classList.remove('hidden');
         }
 
-        // --- Badge & Date (respects active language) ---
-        const lang = (window.currentLang && window.translations) ? window.translations[window.currentLang] : null;
-        const t = (key, fallback) => (lang && lang[key]) ? lang[key] : fallback;
-
-        if (badge) badge.textContent = t('blog_badge_label', 'Artikel');
-
+        // --- Badge & Date ---
+        if (badge) badge.textContent = 'Artikel';
         if (dateEl) {
-            const locale = isEN ? 'en-US' : 'id-ID';
             const d = new Date(blog.date);
             dateEl.textContent = isNaN(d.getTime())
                 ? blog.date
-                : d.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+                : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
         }
 
-        // --- Title: use EN if available and EN is active, else ID ---
-        const displayTitle = (isEN && blog.title_en) ? blog.title_en : blog.title;
-        if (titleEl) titleEl.textContent = displayTitle;
+        // --- Title & Content ---
+        if (titleEl) titleEl.textContent = blog.title;
 
-        // --- Content: use EN if available and EN is active, else ID ---
-        const rawContent = (isEN && blog.content_markdown_en)
-            ? blog.content_markdown_en
-            : blog.content_markdown || '';
-
-        let html = rawContent;
-        if (typeof marked !== 'undefined') html = marked.parse(rawContent);
+        let html = blog.content_markdown || '';
+        if (typeof marked !== 'undefined') html = marked.parse(html);
         if (contentEl) contentEl.innerHTML = html;
 
         // --- Open ---
@@ -1198,14 +1178,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'hidden';
     };
 
-
     window.closeBlogReaderModal = (event) => {
-        // If called from backdrop click, only close when clicking the overlay itself
         if (event && event.target !== document.getElementById('blog-reader-modal')) return;
         const overlay = document.getElementById('blog-reader-modal');
         if (overlay) overlay.classList.add('hidden');
         document.body.style.overflow = '';
     };
+
 
     // --- 11. WebGIS Initialization ---
     const initWebGIS = () => {
