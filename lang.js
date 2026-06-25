@@ -70,6 +70,23 @@ window.KKN_LANG = {
         filter_bersama:     "Proker Bersama",
         filter_individu:    "Proker Individu",
 
+        // ── UMKM SECTION ──────────────────────────────────────
+        umkm_tag:           "Pemberdayaan Ekonomi",
+        umkm_title:         "E-Katalog Potensi UMKM Wungurejo",
+        umkm_subtitle:      "Dukung kemandirian ekonomi lokal dengan membeli produk unggulan asli dari warga Dusun Wungurejo.",
+        umkm_badge_craft:   "Kerajinan Khas",
+        umkm_badge_farm:    "Hasil Peternakan",
+        umkm_btn_buy:       "Pesan via WhatsApp",
+        umkm_1_name:        "Kerajinan Popor Senapan Kayu",
+        umkm_1_desc:        "Mahakarya seni ukir kayu berkualitas tinggi oleh pengrajin lokal. Cocok untuk kolektor dan pecinta olahraga menembak.",
+        umkm_1_price:       "Mulai dari Rp 250.000",
+        umkm_2_name:        "Madu Klanceng Murni",
+        umkm_2_desc:        "Madu murni kaya antioksidan langsung dari peternakan lebah tanpa sengat di alam asri Wungurejo. Sehat & berkhasiat.",
+        umkm_2_price:       "Rp 85.000 / Botol",
+        umkm_3_name:        "Bibit & Konsumsi Ikan Air Tawar",
+        umkm_3_desc:        "Menyediakan bibit ikan berkualitas dan ikan siap konsumsi (Lele, Nila) hasil budidaya Bapak Sugino Wiryo.",
+        umkm_3_price:       "Harga Bervariasi",
+
         // ── LOGBOOK SECTION ───────────────────────────────────
         logbook_tag:        "Log Harian",
         logbook_title:      "Timeline & Kegiatan Terbaru",
@@ -208,6 +225,23 @@ window.KKN_LANG = {
         filter_all:         "All",
         filter_bersama:     "Group Programs",
         filter_individu:    "Individual Programs",
+
+        // ── UMKM SECTION ──────────────────────────────────────
+        umkm_tag:           "Economic Empowerment",
+        umkm_title:         "Wungurejo SME Potential E-Catalog",
+        umkm_subtitle:      "Support local economic independence by purchasing authentic flagship products from the residents of Wungurejo.",
+        umkm_badge_craft:   "Signature Craft",
+        umkm_badge_farm:    "Farm Produce",
+        umkm_btn_buy:       "Order via WhatsApp",
+        umkm_1_name:        "Wooden Rifle Stock Craft",
+        umkm_1_desc:        "High-quality wood carving masterpiece by local artisans. Perfect for collectors and shooting sports enthusiasts.",
+        umkm_1_price:       "Starts from Rp 250.000",
+        umkm_2_name:        "Pure Klanceng Honey",
+        umkm_2_desc:        "Antioxidant-rich pure honey straight from stingless bee farms in Wungurejo's beautiful nature. Healthy & beneficial.",
+        umkm_2_price:       "Rp 85.000 / Bottle",
+        umkm_3_name:        "Freshwater Fish Seed & Consumption",
+        umkm_3_desc:        "Providing quality fish seeds and ready-to-consume fish (Catfish, Tilapia) farmed by Mr. Sugino Wiryo.",
+        umkm_3_price:       "Prices Vary",
 
         // ── LOGBOOK SECTION ───────────────────────────────────
         logbook_tag:        "Daily Log",
