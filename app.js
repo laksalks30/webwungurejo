@@ -37,14 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Update Button UI
+        // Update Button UI with Flags
         if (langToggleBtn) {
             if (lang === 'en') {
-                langToggleBtn.innerHTML = '<span style="opacity: 0.5; font-weight: 400;">ID | </span> EN';
+                langToggleBtn.innerHTML = '<span style="opacity: 0.5; font-weight: 400;">🇮🇩 ID | </span> 🇬🇧 EN';
             } else {
-                langToggleBtn.innerHTML = 'ID <span style="opacity: 0.5; margin: 0 4px; font-weight: 400;">| EN</span>';
+                langToggleBtn.innerHTML = '🇮🇩 ID <span style="opacity: 0.5; margin: 0 4px; font-weight: 400;">| 🇬🇧 EN</span>';
             }
         }
+
+        // Set HTML lang attribute for SEO & Accessibility
+        document.documentElement.setAttribute('lang', lang);
     };
 
     // Apply saved language on load
@@ -54,7 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
         langToggleBtn.addEventListener('click', () => {
             currentLang = currentLang === 'id' ? 'en' : 'id';
             localStorage.setItem('kkn-lang', currentLang);
-            applyLanguage(currentLang);
+            
+            // Add transition class for smooth fade out
+            document.body.classList.add('lang-switching');
+            
+            // Wait for fade out to complete before swapping text
+            setTimeout(() => {
+                applyLanguage(currentLang);
+                // Remove transition class to fade back in
+                document.body.classList.remove('lang-switching');
+            }, 250); // Matches CSS transition duration
         });
     }
 
@@ -1156,18 +1168,25 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         // --- 3. RENDER MARKERS KE PETA ---
-        locations.forEach(loc => {
+        locations.forEach((loc, index) => {
             const marker = L.marker(loc.coords, { icon: createCustomIcon(loc.color, loc.icon) }).addTo(map);
             
             const popupContent = `
                 <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 220px; padding: 5px;">
-                    <span style="display: inline-block; padding: 4px 8px; border-radius: 20px; background-color: ${loc.color}15; font-size: 0.7rem; font-weight: 800; color: ${loc.color}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">${loc.type}</span>
-                    <h4 style="margin: 0 0 8px 0; font-size: 1.15rem; color: #2C3E50; font-weight: 800; line-height: 1.2;">${loc.name}</h4>
-                    <p style="margin: 0; font-size: 0.85rem; color: #666; line-height: 1.5;">${loc.desc}</p>
+                    <span data-lang-key="map_loc_${index}_type" style="display: inline-block; padding: 4px 8px; border-radius: 20px; background-color: ${loc.color}15; font-size: 0.7rem; font-weight: 800; color: ${loc.color}; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">${loc.type}</span>
+                    <h4 data-lang-key="map_loc_${index}_name" style="margin: 0 0 8px 0; font-size: 1.15rem; color: #2C3E50; font-weight: 800; line-height: 1.2;">${loc.name}</h4>
+                    <p data-lang-key="map_loc_${index}_desc" style="margin: 0; font-size: 0.85rem; color: #666; line-height: 1.5;">${loc.desc}</p>
                 </div>
             `;
             
             marker.bindPopup(popupContent);
+        });
+
+        // Apply language translation automatically when a popup opens
+        map.on('popupopen', function() {
+            if (typeof applyLanguage === 'function' && typeof currentLang !== 'undefined') {
+                applyLanguage(currentLang);
+            }
         });
     };
 

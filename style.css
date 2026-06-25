@@ -2143,6 +2143,16 @@ textarea:focus {
     color: rgba(255, 255, 255, 0.8) !important;
 }
 
+/* === LANGUAGE SWITCHING ANIMATION === */
+[data-lang-key], [data-lang-ph] {
+    transition: opacity 0.25s ease-in-out;
+}
+
+body.lang-switching [data-lang-key],
+body.lang-switching [data-lang-ph] {
+    opacity: 0 !important;
+}
+
 /* Logbook Filters styling */
 .logbook-filters {
     display: flex;
