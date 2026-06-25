@@ -1025,7 +1025,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!mapContainer || typeof L === 'undefined') return;
 
         // Koordinat area Dusun Wungurejo (Berdasarkan foto peta aktual)
-        const wungurejoCoords = [-7.877, 110.608]; 
+        const wungurejoCoords = [-7.874, 110.605]; 
         
         const map = L.map('webgis-map').setView(wungurejoCoords, 15);
 
@@ -1081,58 +1081,58 @@ document.addEventListener('DOMContentLoaded', () => {
         const locations = [
             {
                 name: "Posko KKN 84.095",
-                coords: [-7.873834, 110.605251], // Titik presisi sesuai arahan
+                coords: [-7.873990, 110.605355], // Titik presisi sesuai arahan
                 color: "#6C0820", 
                 icon: "fa-solid fa-house-user",
                 desc: "Pusat koordinasi dan tempat tinggal mahasiswa KKN selama mengabdi.",
                 type: "Posko Utama"
             },
             {
-                name: "Putra Mebel (UMKM)",
-                coords: [-7.8765, 110.6090], // Sesuai peta
-                color: "#F5A623", 
-                icon: "fa-solid fa-hammer",
-                desc: "Potensi industri kreatif dan kerajinan kayu lokal Dusun Wungurejo.",
-                type: "UMKM Lokal"
+                name: "Balai Padukuhan Wungurejo",
+                coords: [-7.8735, 110.6040],
+                color: "#4A90E2", 
+                icon: "fa-solid fa-landmark",
+                desc: "Pusat administrasi dusun dan lokasi berbagai sosialisasi proker.",
+                type: "Fasilitas Umum"
             },
             {
-                name: "Griya Sehat TBS",
-                coords: [-7.8718, 110.6075], // Ujung Utara
-                color: "#FF69B4", 
-                icon: "fa-solid fa-kit-medical",
-                desc: "Fasilitas pelayanan kesehatan masyarakat setempat.",
-                type: "Fasilitas Kesehatan"
-            },
-            {
-                name: "TPQ Tarbiyatul Muchcinin",
-                coords: [-7.8755, 110.6065], // Sisi Barat
-                color: "#27AE60", 
-                icon: "fa-solid fa-book-quran",
-                desc: "Pusat pendidikan agama dan taman bacaan Al-Quran dusun.",
-                type: "Pendidikan & Agama"
-            },
-            {
-                name: "Masjid Manbaul Hikmah",
-                coords: [-7.8795, 110.6075], // Sisi Selatan
+                name: "Masjid Al Amin",
+                coords: [-7.8732, 110.6047],
                 color: "#9B59B6", 
                 icon: "fa-solid fa-mosque",
-                desc: "Pusat kegiatan ibadah dan kemasyarakatan warga Wungurejo.",
+                desc: "Pusat kegiatan ibadah kemasyarakatan dan pendidikan keagamaan warga.",
                 type: "Fasilitas Ibadah"
             },
             {
-                name: "SDN Sendowo 03",
-                coords: [-7.8773, 110.6105], // Sisi Timur
-                color: "#1ABC9C", 
-                icon: "fa-solid fa-school",
-                desc: "Sekolah Dasar yang berbatasan langsung dengan area Dusun Wungurejo.",
-                type: "Fasilitas Pendidikan"
+                name: "Omah Kayu Toko Mebel",
+                coords: [-7.8730, 110.6062],
+                color: "#F5A623", 
+                icon: "fa-solid fa-hammer",
+                desc: "Potensi UMKM kerajinan dan furnitur kayu unggulan dusun.",
+                type: "UMKM Lokal"
             },
             {
-                name: "Pengrajin Popor",
-                coords: [-7.8745, 110.6068], // Sisi Barat
+                name: "Toko Qutis",
+                coords: [-7.8742, 110.6068],
+                color: "#1ABC9C", 
+                icon: "fa-solid fa-store",
+                desc: "Salah satu warung kelontong penggerak ekonomi mikro warga.",
+                type: "UMKM Lokal"
+            },
+            {
+                name: "Rumah Jahit PW NUR",
+                coords: [-7.8715, 110.6055],
                 color: "#E67E22", 
-                icon: "fa-solid fa-toolbox",
-                desc: "Salah satu titik potensi usaha mandiri warga (UMKM).",
+                icon: "fa-solid fa-scissors",
+                desc: "Jasa konveksi dan penjahit pakaian lokal Dusun Wungurejo.",
+                type: "UMKM Lokal"
+            },
+            {
+                name: "AB Squad Polishing",
+                coords: [-7.8735, 110.6070],
+                color: "#FF69B4", 
+                icon: "fa-solid fa-car",
+                desc: "Jasa pengecatan dan pemolesan bodi otomotif (Potensi wirausaha mandiri).",
                 type: "UMKM Lokal"
             }
         ];
