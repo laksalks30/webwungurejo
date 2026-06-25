@@ -875,6 +875,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.closeDetailsModal = () => {
         if (detailsModal) detailsModal.classList.add('hidden');
         document.body.style.overflow = ''; // Restore body scroll
+        // Restore gallery side (may have been hidden by openBlogModal)
+        const gallerySide = document.getElementById('modal-gallery-side');
+        if (gallerySide) gallerySide.style.display = '';
     };
 
     // Carousel Navigation
@@ -1107,7 +1110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalTitle) modalTitle.textContent = blog.title;
         if (modalCategory) {
             modalCategory.textContent = "Artikel";
-            modalCategory.className = "badge status-completed"; 
+            modalCategory.className = "badge badge-success"; 
         }
         
         if (modalDate) {
@@ -1118,26 +1121,30 @@ document.addEventListener('DOMContentLoaded', () => {
             modalDate.style.display = 'inline-block';
         }
         
-        // Hide gallery side so text is full width
+        // Hide carousel side panel — blog articles use full-width text layout
         if (modalGallerySide) modalGallerySide.style.display = 'none';
         
-        let htmlContent = blog.content_markdown;
+        let htmlContent = blog.content_markdown || '';
         if (typeof marked !== 'undefined') {
-            htmlContent = marked.parse(blog.content_markdown);
+            htmlContent = marked.parse(htmlContent);
         }
         
         let imagesHTML = '';
         if (blog.thumbnail_url) {
-            const fullUrl = blog.thumbnail_url.startsWith('http') ? blog.thumbnail_url : `${API_BASE_URL}${blog.thumbnail_url}`;
-            imagesHTML = `<img src="${fullUrl}" alt="${escapeHTML(blog.title)}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-bottom: 20px;">`;
+            const fullUrl = blog.thumbnail_url.startsWith('http') 
+                ? blog.thumbnail_url 
+                : `${API_BASE_URL}${blog.thumbnail_url}`;
+            imagesHTML = `<img src="${fullUrl}" alt="${escapeHTML(blog.title)}" 
+                style="width: 100%; max-height: 380px; object-fit: cover; border-radius: 12px; margin-bottom: 24px;">`;
         }
         
         if (modalMarkdownContent) {
-            modalMarkdownContent.innerHTML = imagesHTML + htmlContent;
+            modalMarkdownContent.innerHTML = imagesHTML + `<div class="markdown-body">${htmlContent}</div>`;
         }
         
+        // Use same mechanism as openDetailsModal (removes 'hidden', not adds 'active')
         if (modal) {
-            modal.classList.add('active');
+            modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
     };
