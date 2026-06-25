@@ -1024,8 +1024,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const mapContainer = document.getElementById('webgis-map');
         if (!mapContainer || typeof L === 'undefined') return;
 
-        // Koordinat area Nglipar, Gunungkidul (Dusun Wungurejo area)
-        const wungurejoCoords = [-7.863, 110.638]; 
+        // Koordinat area Pengkol, Nglipar, Gunungkidul (Berdasarkan riset aktual)
+        const wungurejoCoords = [-7.878, 110.598]; 
         
         const map = L.map('webgis-map').setView(wungurejoCoords, 15);
 
@@ -1047,16 +1047,16 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // --- 1. GARIS BATAS WILAYAH DUSUN (POLYGON) ---
-        // Koordinat batas wilayah estimasi (bisa diganti dengan data GeoJSON asli dari BPN/Desa nanti)
+        // Koordinat batas wilayah estimasi (Disesuaikan dengan area Pengkol, Nglipar)
         const wungurejoBoundary = [
-            [-7.859, 110.635],
-            [-7.858, 110.638],
-            [-7.859, 110.641],
-            [-7.861, 110.643],
-            [-7.864, 110.642],
-            [-7.867, 110.639],
-            [-7.866, 110.636],
-            [-7.863, 110.634]
+            [-7.875, 110.595],
+            [-7.874, 110.598],
+            [-7.875, 110.601],
+            [-7.877, 110.603],
+            [-7.880, 110.602],
+            [-7.883, 110.599],
+            [-7.882, 110.596],
+            [-7.879, 110.594]
         ];
 
         // Gambar area polygon di peta
@@ -1080,15 +1080,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const locations = [
             {
                 name: "Posko KKN 84.095",
-                coords: [-7.862, 110.637],
+                coords: [-7.877, 110.597],
                 color: "#6C0820", 
                 icon: "fa-solid fa-house-user",
                 desc: "Pusat koordinasi dan tempat tinggal mahasiswa KKN selama mengabdi.",
                 type: "Posko Utama"
             },
             {
-                name: "Balai Dusun Wungurejo",
-                coords: [-7.864, 110.639],
+                name: "Balai Kalurahan / Dusun",
+                coords: [-7.879, 110.599],
                 color: "#4A90E2", 
                 icon: "fa-solid fa-landmark",
                 desc: "Tempat pelaksanaan proker utama seperti Sosialisasi UMKM dan Stunting.",
@@ -1096,7 +1096,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Peternakan Madu Klanceng",
-                coords: [-7.861, 110.640],
+                coords: [-7.876, 110.600],
                 color: "#F5A623", 
                 icon: "fa-solid fa-bug",
                 desc: "Salah satu potensi utama ekonomi dan UMKM warga Desa Wungurejo.",
@@ -1104,23 +1104,23 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Area Gejog Lesung",
-                coords: [-7.865, 110.636],
+                coords: [-7.880, 110.596],
                 color: "#27AE60", 
                 icon: "fa-solid fa-music",
                 desc: "Pusat pelestarian kesenian tradisional khas Gunungkidul.",
                 type: "Pariwisata Budaya"
             },
             {
-                name: "Masjid Dusun Wungurejo",
-                coords: [-7.863, 110.6375],
+                name: "Masjid / Mushola Dusun",
+                coords: [-7.878, 110.5975],
                 color: "#9B59B6", // Ungu
                 icon: "fa-solid fa-mosque",
                 desc: "Pusat kegiatan ibadah, TPA anak-anak, dan kegiatan keagamaan warga.",
                 type: "Fasilitas Ibadah"
             },
             {
-                name: "SD / PAUD Wungurejo",
-                coords: [-7.8625, 110.639],
+                name: "SD / PAUD Terdekat",
+                coords: [-7.8775, 110.599],
                 color: "#1ABC9C", // Tosca
                 icon: "fa-solid fa-school",
                 desc: "Pusat pendidikan usia dini dan dasar bagi anak-anak dusun.",
@@ -1128,7 +1128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Posyandu Balita & Lansia",
-                coords: [-7.865, 110.638],
+                coords: [-7.880, 110.598],
                 color: "#FF69B4", // Pink Terang
                 icon: "fa-solid fa-kit-medical",
                 desc: "Lokasi pelayanan kesehatan rutin dan sosialisasi pencegahan stunting.",
