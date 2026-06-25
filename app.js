@@ -1083,7 +1083,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const locations = [
             {
                 name: "Posko KKN 84.095",
-                coords: [-7.873990, 110.605355], // Sesuai pin abu-abu pengguna
+                coords: [-7.874000, 110.605389], // Presisi dari 7°52'26.4"S 110°36'19.4"E
                 color: "#6C0820", 
                 icon: "fa-solid fa-house-user",
                 desc: "Pusat koordinasi dan tempat tinggal mahasiswa KKN selama mengabdi.",
