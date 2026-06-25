@@ -1139,11 +1139,19 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "TPQ Tarbiyatul Muchcinin",
-                coords: [-7.8765467110434555, 110.60488574061534], // Presisi dari user
+                coords: [-7.8765467110434555, 110.60488574061534],
                 color: "#27AE60", 
                 icon: "fa-solid fa-book-quran",
                 desc: "Pusat pendidikan agama dan taman bacaan Al-Quran bagi anak-anak dusun.",
                 type: "Pendidikan & Agama"
+            },
+            {
+                name: "Masjid Darussalam",
+                coords: [-7.880814014201857, 110.607250621794], // Presisi dari user
+                color: "#8E44AD", 
+                icon: "fa-solid fa-mosque",
+                desc: "Masjid Darussalam, pusat ibadah dan kegiatan keagamaan warga Wungurejo.",
+                type: "Fasilitas Ibadah"
             }
         ];
 
