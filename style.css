@@ -3487,6 +3487,7 @@ body.lang-switching [data-lang-ph] {
     transition: var(--transition);
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .blog-card:hover {

@@ -1099,18 +1099,27 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const modal = document.getElementById('details-modal');
         const modalTitle = document.getElementById('modal-title');
-        const modalBody = document.getElementById('modal-body');
+        const modalMarkdownContent = document.getElementById('modal-markdown-content');
         const modalDate = document.getElementById('modal-date');
         const modalCategory = document.getElementById('modal-category-badge');
+        const modalGallerySide = document.getElementById('modal-gallery-side');
         
-        modalTitle.textContent = blog.title;
-        modalCategory.textContent = "Artikel/Berita";
-        modalCategory.className = "badge status-completed"; 
+        if (modalTitle) modalTitle.textContent = blog.title;
+        if (modalCategory) {
+            modalCategory.textContent = "Artikel";
+            modalCategory.className = "badge status-completed"; 
+        }
         
-        const dateObj = new Date(blog.date);
-        modalDate.textContent = isNaN(dateObj.getTime()) ? blog.date : dateObj.toLocaleDateString('id-ID', {
-            day: 'numeric', month: 'long', year: 'numeric'
-        });
+        if (modalDate) {
+            const dateObj = new Date(blog.date);
+            modalDate.textContent = isNaN(dateObj.getTime()) ? blog.date : dateObj.toLocaleDateString('id-ID', {
+                day: 'numeric', month: 'long', year: 'numeric'
+            });
+            modalDate.style.display = 'inline-block';
+        }
+        
+        // Hide gallery side so text is full width
+        if (modalGallerySide) modalGallerySide.style.display = 'none';
         
         let htmlContent = blog.content_markdown;
         if (typeof marked !== 'undefined') {
@@ -1120,13 +1129,17 @@ document.addEventListener('DOMContentLoaded', () => {
         let imagesHTML = '';
         if (blog.thumbnail_url) {
             const fullUrl = blog.thumbnail_url.startsWith('http') ? blog.thumbnail_url : `${API_BASE_URL}${blog.thumbnail_url}`;
-            imagesHTML = `<img src="${fullUrl}" alt="${escapeHTML(blog.title)}" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">`;
+            imagesHTML = `<img src="${fullUrl}" alt="${escapeHTML(blog.title)}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-bottom: 20px;">`;
         }
         
-        modalBody.innerHTML = imagesHTML + `<div class="markdown-body" style="color: var(--color-dark);">${htmlContent}</div>`;
+        if (modalMarkdownContent) {
+            modalMarkdownContent.innerHTML = imagesHTML + htmlContent;
+        }
         
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
     };
 
     // --- 11. WebGIS Initialization ---
