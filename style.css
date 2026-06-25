@@ -2114,6 +2114,35 @@ textarea:focus {
     box-shadow: 0 12px 28px rgba(0, 242, 234, 0.25) !important;
 }
 
+/* === DARK MODE TEXT FIXES FOR PROFILE SECTION === */
+[data-theme="dark"] .profile-text-content > p {
+    color: #A6ADC8 !important;
+}
+
+[data-theme="dark"] .vm-info h4 {
+    color: #CDD6F4 !important;
+}
+
+[data-theme="dark"] .vm-info p {
+    color: #A6ADC8 !important;
+}
+
+[data-theme="dark"] .section-subtitle {
+    color: #A6ADC8 !important;
+}
+
+[data-theme="dark"] .timeline-date {
+    color: #FF6B9D !important;
+}
+
+[data-theme="dark"] .timeline-content p {
+    color: #A6ADC8 !important;
+}
+
+[data-theme="dark"] .gallery-info p {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
 /* Logbook Filters styling */
 .logbook-filters {
     display: flex;
