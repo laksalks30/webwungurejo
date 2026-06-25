@@ -1091,7 +1091,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Balai Padukuhan Wungurejo",
-                coords: [-7.8722, 110.6052], // Sisi barat laut agak tengah
+                coords: [-7.873732597455154, 110.60495672624596], // Presisi dari user
                 color: "#4A90E2", 
                 icon: "fa-solid fa-landmark",
                 desc: "Pusat administrasi dusun dan lokasi berbagai sosialisasi proker.",
