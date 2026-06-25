@@ -11,6 +11,7 @@ window.KKN_LANG = {
         // ── NAV ──────────────────────────────────────────────
         nav_home:       "Beranda",
         nav_profile:    "Profil Desa",
+        nav_umkm:       "E-Katalog UMKM",
         nav_proker:     "Program Kerja",
         nav_logbook:    "Logbook",
         nav_gallery:    "Galeri",
@@ -167,6 +168,7 @@ window.KKN_LANG = {
         // ── NAV ──────────────────────────────────────────────
         nav_home:       "Home",
         nav_profile:    "Village Profile",
+        nav_umkm:       "SME E-Catalog",
         nav_proker:     "Work Programs",
         nav_logbook:    "Logbook",
         nav_gallery:    "Gallery",
