@@ -16,9 +16,10 @@
         rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS for WebGIS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css?v=4">
-</head>
 
 <body>
 
@@ -226,8 +227,8 @@
 
             <div class="profile-map-container" style="margin-top: 60px; background-color: var(--color-white); padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px var(--color-shadow); border: 1.5px solid rgba(108, 8, 32, 0.08);">
                 <h3 style="text-align: center; margin-bottom: 24px; font-size: 1.5rem; color: var(--color-dark); font-weight: 800;"><i class="fa-solid fa-map-location-dot" style="color: var(--color-primary); margin-right: 10px;"></i> <span data-lang-key="map_title">Peta Lokasi Dusun Wungurejo</span></h3>
-                <div style="border-radius: 16px; overflow: hidden;">
-                    <iframe src="https://maps.google.com/maps?q=Wungurejo,%20Pengkol,%20Nglipar,%20Gunung%20Kidul&t=&z=14&ie=UTF8&iwloc=&output=embed" width="100%" height="450" style="border:0; display: block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div style="border-radius: 16px; overflow: hidden; position: relative;">
+                    <div id="webgis-map" style="width: 100%; height: 450px; z-index: 1;"></div>
                 </div>
             </div>
         </div>
@@ -528,12 +529,15 @@
         <img id="lightbox-image" src="" alt="Zoomed Image" onclick="event.stopPropagation()">
     </div>
 
-    <!-- Marked.js for Markdown Parsing -->
+    <!-- Leaflet JS for WebGIS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Marked.js for Markdown parsing (Logbook) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Language Dictionary -->
+    <!-- Multi-Language Dictionary -->
     <script src="lang.js?v=1"></script>
     <!-- App Script -->
-    <script src="app.js?v=3"></script>
+    <script src="app.js?v=4"></script>
 </body>
 
 </html>
