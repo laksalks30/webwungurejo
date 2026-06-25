@@ -1106,11 +1106,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: "Fasilitas Ibadah"
             },
             {
-                name: "Omah Kayu Toko Mebel",
-                coords: [-7.8717, 110.6075], // Sisi utara agak timur
+                name: "Pengrajin Popor",
+                coords: [-7.874912049612724, 110.60471903789087], // Presisi dari user
                 color: "#F5A623", 
                 icon: "fa-solid fa-hammer",
-                desc: "Potensi UMKM kerajinan dan furnitur kayu unggulan dusun.",
+                desc: "Usaha kerajinan popor kayu, potensi UMKM unggulan Dusun Wungurejo.",
                 type: "UMKM Lokal"
             },
             {
