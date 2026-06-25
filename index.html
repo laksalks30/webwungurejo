@@ -20,7 +20,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css?v=4">
-
+    <!-- Chart.js for Demographics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 <body>
 
     <!-- Preloader -->
@@ -198,28 +200,30 @@
                     <!-- Stat 1: Total Jiwa -->
                     <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
                         <i class="fa-solid fa-users" style="font-size: 2.5rem; color: var(--color-primary); margin-bottom: 16px; display: block;"></i>
-                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;">437</h4>
+                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;" class="counter-up" data-target="437">0</h4>
                         <p style="color: var(--color-text-muted); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;" data-lang-key="demo_penduduk">Total Penduduk</p>
                     </div>
                     <!-- Stat 2: KK -->
                     <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
                         <i class="fa-solid fa-house-chimney-user" style="font-size: 2.5rem; color: var(--color-secondary); margin-bottom: 16px; display: block;"></i>
-                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;">135</h4>
+                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;" class="counter-up" data-target="135">0</h4>
                         <p style="color: var(--color-text-muted); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;" data-lang-key="demo_kk">Kepala Keluarga</p>
                     </div>
                     <!-- Stat 3: RT -->
                     <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
                         <i class="fa-solid fa-map" style="font-size: 2.5rem; color: #FFA500; margin-bottom: 16px; display: block;"></i>
-                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;">10</h4>
+                        <h4 style="font-size: 2.2rem; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; line-height: 1;" class="counter-up" data-target="10">0</h4>
                         <p style="color: var(--color-text-muted); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;" data-lang-key="demo_rt">Rukun Tetangga (RT)</p>
                     </div>
                     <!-- Stat 4: Gender -->
-                    <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
-                        <i class="fa-solid fa-venus-mars" style="font-size: 2.5rem; color: #9B59B6; margin-bottom: 16px; display: block;"></i>
+                    <div style="background-color: var(--color-white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                        <div style="position: relative; width: 140px; height: 140px; margin: 0 auto 10px auto;">
+                            <canvas id="genderChart"></canvas>
+                        </div>
                         <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 8px;">
-                            <div><span style="font-size: 1.4rem; font-weight: 800; color: var(--color-dark);">230</span><br><span style="font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600;" data-lang-key="demo_lakilaki">Laki-laki</span></div>
+                            <div><span style="font-size: 1.2rem; font-weight: 800; color: var(--color-dark);" class="counter-up" data-target="230">0</span><br><span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600;" data-lang-key="demo_lakilaki">Laki-laki</span></div>
                             <div style="width: 2px; background-color: rgba(0,0,0,0.1);"></div>
-                            <div><span style="font-size: 1.4rem; font-weight: 800; color: var(--color-dark);">207</span><br><span style="font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600;" data-lang-key="demo_perempuan">Perempuan</span></div>
+                            <div><span style="font-size: 1.2rem; font-weight: 800; color: var(--color-dark);" class="counter-up" data-target="207">0</span><br><span style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600;" data-lang-key="demo_perempuan">Perempuan</span></div>
                         </div>
                         <p style="color: var(--color-text-muted); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;" data-lang-key="demo_gender">Rasio Gender</p>
                     </div>

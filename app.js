@@ -1195,6 +1195,91 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchLogbook();
     fetchGuestbook();
     fetchGallery();
+
+    // --- 11. DEMOGRAPHICS ANIMATION (CHART & COUNTER) ---
+    const initDemographics = () => {
+        // 1. Chart.js for Gender Ratio
+        const ctx = document.getElementById('genderChart');
+        if (ctx && typeof Chart !== 'undefined') {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Laki-laki', 'Perempuan'],
+                    datasets: [{
+                        data: [230, 207],
+                        backgroundColor: ['#4A90E2', '#FF6B9D'], // Blue & Pink
+                        borderWidth: 0,
+                        hoverOffset: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            padding: 10,
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.raw + ' Jiwa';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        // 2. Counter-Up Animation
+        const counters = document.querySelectorAll('.counter-up');
+        const speed = 100; // Lower is slower
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                counter.innerText = '0'; // Reset to 0
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    // Calculate increment based on target size to ensure they finish around the same time
+                    const inc = target / speed; 
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 20);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        };
+
+        // Trigger animation when scrolled into view using IntersectionObserver
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    obs.disconnect(); // Run only once
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const demoSection = document.querySelector('.demographics-container');
+        if (demoSection) {
+            observer.observe(demoSection);
+        }
+    };
+
+    // Initialize after a slight delay to ensure DOM is fully ready
+    setTimeout(initDemographics, 500);
     
     // Initialize WebGIS Map safely
     setTimeout(initWebGIS, 500);
