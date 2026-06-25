@@ -1115,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             {
                 name: "Toko Qutis",
-                coords: [-7.8726, 110.6077], // Di jalan sisi timur
+                coords: [-7.873920390437767, 110.60660252927839], // Presisi dari user
                 color: "#1ABC9C", 
                 icon: "fa-solid fa-store",
                 desc: "Salah satu warung kelontong penggerak ekonomi mikro warga.",
