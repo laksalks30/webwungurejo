@@ -219,24 +219,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 authenticatedFetch(`${API_BASE_URL}/api/admin/guestbook`)
             ]);
 
-            const prokers    = prokerRes.ok    ? await prokerRes.json()    : [];
-            const logbooks   = logbookRes.ok   ? await logbookRes.json()   : [];
+            const prokers = prokerRes.ok ? await prokerRes.json() : [];
+            const logbooks = logbookRes.ok ? await logbookRes.json() : [];
             const guestbooks = guestbookRes.ok ? await guestbookRes.json() : [];
 
             // ── Stat Cards ──
-            const selesai  = prokers.filter(p => p.status === 'Selesai').length;
+            const selesai = prokers.filter(p => p.status === 'Selesai').length;
             const berjalan = prokers.filter(p => p.status === 'Sedang Berjalan').length;
             const belumMulai = prokers.filter(p => p.status === 'Belum Mulai').length;
 
-            document.getElementById('dash-proker-selesai').textContent  = selesai;
+            document.getElementById('dash-proker-selesai').textContent = selesai;
             document.getElementById('dash-proker-berjalan').textContent = berjalan;
-            document.getElementById('dash-proker-total').textContent    = prokers.length;
-            document.getElementById('dash-logbook-total').textContent   = logbooks.length;
+            document.getElementById('dash-proker-total').textContent = prokers.length;
+            document.getElementById('dash-logbook-total').textContent = logbooks.length;
 
             const approved = guestbooks.filter(g => g.is_approved).length;
-            const pending  = guestbooks.filter(g => !g.is_approved).length;
+            const pending = guestbooks.filter(g => !g.is_approved).length;
             document.getElementById('dash-tamu-approved').textContent = approved;
-            document.getElementById('dash-tamu-pending').textContent  = pending;
+            document.getElementById('dash-tamu-pending').textContent = pending;
 
             // ── Donut Chart: Proker Status ──
             const donutCanvas = document.getElementById('chart-proker-donut');
@@ -314,12 +314,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         scales: {
                             x: {
                                 ticks: { color: isDark2 ? '#A6ADC8' : '#718096', font: { family: 'Plus Jakarta Sans' } },
-                                grid:  { color: isDark2 ? 'rgba(205,214,244,0.07)' : 'rgba(0,0,0,0.05)' }
+                                grid: { color: isDark2 ? 'rgba(205,214,244,0.07)' : 'rgba(0,0,0,0.05)' }
                             },
                             y: {
                                 beginAtZero: true,
                                 ticks: { color: isDark2 ? '#A6ADC8' : '#718096', font: { family: 'Plus Jakarta Sans' }, stepSize: 1 },
-                                grid:  { color: isDark2 ? 'rgba(205,214,244,0.07)' : 'rgba(0,0,0,0.05)' }
+                                grid: { color: isDark2 ? 'rgba(205,214,244,0.07)' : 'rgba(0,0,0,0.05)' }
                             }
                         },
                         plugins: {
@@ -923,10 +923,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('gallery-title').value = gal.title;
         document.getElementById('gallery-date').value = gal.date;
         document.getElementById('gallery-desc').value = gal.description || '';
-        
+
         currentGalleryImage = gal.image_url;
         renderSingleImagePreview(currentGalleryImage, 'gallery-image-preview');
-        
+
         openModal('gallery-modal');
     };
 
@@ -1111,7 +1111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!file) return;
             const formData = new FormData();
             formData.append('file', file);
-            
+
             try {
                 const response = await authenticatedFetch(`${API_BASE_URL}/api/upload`, {
                     method: 'POST',
@@ -1165,17 +1165,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('edit-blog-id').value = entry.id;
         document.getElementById('blog-title').value = entry.title;
         document.getElementById('blog-date').value = entry.date;
-        
+
         blogContentTextarea.value = entry.content_markdown;
         blogContentPreview.innerHTML = marked.parse(entry.content_markdown);
-        
+
         currentBlogThumbnail = entry.thumbnail_url;
         if (blogThumbnailPreview) {
             blogThumbnailPreview.innerHTML = currentBlogThumbnail
                 ? `<img src="${currentBlogThumbnail.startsWith('http') ? currentBlogThumbnail : API_BASE_URL + currentBlogThumbnail}" style="width: 150px; border-radius: 8px;">`
                 : '';
         }
-        
+
         openModal('blog-modal');
     };
 
@@ -1210,7 +1210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         blogContentTextarea.focus();
         blogContentTextarea.selectionStart = start + prefix.length;
         blogContentTextarea.selectionEnd = end + prefix.length;
-        
+
         blogContentTextarea.dispatchEvent(new Event('input'));
     };
 

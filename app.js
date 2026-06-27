@@ -1502,4 +1502,33 @@ document.addEventListener('DOMContentLoaded', () => {
             "retina_detect": true
         });
     }
+
+    // --- Pillar Card Hover Animation (JS-driven to bypass AOS lock) ---
+    const pillarCards = document.querySelectorAll('.pillar-card');
+    pillarCards.forEach(card => {
+        // Set base transition via JS so it always applies
+        card.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease';
+
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-8px) scale(1.02)';
+            card.style.boxShadow = '0 20px 40px rgba(108, 8, 32, 0.12)';
+            card.style.borderColor = 'rgba(108, 8, 32, 0.2)';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+            card.style.boxShadow = '';
+            card.style.borderColor = '';
+        });
+
+        card.addEventListener('mousedown', () => {
+            card.style.transform = 'translateY(-2px) scale(0.97)';
+            card.style.boxShadow = '0 6px 16px rgba(108, 8, 32, 0.06)';
+        });
+
+        card.addEventListener('mouseup', () => {
+            card.style.transform = 'translateY(-8px) scale(1.02)';
+            card.style.boxShadow = '0 20px 40px rgba(108, 8, 32, 0.12)';
+        });
+    });
 });

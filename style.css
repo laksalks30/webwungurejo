@@ -302,36 +302,23 @@ textarea {
     background-color: transparent;
     color: var(--color-primary);
     border: 2px solid var(--color-primary);
-    position: relative;
-    overflow: hidden;
+    font-weight: 700;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.btn-secondary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-dark));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 0;
-    pointer-events: none;
-}
-
-.btn-secondary span, .btn-secondary i {
-    position: relative;
-    z-index: 1;
-}
-
-.btn-secondary:hover::before {
-    opacity: 1;
-}
-
 .btn-secondary:hover {
+    background-color: var(--color-primary);
     color: #fff;
-    border-color: transparent;
+    border-color: var(--color-primary);
     transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(255, 51, 133, 0.3);
+    box-shadow: 0 8px 24px rgba(255, 51, 133, 0.35);
+}
+
+.btn-secondary:active {
+    background-color: #FF66A3;
+    color: #fff;
+    transform: translateY(-1px) scale(0.97);
+    box-shadow: 0 4px 12px rgba(255, 51, 133, 0.2);
 }
 
 .btn-block {
@@ -508,6 +495,12 @@ textarea {
     gap: 24px;
 }
 
+.pillar-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .pillar-card {
     background-color: rgba(255, 255, 255, 0.75);
     border: 1.5px solid rgba(255, 255, 255, 0.8);
@@ -516,16 +509,24 @@ textarea {
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-    transition: var(--transition);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    cursor: pointer;
+    height: 100%;
+    flex: 1;
 }
 
 .pillar-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px var(--color-shadow);
+    transform: translateY(-8px) scale(1.02) !important;
+    box-shadow: 0 20px 40px rgba(108, 8, 32, 0.08);
     border-color: rgba(108, 8, 32, 0.15);
+}
+
+.pillar-card:active {
+    transform: translateY(-2px) scale(0.98) !important;
+    box-shadow: 0 8px 15px rgba(108, 8, 32, 0.04);
 }
 
 .pillar-icon {
@@ -626,10 +627,13 @@ textarea {
     width: 100%;
     max-width: 440px;
     height: 380px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
-    border-radius: 24px;
-    padding: 8px;
-    box-shadow: 0 30px 60px var(--color-shadow);
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 26px;
+    padding: 10px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
     position: relative;
     overflow: hidden;
 }
@@ -2319,31 +2323,65 @@ body.lang-switching [data-lang-ph] {
 }
 
 .btn-wa {
-    background: #25D366; /* WhatsApp Green */
-    color: white;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white !important;
     width: 100%;
     justify-content: center;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 12px 20px;
     font-weight: 700;
     display: flex;
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-wa::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+    pointer-events: none;
+}
+
+.btn-wa:hover::before {
+    left: 140%;
 }
 
 .btn-wa:hover {
-    background: #1EBE5D;
     transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4);
-    color: white;
+    box-shadow: 0 12px 28px rgba(37, 211, 102, 0.5);
 }
 
 /* Dark mode UMKM overrides */
 [data-theme="dark"] .umkm-section {
     background-color: #11111B !important;
+}
+
+[data-theme="dark"] .btn-wa {
+    background: rgba(37, 211, 102, 0.15) !important;
+    color: #25D366 !important;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.15),
+                inset 0 0 0 1.5px rgba(37, 211, 102, 0.35) !important;
+    border: none !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .btn-wa:hover {
+    background: rgba(37, 211, 102, 0.25) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3),
+                inset 0 0 0 1.5px rgba(37, 211, 102, 0.6) !important;
 }
 
 [data-theme="dark"] .umkm-card {
@@ -2968,7 +3006,6 @@ body.lang-switching [data-lang-ph] {
 }
 
 /* === 10. PROFILE/VILLAGE SECTION === */
-[data-theme="dark"] .profile-grid,
 [data-theme="dark"] .vm-card,
 [data-theme="dark"] .info-card,
 [data-theme="dark"] .profile-info-card,
@@ -2976,6 +3013,16 @@ body.lang-switching [data-lang-ph] {
     background-color: #1E1E2E !important;
     border-color: rgba(255, 107, 157, 0.1) !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .vm-card {
+    border-left: 5px solid var(--color-primary) !important;
+}
+
+[data-theme="dark"] .visual-card {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
 }
 
 [data-theme="dark"] .info-item span,
@@ -3540,11 +3587,18 @@ body.lang-switching [data-lang-ph] {
     background: linear-gradient(135deg, #1E1E2E 0%, #181825 100%) !important;
     border: 1px solid rgba(255, 107, 157, 0.12) !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
 }
 
 [data-theme="dark"] .pillar-card:hover {
-    border-color: rgba(255, 107, 157, 0.3) !important;
-    box-shadow: 0 16px 40px rgba(255, 107, 157, 0.1) !important;
+    border-color: rgba(255, 107, 157, 0.4) !important;
+    box-shadow: 0 16px 40px rgba(255, 107, 157, 0.15) !important;
+    transform: translateY(-8px) scale(1.02) !important;
+}
+
+[data-theme="dark"] .pillar-card:active {
+    transform: translateY(-2px) scale(0.98) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
 }
 
 [data-theme="dark"] .pillar-card h4 {

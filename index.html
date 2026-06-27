@@ -26,7 +26,7 @@
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=14">
     <!-- Chart.js for Demographics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -78,7 +78,7 @@
 
     <!-- Hero Section -->
     <section id="beranda" class="hero-section page-section">
-        <div id="particles-js" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1;"></div>
+        <div id="particles-js" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; pointer-events: none;"></div>
         <div class="hero-overlay" style="z-index: 2;"></div>
         <div class="hero-container" style="z-index: 3;">
             <div class="hero-content" data-aos="fade-up">
@@ -101,7 +101,7 @@
                 <div class="stat-item" data-aos="zoom-in" data-aos-delay="100">
                     <div class="stat-icon"><i class="fa-solid fa-list-check"></i></div>
                     <div class="stat-info">
-                        <span class="stat-number">12</span>
+                        <span class="stat-number">16</span>
                         <span class="stat-label" data-lang-key="stat_proker_label">Program Kerja</span>
                     </div>
                 </div>
@@ -127,36 +127,44 @@
             <h2 class="beranda-info-title" data-lang-key="pillars_title" data-aos="fade-up">Fokus Utama Pengabdian Kami</h2>
             <div class="pillars-grid">
                 <!-- Pilar 1 -->
-                <div class="pillar-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="pillar-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                    <h4 data-lang-key="p1_title">Pendidikan & Literasi</h4>
-                    <p data-lang-key="p1_desc">Membangun masa depan generasi muda Wungurejo melalui bimbingan belajar
-                        kreatif, literasi digital
-                        sejak dini, dan penyediaan pojok baca.</p>
+                <div class="pillar-wrapper" data-aos="fade-up" data-aos-delay="100">
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <h4 data-lang-key="p1_title">Pendidikan & Literasi</h4>
+                        <p data-lang-key="p1_desc">Membangun masa depan generasi muda Wungurejo melalui bimbingan belajar
+                            kreatif, literasi digital
+                            sejak dini, dan penyediaan pojok baca.</p>
+                    </div>
                 </div>
                 <!-- Pilar 2 -->
-                <div class="pillar-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="pillar-icon"><i class="fa-solid fa-chart-line"></i></div>
-                    <h4 data-lang-key="p2_title">UMKM & Ekonomi Lokal</h4>
-                    <p data-lang-key="p2_desc">Mendorong kemandirian ekonomi desa dengan melakukan digitalisasi
-                        pemasaran, rebranding kemasan,
-                        dan sosialisasi manajemen keuangan.</p>
+                <div class="pillar-wrapper" data-aos="fade-up" data-aos-delay="200">
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h4 data-lang-key="p2_title">UMKM & Ekonomi Lokal</h4>
+                        <p data-lang-key="p2_desc">Mendorong kemandirian ekonomi desa dengan melakukan digitalisasi
+                            pemasaran, rebranding kemasan,
+                            dan sosialisasi manajemen keuangan.</p>
+                    </div>
                 </div>
                 <!-- Pilar 3 -->
-                <div class="pillar-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="pillar-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                    <h4 data-lang-key="p3_title">Kesehatan & Sanitasi</h4>
-                    <p data-lang-key="p3_desc">Meningkatkan kesadaran pola hidup bersih dan sehat (PHBS) warga desa
-                        serta melakukan sosialisasi
-                        intensif pencegahan stunting.</p>
+                <div class="pillar-wrapper" data-aos="fade-up" data-aos-delay="300">
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h4 data-lang-key="p3_title">Kesehatan & Sanitasi</h4>
+                        <p data-lang-key="p3_desc">Meningkatkan kesadaran pola hidup bersih dan sehat (PHBS) warga desa
+                            serta melakukan sosialisasi
+                            intensif pencegahan stunting.</p>
+                    </div>
                 </div>
                 <!-- Pilar 4 -->
-                <div class="pillar-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="pillar-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                    <h4 data-lang-key="p4_title">Adaptasi & Digitalisasi IT</h4>
-                    <p data-lang-key="p4_desc">Mengimplementasikan solusi digital untuk administrasi desa, pemetaan
-                        potensi wilayah, dan
-                        optimalisasi publikasi online desa.</p>
+                <div class="pillar-wrapper" data-aos="fade-up" data-aos-delay="400">
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                        <h4 data-lang-key="p4_title">Adaptasi & Digitalisasi IT</h4>
+                        <p data-lang-key="p4_desc">Mengimplementasikan solusi digital untuk administrasi desa, pemetaan
+                            potensi wilayah, dan
+                            optimalisasi publikasi online desa.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -766,7 +774,7 @@
     <!-- Multi-Language Dictionary -->
     <script src="lang.js?v=2"></script>
     <!-- App Script -->
-    <script src="app.js?v=13"></script>
+    <script src="app.js?v=14"></script>
     <!-- PWA Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
@@ -780,6 +788,44 @@
                     });
             });
         }
+    </script>
+    <!-- Pillar Card Hover Animation (Inline - bypass SW cache) -->
+    <script>
+        (function() {
+            function initPillarAnimation() {
+                var cards = document.querySelectorAll('.pillar-card');
+                if (!cards.length) return;
+                cards.forEach(function(card) {
+                    card.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease';
+                    card.style.willChange = 'transform';
+                    card.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translateY(-10px) scale(1.03)';
+                        this.style.boxShadow = '0 24px 48px rgba(108,8,32,0.15)';
+                        this.style.borderColor = 'rgba(255,107,157,0.4)';
+                    });
+                    card.addEventListener('mouseleave', function() {
+                        this.style.transform = 'translateY(0) scale(1)';
+                        this.style.boxShadow = '';
+                        this.style.borderColor = '';
+                    });
+                    card.addEventListener('mousedown', function() {
+                        this.style.transform = 'translateY(-3px) scale(0.98)';
+                        this.style.boxShadow = '0 8px 16px rgba(108,8,32,0.06)';
+                    });
+                    card.addEventListener('mouseup', function() {
+                        this.style.transform = 'translateY(-10px) scale(1.03)';
+                        this.style.boxShadow = '0 24px 48px rgba(108,8,32,0.15)';
+                    });
+                });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initPillarAnimation);
+            } else {
+                initPillarAnimation();
+            }
+            // Also init after AOS finishes (delay safety net)
+            setTimeout(initPillarAnimation, 1500);
+        })();
     </script>
 </body>
 
