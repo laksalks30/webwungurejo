@@ -9,6 +9,10 @@
     <link rel="icon" href="assets/logo/LogoKKNBaru.png" type="image/png">
     <meta name="description"
         content="Official website of KKN AA 84.095 UPN 'Veteran' Yogyakarta in Desa Dusun Wungurejo, Pengkol, Nglipar, Gunung Kidul. Explore our community development programs, daily logbook, and leave a message in our guestbook.">
+    <!-- PWA Manifest and Theme Color -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF3385">
+    <link rel="apple-touch-icon" href="assets/logo/LogoKKNBaru.png">
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,8 +23,10 @@
     <!-- Leaflet CSS for WebGIS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=7">
     <!-- Chart.js for Demographics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -72,9 +78,10 @@
 
     <!-- Hero Section -->
     <section id="beranda" class="hero-section page-section">
-        <div class="hero-overlay"></div>
-        <div class="hero-container">
-            <div class="hero-content">
+        <div id="particles-js" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1;"></div>
+        <div class="hero-overlay" style="z-index: 2;"></div>
+        <div class="hero-container" style="z-index: 3;">
+            <div class="hero-content" data-aos="fade-up">
                 <span class="hero-tag" data-lang-key="hero_tag">Wungurejo, Gunungkidul (1 Juli - 31 Juli 2026)</span>
                 <h1 class="hero-title"><span data-lang-key="hero_title">Datang Mengabdi,</span><br><span
                         class="highlight-text" data-lang-key="hero_highlight">Pulang Membawa Arti</span>
@@ -91,21 +98,21 @@
             </div>
 
             <div class="hero-stats-card">
-                <div class="stat-item">
+                <div class="stat-item" data-aos="zoom-in" data-aos-delay="100">
                     <div class="stat-icon"><i class="fa-solid fa-list-check"></i></div>
                     <div class="stat-info">
                         <span class="stat-number">12</span>
                         <span class="stat-label" data-lang-key="stat_proker_label">Program Kerja</span>
                     </div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item" data-aos="zoom-in" data-aos-delay="200">
                     <div class="stat-icon"><i class="fa-solid fa-people-group"></i></div>
                     <div class="stat-info">
                         <span class="stat-number">10</span>
                         <span class="stat-label" data-lang-key="stat_mhs_label">Mahasiswa KKN</span>
                     </div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item" data-aos="zoom-in" data-aos-delay="300">
                     <div class="stat-icon"><i class="fa-solid fa-calendar-day"></i></div>
                     <div class="stat-info">
                         <span class="stat-number">30 Hari</span>
@@ -117,10 +124,10 @@
 
         <!-- Core Pillars Section (Fokus Kegiatan) -->
         <div class="beranda-info-container">
-            <h2 class="beranda-info-title" data-lang-key="pillars_title">Fokus Utama Pengabdian Kami</h2>
+            <h2 class="beranda-info-title" data-lang-key="pillars_title" data-aos="fade-up">Fokus Utama Pengabdian Kami</h2>
             <div class="pillars-grid">
                 <!-- Pilar 1 -->
-                <div class="pillar-card">
+                <div class="pillar-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="pillar-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                     <h4 data-lang-key="p1_title">Pendidikan & Literasi</h4>
                     <p data-lang-key="p1_desc">Membangun masa depan generasi muda Wungurejo melalui bimbingan belajar
@@ -128,7 +135,7 @@
                         sejak dini, dan penyediaan pojok baca.</p>
                 </div>
                 <!-- Pilar 2 -->
-                <div class="pillar-card">
+                <div class="pillar-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="pillar-icon"><i class="fa-solid fa-chart-line"></i></div>
                     <h4 data-lang-key="p2_title">UMKM & Ekonomi Lokal</h4>
                     <p data-lang-key="p2_desc">Mendorong kemandirian ekonomi desa dengan melakukan digitalisasi
@@ -136,7 +143,7 @@
                         dan sosialisasi manajemen keuangan.</p>
                 </div>
                 <!-- Pilar 3 -->
-                <div class="pillar-card">
+                <div class="pillar-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="pillar-icon"><i class="fa-solid fa-heart-pulse"></i></div>
                     <h4 data-lang-key="p3_title">Kesehatan & Sanitasi</h4>
                     <p data-lang-key="p3_desc">Meningkatkan kesadaran pola hidup bersih dan sehat (PHBS) warga desa
@@ -144,7 +151,7 @@
                         intensif pencegahan stunting.</p>
                 </div>
                 <!-- Pilar 4 -->
-                <div class="pillar-card">
+                <div class="pillar-card" data-aos="fade-up" data-aos-delay="400">
                     <div class="pillar-icon"><i class="fa-solid fa-laptop-code"></i></div>
                     <h4 data-lang-key="p4_title">Adaptasi & Digitalisasi IT</h4>
                     <p data-lang-key="p4_desc">Mengimplementasikan solusi digital untuk administrasi desa, pemetaan
@@ -158,7 +165,7 @@
     <!-- Profile & Village Section -->
     <section id="profil" class="profile-section section-padding page-section">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-aos="fade-up">
                 <span class="section-tag" data-lang-key="profil_tag">Profil Pengabdian</span>
                 <h2 class="section-title" data-lang-key="profil_title">Kenal Lebih Dekat dengan Wungurejo</h2>
                 <p class="section-subtitle" data-lang-key="profil_subtitle">Kalurahan Pengkol, Kapanewon Nglipar,
@@ -166,7 +173,7 @@
             </div>
 
             <div class="profile-grid">
-                <div class="profile-text-content">
+                <div class="profile-text-content" data-aos="fade-right">
                     <h3 data-lang-key="profil_potensi_h">Potensi & Karakteristik Dusun</h3>
                     <p data-lang-key="profil_potensi_p">Dusun Wungurejo memiliki kekayaan filosofis dari kata "Wungu"
                         (bunga yang tumbuh subur di tepi sungai) dan "Rejo" (makmur). Sebagai bagian dari rintisan Desa
@@ -197,7 +204,7 @@
                     </div>
                 </div>
 
-                <div class="profile-visual">
+                <div class="profile-visual" data-aos="fade-left">
                     <div class="visual-card">
                         <img src="assets/images/Gunung kidul.jpg" alt="Pemandangan Gunung Kidul" class="visual-img">
                         <div class="visual-badge">
@@ -213,7 +220,7 @@
 
         <!-- Data Demografi Section -->
         <div class="demographics-container" style="margin-top: 60px;">
-            <h3
+            <h3 data-aos="fade-up"
                 style="text-align: center; margin-bottom: 30px; font-size: 1.5rem; color: var(--color-dark); font-weight: 800;">
                 <i class="fa-solid fa-chart-pie" style="color: var(--color-primary); margin-right: 10px;"></i> <span
                     data-lang-key="demo_title">Data Demografi Dusun Wungurejo</span>
@@ -221,7 +228,7 @@
             <div
                 style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; text-align: center;">
                 <!-- Stat 1: Total Jiwa -->
-                <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;"
+                <div data-aos="zoom-in" data-aos-delay="100" style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;"
                     onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
                     <i class="fa-solid fa-users"
                         style="font-size: 2.5rem; color: var(--color-primary); margin-bottom: 16px; display: block;"></i>
@@ -231,7 +238,7 @@
                         data-lang-key="demo_penduduk">Total Penduduk</p>
                 </div>
                 <!-- Stat 2: KK -->
-                <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;"
+                <div data-aos="zoom-in" data-aos-delay="200" style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;"
                     onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
                     <i class="fa-solid fa-house-chimney-user"
                         style="font-size: 2.5rem; color: var(--color-secondary); margin-bottom: 16px; display: block;"></i>
@@ -241,7 +248,7 @@
                         data-lang-key="demo_kk">Kepala Keluarga</p>
                 </div>
                 <!-- Stat 3: RT -->
-                <div style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;"
+                <div data-aos="zoom-in" data-aos-delay="300" style="background-color: var(--color-white); padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;"
                     onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
                     <i class="fa-solid fa-map"
                         style="font-size: 2.5rem; color: #FFA500; margin-bottom: 16px; display: block;"></i>
@@ -251,7 +258,7 @@
                         data-lang-key="demo_rt">Rukun Tetangga (RT)</p>
                 </div>
                 <!-- Stat 4: Gender -->
-                <div style="background-color: var(--color-white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;"
+                <div data-aos="zoom-in" data-aos-delay="400" style="background-color: var(--color-white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1.5px solid rgba(108, 8, 32, 0.05); transition: transform 0.3s; cursor: default;"
                     onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
                     <div style="position: relative; width: 140px; height: 140px; margin: 0 auto 10px auto;">
                         <canvas id="genderChart"></canvas>
@@ -273,7 +280,7 @@
             </div>
         </div>
 
-        <div class="profile-map-container"
+        <div class="profile-map-container" data-aos="fade-up"
             style="margin-top: 60px; background-color: var(--color-white); padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px var(--color-shadow); border: 1.5px solid rgba(108, 8, 32, 0.08);">
             <h3
                 style="text-align: center; margin-bottom: 24px; font-size: 1.5rem; color: var(--color-dark); font-weight: 800;">
@@ -290,7 +297,7 @@
     <!-- E-Katalog UMKM Section -->
     <section id="umkm" class="umkm-section section-padding page-section">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-aos="fade-up">
                 <span class="section-tag" data-lang-key="umkm_tag">Pemberdayaan Ekonomi</span>
                 <h2 class="section-title" data-lang-key="umkm_title">E-Katalog Potensi UMKM Wungurejo</h2>
                 <p class="section-subtitle" data-lang-key="umkm_subtitle">Dukung kemandirian ekonomi lokal dengan
@@ -299,7 +306,7 @@
 
             <div class="umkm-grid">
                 <!-- UMKM Item 1 -->
-                <div class="umkm-card">
+                <div class="umkm-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="umkm-img-wrap">
                         <img src="assets/images/umkm_popor.png" alt="Kerajinan Popor Senapan Kayu">
                         <div class="umkm-badge" data-lang-key="umkm_badge_craft">Kerajinan Khas</div>
@@ -318,7 +325,7 @@
                 </div>
 
                 <!-- UMKM Item 2 -->
-                <div class="umkm-card">
+                <div class="umkm-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="umkm-img-wrap">
                         <img src="assets/images/umkm_madu.png" alt="Madu Klanceng Asli">
                         <div class="umkm-badge" data-lang-key="umkm_badge_farm">Hasil Peternakan</div>
@@ -337,7 +344,7 @@
                 </div>
 
                 <!-- UMKM Item 3 -->
-                <div class="umkm-card">
+                <div class="umkm-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="umkm-img-wrap">
                         <img src="assets/images/umkm_ikan.png" alt="Peternakan Ikan Segar">
                         <div class="umkm-badge" data-lang-key="umkm_badge_farm">Hasil Peternakan</div>
@@ -361,7 +368,7 @@
     <!-- Program Kerja (Proker) Section -->
     <section id="proker" class="proker-section section-padding page-section">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-aos="fade-up">
                 <span class="section-tag" data-lang-key="proker_tag">Rencana Aksi</span>
                 <h2 class="section-title" data-lang-key="proker_title">Program Kerja Pengabdian</h2>
                 <p class="section-subtitle" data-lang-key="proker_subtitle">Inisiatif program kerja KKN Kelompok AA
@@ -369,7 +376,7 @@
             </div>
 
             <!-- Proker Filters -->
-            <div class="proker-filters">
+            <div class="proker-filters" data-aos="fade-up" data-aos-delay="100">
                 <button class="filter-btn active" data-filter="all" data-lang-key="filter_all">Semua</button>
                 <button class="filter-btn" data-filter="Proker Bersama" data-lang-key="filter_bersama">Proker
                     Bersama</button>
@@ -390,7 +397,7 @@
     <!-- Logbook Timeline Section -->
     <section id="logbook" class="logbook-section section-padding page-section">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-aos="fade-up">
                 <span class="section-tag" data-lang-key="logbook_tag">Log Harian</span>
                 <h2 class="section-title" data-lang-key="logbook_title">Timeline & Kegiatan Terbaru</h2>
                 <p class="section-subtitle" data-lang-key="logbook_subtitle">Catatan dokumentasi harian kegiatan
@@ -398,7 +405,7 @@
             </div>
 
             <!-- Logbook Filters -->
-            <div class="logbook-filters">
+            <div class="logbook-filters" data-aos="fade-up" data-aos-delay="100">
                 <button class="logbook-filter-btn active" data-filter="all" data-lang-key="filter_all_phase">Semua
                     Fase</button>
                 <button class="logbook-filter-btn" data-filter="Pra-KKN" data-lang-key="filter_prakkn">Pra-KKN</button>
@@ -418,7 +425,7 @@
     <!-- Blog/Artikel Section -->
     <section id="blog" class="blog-section section-padding page-section">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-aos="fade-up">
                 <span class="section-tag" data-lang-key="blog_tag">Kabar & Artikel</span>
                 <h2 class="section-title" data-lang-key="blog_title">Cerita dari Wungurejo</h2>
                 <p class="section-subtitle" data-lang-key="blog_subtitle">Kumpulan tulisan inspiratif, sejarah dusun, dan artikel ringan dari kegiatan pengabdian kami.</p>
@@ -435,7 +442,7 @@
     <!-- Gallery (Masonry) Section -->
     <section id="galeri" class="gallery-section section-padding page-section">
         <div class="container container-wide">
-            <div class="section-header">
+            <div class="section-header" data-aos="fade-up">
                 <span class="section-tag" data-lang-key="gallery_tag">Pesona Wungurejo</span>
                 <h2 class="section-title" data-lang-key="gallery_title">Galeri Pengabdian</h2>
                 <p class="section-subtitle" data-lang-key="gallery_subtitle">Potret keindahan alam dan momen berharga
@@ -455,14 +462,14 @@
     <!-- Meet the Team Section -->
     <section id="tim" class="team-section section-padding page-section">
         <div class="container container-wide">
-            <div class="section-header">
+            <div class="section-header" data-aos="fade-up">
                 <span class="section-tag" data-lang-key="tim_tag">Anggota Kelompok</span>
                 <h2 class="section-title" data-lang-key="tim_title">Di Balik Layar KKN AA 84.095</h2>
                 <p class="section-subtitle" data-lang-key="tim_subtitle">Arahkan kursor dan klik pada foto anggota
                     kelompok untuk melihat profil lengkap mereka.</p>
             </div>
 
-            <div class="team-interactive-container">
+            <div class="team-interactive-container" data-aos="zoom-in" data-aos-delay="100">
                 <!-- Group Photo Side -->
                 <div class="team-photo-wrapper">
 
@@ -555,7 +562,7 @@
     <!-- Guestbook Section -->
     <section id="guestbook" class="guestbook-section section-padding page-section">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-aos="fade-up">
                 <span class="section-tag" data-lang-key="gb_tag">Pesan & Saran</span>
                 <h2 class="section-title" data-lang-key="gb_title">Buku Tamu Interaktif</h2>
                 <p class="section-subtitle" data-lang-key="gb_subtitle">Silakan tinggalkan pesan, masukan, atau kesan
@@ -565,7 +572,7 @@
 
             <div class="guestbook-grid">
                 <!-- Form Side -->
-                <div class="guestbook-form-card">
+                <div class="guestbook-form-card" data-aos="fade-right" data-aos-delay="100">
                     <h3 data-lang-key="gb_form_title">Kirim Pesan Baru</h3>
                     <form id="comment-form">
                         <div class="form-group">
@@ -607,7 +614,7 @@
                 </div>
 
                 <!-- Messages Display Side -->
-                <div class="guestbook-messages-card">
+                <div class="guestbook-messages-card" data-aos="fade-left" data-aos-delay="200">
                     <h3><span data-lang-key="gb_latest">Pesan Terbaru</span> (<span id="messages-count">0</span>)</h3>
                     <div id="messages-list" class="messages-list">
                         <!-- Dynamic Comments will appear here -->
@@ -620,7 +627,7 @@
     <!-- Call to Action (Social Media) Section -->
     <section class="cta-section section-padding">
         <div class="container">
-            <div class="cta-container">
+            <div class="cta-container" data-aos="zoom-in">
                 <div class="cta-content">
                     <h2 data-lang-key="cta_title">Ikuti Perjalanan KKN Kami!</h2>
                     <p data-lang-key="cta_desc">Dapatkan update terbaru seputar program kerja dan kegiatan sehari-hari
@@ -745,10 +752,35 @@
 
     <!-- Marked.js for Markdown parsing (Logbook) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100,
+        });
+    </script>
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <!-- Multi-Language Dictionary -->
     <script src="lang.js?v=2"></script>
     <!-- App Script -->
-    <script src="app.js?v=11"></script>
+    <script src="app.js?v=13"></script>
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker PWA berhasil diregistrasi dengan scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.error('Pendaftaran ServiceWorker gagal: ', err);
+                    });
+            });
+        }
+    </script>
 </body>
 
 </html>

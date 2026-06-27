@@ -10,6 +10,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 import bcrypt
 from jose import JWTError, jwt
+from fpdf import FPDF
+import io
 
 # --- Configuration ---
 SECRET_KEY = os.environ.get("SECRET_KEY", "kkn_super_secret_key_change_me_in_production")
@@ -358,6 +360,51 @@ def delete_logbook(id: int, current_user: AdminUserDB = Depends(get_current_admi
     db.delete(db_logbook)
     db.commit()
     return {"message": "Logbook entry berhasil dihapus"}
+
+@app.get("/api/admin/export/logbook-pdf")
+def export_logbook_pdf(current_user: AdminUserDB = Depends(get_current_admin), db: Session = Depends(get_db)):
+    logbooks = db.query(LogbookDB).order_by(LogbookDB.date.asc(), LogbookDB.id.asc()).all()
+    
+    class PDF(FPDF):
+        def header(self):
+            self.set_font('helvetica', 'B', 15)
+            self.cell(0, 10, 'LAPORAN LOGBOOK HARIAN KKN', border=False, new_x="LMARGIN", new_y="NEXT", align='C')
+            self.set_font('helvetica', 'B', 12)
+            self.cell(0, 10, 'Kelompok AA 84.095 UPN "Veteran" Yogyakarta', border=False, new_x="LMARGIN", new_y="NEXT", align='C')
+            self.cell(0, 10, 'Dusun Wungurejo, Pengkol, Nglipar, Gunungkidul', border=False, new_x="LMARGIN", new_y="NEXT", align='C')
+            self.ln(10)
+
+        def footer(self):
+            self.set_y(-15)
+            self.set_font('helvetica', 'I', 8)
+            self.cell(0, 10, f'Halaman {self.page_no()}/{{nb}}', align='C')
+
+    pdf = PDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+
+    if not logbooks:
+        pdf.set_font("helvetica", '', 12)
+        pdf.cell(0, 10, "Belum ada catatan logbook.", new_x="LMARGIN", new_y="NEXT")
+    else:
+        for entry in logbooks:
+            pdf.set_font("helvetica", 'B', 12)
+            pdf.cell(0, 8, f"{entry.date} - {entry.phase}", new_x="LMARGIN", new_y="NEXT")
+            
+            pdf.set_font("helvetica", 'B', 14)
+            # encode ascii strictly or replace to avoid fpdf encoding errors
+            title_safe = entry.title.encode('latin-1', 'replace').decode('latin-1')
+            pdf.cell(0, 8, title_safe, new_x="LMARGIN", new_y="NEXT")
+            
+            pdf.set_font("helvetica", '', 11)
+            content_safe = entry.content_markdown.encode('latin-1', 'replace').decode('latin-1')
+            pdf.multi_cell(0, 6, content_safe)
+            pdf.ln(8)
+
+    pdf_bytes = pdf.output()
+    # pdf.output() returns bytearray in fpdf2
+    from fastapi.responses import StreamingResponse
+    return StreamingResponse(io.BytesIO(pdf_bytes), media_type="application/pdf", headers={"Content-Disposition": "attachment; filename=Laporan_Logbook_KKN.pdf"})
 
 # --- Guestbook Routes ---
 @app.get("/api/guestbook", response_model=List[GuestbookResponse])

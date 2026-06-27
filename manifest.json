@@ -1,0 +1,23 @@
+{
+  "name": "KKN Wungurejo 84.095",
+  "short_name": "Wungurejo",
+  "description": "Portal Informasi Desa Wungurejo & Program Kerja KKN UPN Veteran Yogyakarta 84.095",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FAF6F6",
+  "theme_color": "#FF3385",
+  "icons": [
+    {
+      "src": "assets/logo/LogoKKNBaru.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/logo/LogoKKNBaru.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

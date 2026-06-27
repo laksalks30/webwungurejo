@@ -184,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filteredProkers.forEach(proker => {
             const prokerCard = document.createElement('div');
             prokerCard.className = 'proker-card';
+            prokerCard.setAttribute('data-aos', 'fade-up');
             prokerCard.setAttribute('data-category', proker.type);
             prokerCard.style.cursor = 'pointer';
 
@@ -223,6 +224,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             prokerGridContainer.appendChild(prokerCard);
         });
+
+        // Refresh AOS for new elements
+        if (typeof AOS !== 'undefined') AOS.refresh();
     };
 
     // Filter button click handler
@@ -271,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         filteredLogbook.forEach(entry => {
             const timelineItem = document.createElement('div');
             timelineItem.className = 'timeline-item';
+            timelineItem.setAttribute('data-aos', 'fade-up');
 
             // Phase badge styling
             let phaseIcon = entry.phase === 'Pra-KKN' ? 'fa-clipboard-list' : 'fa-person-digging';
@@ -301,6 +306,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             logbookTimelineContainer.appendChild(timelineItem);
         });
+
+        // Refresh AOS for new elements
+        if (typeof AOS !== 'undefined') AOS.refresh();
     };
 
     // Filter button click handler for logbook
@@ -688,6 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
         guestbookMessages.forEach(msg => {
             const commentCard = document.createElement('div');
             commentCard.className = 'comment-card';
+            commentCard.setAttribute('data-aos', 'fade-up');
 
             commentCard.innerHTML = `
                 <div class="comment-header">
@@ -699,6 +708,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             messagesList.appendChild(commentCard);
         });
+
+        // Refresh AOS for new elements
+        if (typeof AOS !== 'undefined') AOS.refresh();
     };
 
     // Handle new message submission
@@ -1028,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 const html = `
-                    <div class="gallery-item" onclick="openLightbox('${fullUrl}')">
+                    <div class="gallery-item" data-aos="zoom-in" onclick="openLightbox('${fullUrl}')">
                         <img src="${fullUrl}" alt="${escapeHTML(item.title)}" class="gallery-img" loading="lazy">
                         <div class="gallery-info">
                             <h4 class="gallery-title">${escapeHTML(item.title)}</h4>
@@ -1040,6 +1052,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 galleryContainer.insertAdjacentHTML('beforeend', html);
             });
             
+            // Refresh AOS
+            if (typeof AOS !== 'undefined') AOS.refresh();
+
         } catch (error) {
             console.error(error);
             galleryContainer.innerHTML = `<div class="error-msg" style="color: var(--color-primary); font-weight: 600; padding: 20px; text-align: center; grid-column: 1 / -1;">Gagal memuat galeri.</div>`;
@@ -1107,7 +1122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const readMoreText = t('blog_read_more', 'Baca Selengkapnya');
 
             const html = `
-                <div class="blog-card" onclick="openBlogModal(${item.id})">
+                <div class="blog-card" data-aos="fade-up" onclick="openBlogModal(${item.id})">
                     <div class="blog-img-wrap">
                         <img src="${thumbnail}" alt="${escapeHTML(item.title)}" loading="lazy">
                         <div class="blog-date">${formattedDate}</div>
@@ -1121,6 +1136,9 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             blogContainer.insertAdjacentHTML('beforeend', html);
         });
+
+        // Refresh AOS
+        if (typeof AOS !== 'undefined') AOS.refresh();
     };
 
     // Re-render blog cards when language changes (UI labels only)
@@ -1439,4 +1457,49 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize WebGIS Map safely
     setTimeout(initWebGIS, 500);
+
+    // --- 13. Particles.js (Kunang-Kunang Wungurejo) ---
+    if (document.getElementById('particles-js') && typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 45, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#FFD700", "#FFFACD", "#FFB6C1", "#FF69B4"] },
+                "shape": { "type": "circle" },
+                "opacity": {
+                    "value": 0.8,
+                    "random": true,
+                    "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": { "enable": true, "speed": 2, "size_min": 0.1, "sync": false }
+                },
+                "line_linked": { "enable": false },
+                "move": {
+                    "enable": true,
+                    "speed": 1.5,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": { "enable": false }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" },
+                    "resize": true
+                },
+                "modes": {
+                    "repulse": { "distance": 100, "duration": 0.4 },
+                    "push": { "particles_nb": 4 }
+                }
+            },
+            "retina_detect": true
+        });
+    }
 });

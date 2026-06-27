@@ -190,7 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const loadTabData = (tabName) => {
-        if (tabName === 'proker') {
+        if (tabName === 'dashboard') {
+            loadDashboard();
+        } else if (tabName === 'proker') {
             fetchProkers();
         } else if (tabName === 'logbook') {
             fetchLogbooks();
@@ -200,6 +202,147 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchGuestbookEntries();
         } else if (tabName === 'blog') {
             fetchBlogsAdmin();
+        }
+    };
+
+    // --- Chart instances (stored so we can destroy & re-render on refresh) ---
+    let chartProkerInstance = null;
+    let chartLogbookInstance = null;
+
+    // --- Dashboard Data Loader ---
+    window.loadDashboard = async () => {
+        try {
+            // Fetch all needed data in parallel
+            const [prokerRes, logbookRes, guestbookRes] = await Promise.all([
+                fetch(`${API_BASE_URL}/api/proker`),
+                fetch(`${API_BASE_URL}/api/logbook`),
+                authenticatedFetch(`${API_BASE_URL}/api/admin/guestbook`)
+            ]);
+
+            const prokers    = prokerRes.ok    ? await prokerRes.json()    : [];
+            const logbooks   = logbookRes.ok   ? await logbookRes.json()   : [];
+            const guestbooks = guestbookRes.ok ? await guestbookRes.json() : [];
+
+            // ── Stat Cards ──
+            const selesai  = prokers.filter(p => p.status === 'Selesai').length;
+            const berjalan = prokers.filter(p => p.status === 'Sedang Berjalan').length;
+            const belumMulai = prokers.filter(p => p.status === 'Belum Mulai').length;
+
+            document.getElementById('dash-proker-selesai').textContent  = selesai;
+            document.getElementById('dash-proker-berjalan').textContent = berjalan;
+            document.getElementById('dash-proker-total').textContent    = prokers.length;
+            document.getElementById('dash-logbook-total').textContent   = logbooks.length;
+
+            const approved = guestbooks.filter(g => g.is_approved).length;
+            const pending  = guestbooks.filter(g => !g.is_approved).length;
+            document.getElementById('dash-tamu-approved').textContent = approved;
+            document.getElementById('dash-tamu-pending').textContent  = pending;
+
+            // ── Donut Chart: Proker Status ──
+            const donutCanvas = document.getElementById('chart-proker-donut');
+            if (donutCanvas) {
+                if (chartProkerInstance) chartProkerInstance.destroy();
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                chartProkerInstance = new Chart(donutCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Selesai', 'Sedang Berjalan', 'Belum Mulai'],
+                        datasets: [{
+                            data: [selesai, berjalan, belumMulai],
+                            backgroundColor: ['#2ecc71', '#f1c40f', '#e74c3c'],
+                            borderColor: isDark ? '#1E1E2E' : '#fff',
+                            borderWidth: 3,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '65%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: isDark ? '#CDD6F4' : '#2D3748', font: { family: 'Plus Jakarta Sans', size: 12 }, padding: 16 }
+                            },
+                            tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} Proker` } }
+                        }
+                    }
+                });
+            }
+
+            // ── Line Chart: Logbook per week ──
+            const lineCanvas = document.getElementById('chart-logbook-line');
+            if (lineCanvas && logbooks.length > 0) {
+                // Group entries by ISO week
+                const weeklyMap = {};
+                logbooks.forEach(entry => {
+                    if (!entry.date) return;
+                    const d = new Date(entry.date);
+                    // Get Monday of that week
+                    const day = d.getDay();
+                    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+                    const monday = new Date(d.setDate(diff));
+                    const label = `${monday.getDate()}/${monday.getMonth() + 1}`;
+                    weeklyMap[label] = (weeklyMap[label] || 0) + 1;
+                });
+
+                // Sort chronologically (by first occurrence order)
+                const labels = Object.keys(weeklyMap);
+                const values = labels.map(k => weeklyMap[k]);
+
+                if (chartLogbookInstance) chartLogbookInstance.destroy();
+                const isDark2 = document.documentElement.getAttribute('data-theme') === 'dark';
+                chartLogbookInstance = new Chart(lineCanvas, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: 'Jumlah Kegiatan',
+                            data: values,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52,152,219,0.12)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#3498db',
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                ticks: { color: isDark2 ? '#A6ADC8' : '#718096', font: { family: 'Plus Jakarta Sans' } },
+                                grid:  { color: isDark2 ? 'rgba(205,214,244,0.07)' : 'rgba(0,0,0,0.05)' }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: isDark2 ? '#A6ADC8' : '#718096', font: { family: 'Plus Jakarta Sans' }, stepSize: 1 },
+                                grid:  { color: isDark2 ? 'rgba(205,214,244,0.07)' : 'rgba(0,0,0,0.05)' }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y} catatan` } }
+                        }
+                    }
+                });
+            } else if (lineCanvas && logbooks.length === 0) {
+                // No data yet
+                if (chartLogbookInstance) chartLogbookInstance.destroy();
+                const ctx = lineCanvas.getContext('2d');
+                ctx.clearRect(0, 0, lineCanvas.width, lineCanvas.height);
+                const isDark2 = document.documentElement.getAttribute('data-theme') === 'dark';
+                ctx.fillStyle = isDark2 ? '#A6ADC8' : '#718096';
+                ctx.font = '14px Plus Jakarta Sans';
+                ctx.textAlign = 'center';
+                ctx.fillText('Belum ada data logbook.', lineCanvas.width / 2, lineCanvas.height / 2);
+            }
+
+        } catch (err) {
+            console.error('Dashboard load error:', err);
+            showToast('Gagal memuat data dashboard', 'error');
         }
     };
 
@@ -566,6 +709,35 @@ document.addEventListener('DOMContentLoaded', () => {
             currentLogbookImages = [];
             renderImagePreviews(currentLogbookImages, 'logbook-images-preview');
             openModal('logbook-modal');
+        });
+    }
+
+    const exportLogbookBtn = document.getElementById('export-logbook-btn');
+    if (exportLogbookBtn) {
+        exportLogbookBtn.addEventListener('click', async () => {
+            try {
+                showToast("Sedang memproses PDF...", "success");
+                const response = await authenticatedFetch(`${API_BASE_URL}/api/admin/export/logbook-pdf`);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = "Laporan_Logbook_KKN.pdf";
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                    showToast("PDF berhasil diunduh!", "success");
+                } else {
+                    throw new Error("Gagal mengunduh laporan PDF");
+                }
+            } catch (error) {
+                console.error(error);
+                if (error.message !== "Unauthorized") {
+                    showToast(error.message, "error");
+                }
+            }
         });
     }
 
